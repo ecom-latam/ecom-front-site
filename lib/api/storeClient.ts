@@ -14,6 +14,7 @@ export interface ProductVariant {
   combination: ProductVariantCombinationEntry[];
   price: number | null;
   stock: number;
+  availableStock?: number;
   enabled: boolean;
 }
 
@@ -30,6 +31,7 @@ export interface Product {
   price: number;
   salePrice: number | null;
   stock: number;
+  availableStock?: number;
   status: string;
   categoryId: string | null;
   images: { url: string; publicId: string; isMain: boolean }[];

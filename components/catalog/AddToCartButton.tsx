@@ -9,10 +9,28 @@ import { AddToCartModal } from './AddToCartModal';
 interface Props {
   product: Product;
   hasSession: boolean;
+  availableStock?: number;
 }
 
-export function AddToCartButton({ product, hasSession }: Props) {
+export function AddToCartButton({ product, hasSession, availableStock }: Props) {
   const [modalOpen, setModalOpen] = useState(false);
+
+  const isOutOfStock = availableStock !== undefined && availableStock === 0;
+
+  if (isOutOfStock) {
+    return (
+      <Button
+        variant="outlined"
+        shape="pill"
+        size="md"
+        className="mt-6"
+        style={{ width: '100%' }}
+        disabled
+      >
+        Sin stock
+      </Button>
+    );
+  }
 
   if (!hasSession) {
     return (

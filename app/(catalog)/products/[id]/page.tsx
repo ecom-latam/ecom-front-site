@@ -24,6 +24,15 @@ export default async function ProductDetailPage({ params }: Props) {
   const displayPrice = product.salePrice ?? product.price;
   const hasDiscount = product.salePrice !== null && product.salePrice < product.price;
 
+  const effectiveStock = product.hasVariants
+    ? Math.max(
+        0,
+        ...product.variants
+          .filter((v) => v.enabled !== false)
+          .map((v) => v.availableStock ?? v.stock)
+      )
+    : (product.availableStock ?? product.stock);
+
   return (
     <main className="min-h-screen bg-white">
       <div className="max-w-5xl mx-auto px-4 py-8">
@@ -107,13 +116,13 @@ export default async function ProductDetailPage({ params }: Props) {
               </div>
             )}
 
-            {product.stock > 0 ? (
-              <p className="mt-6 text-sm text-green-600">En stock ({product.stock} disponibles)</p>
+            {effectiveStock > 0 ? (
+              <p className="mt-6 text-sm text-green-600">Disponible ({effectiveStock} disponibles)</p>
             ) : (
               <p className="mt-6 text-sm text-red-500">Sin stock</p>
             )}
 
-            <AddToCartButton product={product} hasSession={hasSession} />
+            <AddToCartButton product={product} hasSession={hasSession} availableStock={effectiveStock} />
           </div>
         </div>
       </div>

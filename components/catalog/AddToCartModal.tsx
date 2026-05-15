@@ -31,6 +31,7 @@ function isValueAvailable(
   return variants.some(
     (v) =>
       v.enabled &&
+      (v.availableStock ?? v.stock) > 0 &&
       v.combination.some((e) => e.optionName === optionName && e.value === value) &&
       v.combination.every(
         (e) =>
@@ -86,7 +87,10 @@ export function AddToCartModal({ product, onClose }: Props) {
     ? findMatchingVariant(product.variants, selectedOptions)
     : undefined;
 
-  const canAddToCart = !product.hasVariants || (allOptionsSelected && matchedVariant !== undefined);
+  const canAddToCart =
+    !product.hasVariants
+      ? (product.availableStock ?? product.stock) > 0
+      : allOptionsSelected && matchedVariant !== undefined && (matchedVariant.availableStock ?? matchedVariant.stock) > 0;
 
   function selectValue(optionName: string, value: string) {
     setSelectedOptions((prev) => {
