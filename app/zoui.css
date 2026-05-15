@@ -715,6 +715,27 @@ body {
   z-index: 1;
 }
 
+.product-card__badge {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+  line-height: 1;
+  z-index: 1;
+}
+
+.product-card__badge--out-of-stock {
+  background: var(--color-neutral-200);
+  color: var(--color-neutral-600);
+}
+
 .product-card__body {
   display: flex;
   flex-direction: column;

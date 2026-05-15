@@ -36,6 +36,14 @@ function getDiscount(p: Product) {
   return `−${Math.round((1 - p.salePrice / p.price) * 100)}%`;
 }
 
+function getEffectiveAvailableStock(p: Product): number {
+  if (!p.hasVariants) return p.availableStock ?? p.stock;
+  const stocks = p.variants
+    .filter((v) => v.enabled !== false)
+    .map((v) => v.availableStock ?? v.stock);
+  return stocks.length === 0 ? 0 : Math.max(...stocks);
+}
+
 export function ProductGrid({
   products,
   categories,
@@ -125,6 +133,7 @@ export function ProductGrid({
             const mainImage = getMainImage(p);
             const displayPrice = getDisplayPrice(p);
             const hasDiscount = p.salePrice !== null && p.salePrice < p.price;
+            const outOfStock = getEffectiveAvailableStock(p) === 0;
             return (
               <ProductCard
                 key={p._id}
@@ -135,6 +144,7 @@ export function ProductGrid({
                 discount={getDiscount(p)}
                 image={mainImage ? { url: mainImage.url, alt: p.name } : undefined}
                 href={`/products/${p._id}`}
+                outOfStock={outOfStock}
               />
             );
           })}
@@ -164,6 +174,7 @@ function ProductListItem({ product }: { product: Product }) {
   const mainImage = getMainImage(product);
   const displayPrice = getDisplayPrice(product);
   const hasDiscount = product.salePrice !== null && product.salePrice < product.price;
+  const outOfStock = getEffectiveAvailableStock(product) === 0;
 
   return (
     <Link
@@ -192,6 +203,11 @@ function ProductListItem({ product }: { product: Product }) {
           {hasDiscount && (
             <span className="text-xs text-gray-400 line-through">
               ${product.price.toLocaleString('es-AR')}
+            </span>
+          )}
+          {outOfStock && (
+            <span className="text-xs font-medium text-red-500 bg-red-50 px-2 py-0.5 rounded-full">
+              Sin stock
             </span>
           )}
         </div>

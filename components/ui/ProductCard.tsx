@@ -13,6 +13,7 @@ interface Props {
   image?: { url: string; alt?: string };
   href?: string;
   cta?: ReactNode;
+  outOfStock?: boolean;
 }
 
 export function ProductCard({
@@ -24,11 +25,13 @@ export function ProductCard({
   image,
   href,
   cta,
+  outOfStock,
 }: Props) {
   const inner = (
     <>
       <div className="product-card__media">
-        {discount && <span className="product-card__discount">{discount}</span>}
+        {outOfStock && <span className="product-card__badge product-card__badge--out-of-stock">Sin stock</span>}
+        {!outOfStock && discount && <span className="product-card__discount">{discount}</span>}
         {image && (
           <Image
             src={image.url}
