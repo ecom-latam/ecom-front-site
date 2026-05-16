@@ -25,10 +25,15 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
+const AUTH_ENDPOINTS = ['/api/auth/login', '/api/auth/refresh', '/api/auth/customer/register', '/api/auth/mfa/verify'];
+
 apiClient.interceptors.response.use(
   (res) => res,
   async (err) => {
-    if (err.response?.status === 401 && !err.config._retry) {
+    const url: string = err.config?.url ?? '';
+    const isAuthEndpoint = AUTH_ENDPOINTS.some((e) => url.includes(e));
+
+    if (err.response?.status === 401 && !err.config._retry && !isAuthEndpoint) {
       err.config._retry = true;
       try {
         const { data } = await axios.post(
