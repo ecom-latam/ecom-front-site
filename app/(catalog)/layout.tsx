@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { cookies } from 'next/headers';
 import { CatalogNavbar } from '@/components/catalog/CatalogNavbar';
 import { CartDrawer } from '@/components/catalog/CartDrawer';
 import { getStoreInfo } from '@/lib/api/storeClient';
@@ -21,17 +20,14 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function CatalogLayout({
+export default function CatalogLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = await cookies();
-  const isLoggedIn = cookieStore.has('_auth');
-
   return (
     <>
-      <CatalogNavbar isLoggedIn={isLoggedIn} />
+      <CatalogNavbar />
       <CartDrawer />
       {children}
     </>

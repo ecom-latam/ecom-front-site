@@ -45,9 +45,13 @@ apiClient.interceptors.response.use(
         localStorage.setItem('access_token', newToken);
         err.config.headers['Authorization'] = `Bearer ${newToken}`;
         return apiClient(err.config);
-      } catch {
-        endSession();
-        window.location.href = '/iniciar-sesion';
+      } catch (refreshErr) {
+        // Solo desloguear si el refresh token está inválido o expirado (401).
+        // Cualquier otro error (red, servicio caído, 5xx) no debe terminar la sesión.
+        if (axios.isAxiosError(refreshErr) && refreshErr.response?.status === 401) {
+          endSession();
+          window.location.href = '/iniciar-sesion';
+        }
       }
     }
     return Promise.reject(err);

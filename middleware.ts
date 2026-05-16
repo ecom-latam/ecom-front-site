@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const AUTH_ROUTES = ['/iniciar-sesion', '/registro'];
-const PROTECTED_ROUTES = ['/carrito'];
+const PROTECTED_ROUTES = ['/carrito', '/gestion'];
 
 function extractSlug(req: NextRequest): string | null {
   const host = req.headers.get('host') ?? '';

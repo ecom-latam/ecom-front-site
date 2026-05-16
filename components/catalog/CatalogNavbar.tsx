@@ -1,22 +1,30 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 import { useCart } from '@/context/CartContext';
+import { getAccessTokenRole } from '@/utils/helpers';
 
-interface Props {
-  isLoggedIn: boolean;
-  userEmail?: string;
-}
+const MANAGEMENT_ROLES = ['Admin', 'Manager', 'Seller'];
 
-export function CatalogNavbar({ isLoggedIn, userEmail }: Props) {
+export function CatalogNavbar() {
   const { itemCount, openDrawer } = useCart();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [canManage, setCanManage] = useState(false);
+
+  useEffect(() => {
+    const role = getAccessTokenRole();
+    setIsLoggedIn(!!localStorage.getItem('access_token'));
+    setCanManage(role !== null && MANAGEMENT_ROLES.includes(role));
+  }, []);
 
   async function handleLogout() {
     const BFF_URL = process.env.NEXT_PUBLIC_BFF_URL ?? 'http://localhost:4000';
     await fetch(`${BFF_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' }).catch(() => {});
     localStorage.removeItem('access_token');
     document.cookie = '_auth=; path=/; max-age=0';
+    setIsLoggedIn(false);
     window.location.href = '/productos';
   }
 
@@ -27,23 +35,31 @@ export function CatalogNavbar({ isLoggedIn, userEmail }: Props) {
           Tienda
         </Link>
 
-        <div className="navbar__links" />
+        <div className="navbar__links">
+          {canManage && (
+            <Link href="/gestion" className="btn btn--ghost btn--sm" style={{ fontWeight: 500 }}>
+              Gestión
+            </Link>
+          )}
+        </div>
 
         <div className="navbar__actions">
           {isLoggedIn ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ fontSize: '14px', color: '#6b7280' }}>{userEmail}</span>
-              <button
-                onClick={handleLogout}
-                className="btn btn--ghost btn--rounded btn--sm"
-              >
-                Salir
-              </button>
-            </div>
+            <button
+              onClick={handleLogout}
+              className="btn btn--ghost btn--rounded btn--sm"
+            >
+              Salir
+            </button>
           ) : (
-            <Link href="/iniciar-sesion" className="btn btn--outlined btn--rounded btn--sm">
-              Iniciar sesión
-            </Link>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Link href="/iniciar-sesion" className="btn btn--ghost btn--rounded btn--sm">
+                Iniciar sesión
+              </Link>
+              <Link href="/registro" className="btn btn--outlined btn--rounded btn--sm">
+                Registrate
+              </Link>
+            </div>
           )}
 
           <button
