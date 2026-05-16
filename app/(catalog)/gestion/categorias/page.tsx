@@ -183,6 +183,9 @@ export default function GestionCategoriasPage() {
   const [statusFilter, setStatusFilter] = useState<Category['status'] | ''>('active');
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
+  const [toggling, setToggling] = useState<Set<string>>(new Set());
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editing, setEditing] = useState<Category | null>(null);
 
@@ -205,6 +208,15 @@ export default function GestionCategoriasPage() {
       // silent
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function refresh() {
+    try {
+      const { data } = await categoriesApi.list();
+      setCategoryList(data);
+    } catch {
+      // silent
     }
   }
 
@@ -259,17 +271,48 @@ export default function GestionCategoriasPage() {
     setDrawerOpen(true);
   }
 
+  function getAncestorIds(categoryId: string): string[] {
+    const ancestors: string[] = [];
+    let current = categoryList.find(c => c._id === categoryId);
+    while (current?.parentId) {
+      ancestors.push(current.parentId);
+      current = categoryList.find(c => c._id === current!.parentId);
+    }
+    return ancestors;
+  }
+
+  function getDescendantIds(categoryId: string): string[] {
+    const children = categoryList.filter(c => c.parentId === categoryId);
+    return children.flatMap(c => [c._id, ...getDescendantIds(c._id)]);
+  }
+
   function handleToggleStatus(category: Category) {
     const newStatus = category.status === 'active' ? 'inactive' : 'active';
     const categoryHasChildren = categoryList.some(c => c.parentId === category._id);
 
     const doToggle = async () => {
       setConfirm(null);
+      setToggling(prev => new Set(prev).add(category._id));
       try {
-        await categoriesApi.update(category._id, { status: newStatus });
-        load();
+        if (newStatus === 'active') {
+          const inactiveAncestors = getAncestorIds(category._id).filter(
+            id => categoryList.find(c => c._id === id)?.status !== 'active'
+          );
+          await Promise.all([
+            categoriesApi.update(category._id, { status: 'active' }),
+            ...inactiveAncestors.map(id => categoriesApi.update(id, { status: 'active' })),
+          ]);
+          const activated = new Set([category._id, ...inactiveAncestors]);
+          setCategoryList(prev => prev.map(c => activated.has(c._id) ? { ...c, status: 'active' as const } : c));
+        } else {
+          await categoriesApi.update(category._id, { status: 'inactive' });
+          const deactivated = new Set([category._id, ...getDescendantIds(category._id)]);
+          setCategoryList(prev => prev.map(c => deactivated.has(c._id) ? { ...c, status: 'inactive' as const } : c));
+        }
       } catch {
-        // silent
+        setErrorMsg('No se pudo cambiar el estado de la categoría. Intentá de nuevo.');
+      } finally {
+        setToggling(prev => { const next = new Set(prev); next.delete(category._id); return next; });
       }
     };
 
@@ -299,7 +342,7 @@ export default function GestionCategoriasPage() {
         setConfirm(null);
         try {
           await categoriesApi.delete(category._id);
-          load();
+          refresh();
         } catch {
           // silent
         }
@@ -309,22 +352,22 @@ export default function GestionCategoriasPage() {
 
   function handleSaved() {
     setDrawerOpen(false);
-    load();
+    refresh();
   }
 
   const visibleRows = sorted.filter(({ category }) => isVisible(category));
 
   return (
-    <main style={{ padding: '32px', overflowY: 'auto' }}>
+    <main style={{ padding: '32px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <h1 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-fg-primary)' }}>Categorías</h1>
-        <Button variant="filled" shape="rounded" size="sm" onClick={openCreate}>
+        <Button variant="filled" shape="rounded" size="md" onClick={openCreate}>
           + Nueva categoría
         </Button>
       </div>
 
       <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
-        <div style={{ width: '260px' }}>
+        <div style={{ width: 280 }}>
           <Input
             value={search}
             onChange={e => setSearch(e.target.value)}
@@ -366,16 +409,12 @@ export default function GestionCategoriasPage() {
           <Table.Body>
             {loading ? (
               <Table.Row>
-                <Table.Td colSpan={4} style={{ textAlign: 'center', color: 'var(--color-fg-muted)' }}>
-                  Cargando...
-                </Table.Td>
+                <Table.Td colSpan={4} style={{ textAlign: 'center', padding: '48px', color: 'var(--color-fg-muted)' }}>Cargando...</Table.Td>
               </Table.Row>
             ) : visibleRows.length === 0 ? (
               <Table.Row>
-                <Table.Td colSpan={4} style={{ textAlign: 'center', color: 'var(--color-fg-muted)' }}>
-                  {search || statusFilter !== 'active'
-                    ? 'Sin resultados para los filtros aplicados.'
-                    : 'Todavía no hay categorías. ¡Creá la primera!'}
+                <Table.Td colSpan={4} style={{ textAlign: 'center', padding: '48px', color: 'var(--color-fg-muted)' }}>
+                  {search || statusFilter !== 'active' ? 'Sin resultados para los filtros aplicados.' : 'Todavía no hay categorías. ¡Creá la primera!'}
                 </Table.Td>
               </Table.Row>
             ) : visibleRows.map(({ category, depth }) => (
@@ -412,34 +451,22 @@ export default function GestionCategoriasPage() {
                     {STATUS_LABELS[category.status]}
                   </Badge>
                 </Table.Td>
-                <Table.Td>
+                <Table.Td style={{ textAlign: 'center' }}>
                   <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
-                    <Button
-                      variant="ghost"
-                      shape="rounded"
-                      size="sm"
-                      onClick={() => handleToggleStatus(category)}
-                      style={{
-                        minWidth: '90px',
-                        color: category.status === 'active'
-                          ? 'var(--color-warning-700)'
-                          : 'var(--color-success-700)',
-                      }}
-                    >
-                      {category.status === 'active' ? 'Desactivar' : 'Activar'}
-                    </Button>
-                    <Button variant="ghost" shape="rounded" size="sm" onClick={() => openEdit(category)}>
+                    <Button variant="filled" shape="rounded" size="sm" onClick={() => openEdit(category)}>
                       Editar
                     </Button>
                     <Button
-                      variant="ghost"
+                      variant="outlined"
                       shape="rounded"
                       size="sm"
-                      onClick={() => handleDelete(category)}
-                      style={{ color: 'var(--color-error-600)' }}
+                      onClick={() => handleToggleStatus(category)}
+                      disabled={toggling.has(category._id)}
+                      loading={toggling.has(category._id)}
                     >
-                      Eliminar
+                      {category.status === 'active' ? 'Desactivar' : 'Activar'}
                     </Button>
+                    <Button variant="ghost" shape="rounded" size="sm" onClick={() => handleDelete(category)} style={{ color: 'var(--color-error-500)' }}>Eliminar</Button>
                   </div>
                 </Table.Td>
               </Table.Row>
@@ -473,6 +500,18 @@ export default function GestionCategoriasPage() {
           onConfirm={confirm.onConfirm}
           onCancel={() => setConfirm(null)}
         />
+      )}
+
+      {errorMsg && (
+        <Modal size="sm" onClose={() => setErrorMsg(null)}>
+          <Modal.Header>Error</Modal.Header>
+          <Modal.Body>
+            <p style={{ fontSize: 'var(--font-size-base)', color: 'var(--color-fg-secondary)', lineHeight: 'var(--line-height-normal)' }}>{errorMsg}</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="filled" shape="rounded" size="md" onClick={() => setErrorMsg(null)}>Entendido</Button>
+          </Modal.Footer>
+        </Modal>
       )}
     </main>
   );

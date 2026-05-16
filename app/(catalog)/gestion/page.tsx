@@ -1,3 +1,5 @@
+'use client';
+
 import { Table, Badge } from 'zoui';
 
 const STATS_MOCK = [
