@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import { useCart } from '@/context/CartContext';
 
@@ -12,14 +11,13 @@ interface Props {
 
 export function CatalogNavbar({ isLoggedIn, userEmail }: Props) {
   const { itemCount, openDrawer } = useCart();
-  const router = useRouter();
 
   async function handleLogout() {
     const BFF_URL = process.env.NEXT_PUBLIC_BFF_URL ?? 'http://localhost:4000';
     await fetch(`${BFF_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' }).catch(() => {});
     localStorage.removeItem('access_token');
     document.cookie = '_auth=; path=/; max-age=0';
-    router.push('/iniciar-sesion');
+    window.location.href = '/productos';
   }
 
   return (
