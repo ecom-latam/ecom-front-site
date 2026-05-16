@@ -1,5 +1,7 @@
 'use client';
 
+import { Button } from 'zoui';
+
 export default function GlobalError({
   reset,
 }: {
@@ -13,9 +15,9 @@ export default function GlobalError({
       <p className="text-gray-600 mb-8 max-w-sm">
         Ocurrió un error inesperado. Podés intentar de nuevo o volver al inicio.
       </p>
-      <button onClick={reset} className="btn btn--md btn--rounded btn--filled">
+      <Button variant="filled" shape="rounded" size="md" onClick={reset}>
         Reintentar
-      </button>
+      </Button>
     </main>
   );
 }

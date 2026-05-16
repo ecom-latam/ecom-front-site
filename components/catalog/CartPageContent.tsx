@@ -1,11 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { useCart } from '@/context/CartContext';
+import { Button } from 'zoui';
 
 export function CartPageContent() {
+  const router = useRouter();
   const { items, isLoading, updateItem, removeItem, clearCart } = useCart();
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -29,9 +31,9 @@ export function CartPageContent() {
       <main className="min-h-screen bg-white">
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
           <p className="text-gray-400 text-lg mb-4">Tu carrito está vacío.</p>
-          <Link href="/productos" className="btn btn--md btn--rounded btn--filled">
+          <Button variant="filled" shape="rounded" size="md" onClick={() => router.push('/productos')}>
             Ver productos
-          </Link>
+          </Button>
         </div>
       </main>
     );
@@ -75,12 +77,12 @@ export function CartPageContent() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <Link
-                    href={`/producto?id=${item.productId}`}
-                    className="font-medium text-gray-900 hover:underline"
+                  <button
+                    onClick={() => router.push(`/producto?id=${item.productId}`)}
+                    className="font-medium text-gray-900 hover:underline text-left"
                   >
                     {item.name}
-                  </Link>
+                  </button>
 
                   {Object.keys(item.selectedOptions).length > 0 && (
                     <p className="text-sm text-gray-400 mt-0.5">
@@ -95,21 +97,25 @@ export function CartPageContent() {
                   </p>
 
                   <div className="flex items-center gap-2 mt-3">
-                    <button
+                    <Button
+                      variant="outlined"
+                      shape="square"
+                      size="sm"
                       onClick={() => updateItem(item._id, item.quantity - 1)}
                       disabled={item.quantity <= 1 || isLoading}
-                      className="btn btn--outlined btn--square btn--sm"
                     >
                       −
-                    </button>
+                    </Button>
                     <span className="text-sm font-medium w-6 text-center">{item.quantity}</span>
-                    <button
+                    <Button
+                      variant="outlined"
+                      shape="square"
+                      size="sm"
                       onClick={() => updateItem(item._id, item.quantity + 1)}
                       disabled={isLoading}
-                      className="btn btn--outlined btn--square btn--sm"
                     >
                       +
-                    </button>
+                    </Button>
 
                     <span className="ml-4 text-sm text-gray-500">
                       Total: ${(item.price * item.quantity).toLocaleString('es-AR')}
@@ -144,21 +150,23 @@ export function CartPageContent() {
                 <span>${subtotal.toLocaleString('es-AR')}</span>
               </div>
 
-              <button
+              <Button
+                variant="filled"
+                shape="pill"
+                size="md"
                 disabled
-                className="btn btn--filled btn--pill btn--md"
                 title="Disponible próximamente"
-                style={{ width: '100%', justifyContent: 'center' }}
+                style={{ width: '100%', justifyContent: 'center', cursor: 'not-allowed' }}
               >
                 Ir al checkout
-              </button>
+              </Button>
 
-              <Link
-                href="/productos"
-                className="block text-center text-sm text-gray-500 hover:text-gray-900"
+              <button
+                onClick={() => router.push('/productos')}
+                className="block text-center text-sm text-gray-500 hover:text-gray-900 w-full"
               >
                 Seguir comprando
-              </Link>
+              </button>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Sidebar } from 'zoui';
 import type React from 'react';
 
 const ELEVATED_ROLES = ['Admin', 'Manager'];
@@ -85,25 +86,24 @@ export function GestionSidebar({ role }: Props) {
   const visibleItems = NAV_ITEMS.filter(item => !item.elevated || isElevated);
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar__header">
-        <p className="sidebar__section-label">Panel</p>
-      </div>
-      <nav className="sidebar__nav">
+    <Sidebar>
+      <Sidebar.Header label="Panel" />
+      <Sidebar.Nav>
         {visibleItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
-            <Link
+            <Sidebar.Item
               key={item.href}
+              as={Link}
               href={item.href}
-              className={`sidebar__item${isActive ? ' sidebar__item--active' : ''}`}
+              active={isActive}
+              icon={item.icon}
             >
-              <span className="sidebar__item-icon">{item.icon}</span>
-              <span className="sidebar__item-label">{item.label}</span>
-            </Link>
+              {item.label}
+            </Sidebar.Item>
           );
         })}
-      </nav>
-    </aside>
+      </Sidebar.Nav>
+    </Sidebar>
   );
 }

@@ -70,7 +70,7 @@ export default function RegistroPage() {
           fullWidth
         />
 
-        {error && <p className="field__hint field__hint--error">{error}</p>}
+        {error && <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-error-600)' }}>{error}</p>}
 
         <Button type="submit" loading={loading} variant="filled" shape="rounded" size="md" style={{ width: '100%' }}>
           {loading ? 'Creando cuenta...' : 'Crear cuenta'}

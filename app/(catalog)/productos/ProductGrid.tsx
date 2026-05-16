@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 
 import type { Category, Product } from '@/lib/api/storeClient';
-import { ProductCard, ProductGrid as ProductGridUI, ViewToggle, Pagination, EmptyState, ICON_SEARCH } from 'zoui';
+import { ProductCard, ProductGrid as ProductGridUI, ViewToggle, Pagination, EmptyState, ICON_SEARCH, Input, Select, Button, Badge } from 'zoui';
 
 interface Props {
   products: Product[];
@@ -78,24 +78,24 @@ export function ProductGrid({
     <div>
       <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
         <form onSubmit={handleSearch} style={{ display: 'flex', gap: '8px', flex: 1, minWidth: '200px' }}>
-          <div className="field field--outlined" style={{ flex: 1 }}>
-            <input
+          <div style={{ flex: 1 }}>
+            <Input
               name="q"
               defaultValue={currentQ ?? ''}
               placeholder="Buscar productos..."
-              className="field__input"
+              fullWidth
             />
           </div>
-          <button type="submit" className="btn btn--filled btn--rounded btn--sm">
+          <Button type="submit" variant="filled" shape="rounded" size="sm">
             Buscar
-          </button>
+          </Button>
         </form>
 
-        <div className="field field--outlined" style={{ minWidth: '180px' }}>
-          <select
-            className="field__input"
+        <div style={{ minWidth: '180px' }}>
+          <Select
             value={currentCategoryId ?? ''}
             onChange={(e) => navigate({ categoryId: e.target.value || undefined, page: undefined })}
+            fullWidth
           >
             <option value="">Todas las categorías</option>
             {categories.map((cat) => (
@@ -103,7 +103,7 @@ export function ProductGrid({
                 {cat.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <ViewToggle
@@ -215,7 +215,7 @@ function ProductListItem({ product }: { product: Product }) {
             </span>
           )}
           {outOfStock && (
-            <span className="badge badge--pill badge--error">Sin stock</span>
+            <Badge type="error" shape="pill">Sin stock</Badge>
           )}
         </div>
       </div>

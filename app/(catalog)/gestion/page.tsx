@@ -1,3 +1,5 @@
+import { Table, Badge } from 'zoui';
+
 const STATS_MOCK = [
   { label: 'Pedidos hoy', value: '24', change: '+12%' },
   { label: 'Ingresos del mes', value: '$148.320', change: '+8%' },
@@ -13,7 +15,7 @@ const ORDERS_MOCK = [
   { id: '#0037', customer: 'Valentina López', total: '$2.100', status: 'Cancelado' },
 ];
 
-const STATUS_BADGE: Record<string, string> = {
+const STATUS_BADGE: Record<string, 'warning' | 'info' | 'success' | 'error'> = {
   Pendiente: 'warning',
   Enviado:   'info',
   Entregado: 'success',
@@ -48,31 +50,31 @@ export default function GestionPage() {
         <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--color-border-default)' }}>
           <h2 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 600, color: 'var(--color-fg-primary)' }}>Últimos pedidos</h2>
         </div>
-        <div className="table-wrapper" style={{ border: 'none', borderRadius: 0 }}>
-          <table className="table">
-            <thead className="table__head">
+        <Table style={{ border: 'none', borderRadius: 0 }}>
+          <Table.Root>
+            <Table.Head>
               <tr>
                 {['Pedido', 'Cliente', 'Total', 'Estado'].map((col) => (
-                  <th key={col} className="table__th">{col}</th>
+                  <Table.Th key={col}>{col}</Table.Th>
                 ))}
               </tr>
-            </thead>
-            <tbody className="table__body">
+            </Table.Head>
+            <Table.Body>
               {ORDERS_MOCK.map((order) => (
-                <tr key={order.id} className="table__row">
-                  <td className="table__td" style={{ fontWeight: 500 }}>{order.id}</td>
-                  <td className="table__td">{order.customer}</td>
-                  <td className="table__td">{order.total}</td>
-                  <td className="table__td">
-                    <span className={`badge badge--pill badge--${STATUS_BADGE[order.status]}`}>
+                <Table.Row key={order.id}>
+                  <Table.Td style={{ fontWeight: 500 }}>{order.id}</Table.Td>
+                  <Table.Td>{order.customer}</Table.Td>
+                  <Table.Td>{order.total}</Table.Td>
+                  <Table.Td>
+                    <Badge type={STATUS_BADGE[order.status]} shape="pill">
                       {order.status}
-                    </span>
-                  </td>
-                </tr>
+                    </Badge>
+                  </Table.Td>
+                </Table.Row>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </Table.Body>
+          </Table.Root>
+        </Table>
       </div>
     </main>
   );

@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { isAxiosError } from 'axios';
 import { categories as categoriesApi } from '@/utils/api';
 import type { Category, CategoryPayload } from '@/utils/api';
+import { Modal, Drawer, Table, Badge, Input, Select, Button } from 'zoui';
 
-const STATUS_BADGE: Record<Category['status'], string> = {
+const STATUS_BADGE: Record<Category['status'], 'success' | 'neutral'> = {
   active:   'success',
   inactive: 'neutral',
 };
@@ -30,26 +31,24 @@ interface ConfirmModalProps {
 
 function ConfirmModal({ title, message, confirmLabel, danger = false, onConfirm, onCancel }: ConfirmModalProps) {
   return (
-    <div className="modal-overlay" onClick={onCancel}>
-      <div className="modal modal--sm" onClick={(e) => e.stopPropagation()}>
-        <div className="modal__header">
-          <h3 className="modal__title">{title}</h3>
-        </div>
-        <div className="modal__body">
-          <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-secondary)', lineHeight: 1.6 }}>{message}</p>
-        </div>
-        <div className="modal__footer" style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <button onClick={onCancel} className="btn btn--outlined btn--rounded btn--sm">Cancelar</button>
-          <button
-            onClick={onConfirm}
-            className="btn btn--filled btn--rounded btn--sm"
-            style={danger ? { background: 'var(--color-error-600)', borderColor: 'var(--color-error-600)' } : {}}
-          >
-            {confirmLabel}
-          </button>
-        </div>
-      </div>
-    </div>
+    <Modal size="sm" onClose={onCancel}>
+      <Modal.Header>{title}</Modal.Header>
+      <Modal.Body>
+        <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-secondary)', lineHeight: 1.6 }}>{message}</p>
+      </Modal.Body>
+      <Modal.Footer style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+        <Button variant="outlined" shape="rounded" size="sm" onClick={onCancel}>Cancelar</Button>
+        <Button
+          variant="filled"
+          shape="rounded"
+          size="sm"
+          onClick={onConfirm}
+          style={danger ? { background: 'var(--color-error-600)', borderColor: 'var(--color-error-600)' } : undefined}
+        >
+          {confirmLabel}
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
@@ -71,7 +70,7 @@ function buildDepthMap(categories: Category[]): Map<string, number> {
 
 // ─── Category Drawer ──────────────────────────────────────────────────────────
 
-interface DrawerProps {
+interface CategoryDrawerProps {
   category: Category | null;
   allCategories: Category[];
   depthMap: Map<string, number>;
@@ -79,7 +78,7 @@ interface DrawerProps {
   onSaved: () => void;
 }
 
-function CategoryDrawer({ category, allCategories, depthMap, onClose, onSaved }: DrawerProps) {
+function CategoryDrawer({ category, allCategories, depthMap, onClose, onSaved }: CategoryDrawerProps) {
   const [name, setName] = useState(category?.name ?? '');
   const [parentId, setParentId] = useState<string>(category?.parentId ?? '');
   const [status, setStatus] = useState<Category['status']>(category?.status ?? 'active');
@@ -123,71 +122,55 @@ function CategoryDrawer({ category, allCategories, depthMap, onClose, onSaved }:
   }
 
   return (
-    <div className="drawer-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <aside className="drawer drawer--right drawer--md" role="dialog" aria-label={category ? 'Editar categoría' : 'Nueva categoría'}>
-        <div className="drawer__header">
-          <h2 className="drawer__title">{category ? 'Editar categoría' : 'Nueva categoría'}</h2>
-          <button onClick={onClose} className="btn btn--ghost btn--square btn--sm drawer__close" aria-label="Cerrar">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        </div>
+    <Drawer side="right" size="md" onClose={onClose} label={category ? 'Editar categoría' : 'Nueva categoría'}>
+      <Drawer.Header onClose={onClose}>{category ? 'Editar categoría' : 'Nueva categoría'}</Drawer.Header>
+      <form onSubmit={handleSubmit} style={{ display: 'contents' }}>
+        <Drawer.Body style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <Input
+            label="Nombre *"
+            required
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder="Ej: Ropa de hombre"
+            fullWidth
+          />
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
-          <div className="drawer__body" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <div className="field field--outlined">
-              <label className="field__label">Nombre *</label>
-              <input
-                required
-                className="field__input"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                placeholder="Ej: Ropa de hombre"
-              />
-            </div>
+          <Select
+            label="Categoría padre"
+            value={parentId}
+            onChange={e => setParentId(e.target.value)}
+            hint="Solo se muestran categorías que pueden recibir subcategorías (máximo 4 niveles)."
+            fullWidth
+          >
+            <option value="">Sin categoría padre (raíz)</option>
+            {candidates.map(c => (
+              <option key={c._id} value={c._id}>{c.name}</option>
+            ))}
+          </Select>
 
-            <div className="field field--outlined">
-              <label className="field__label">Categoría padre</label>
-              <select
-                className="field__input"
-                value={parentId}
-                onChange={e => setParentId(e.target.value)}
-              >
-                <option value="">Sin categoría padre (raíz)</option>
-                {candidates.map(c => (
-                  <option key={c._id} value={c._id}>{c.name}</option>
-                ))}
-              </select>
-              <p className="field__hint">Solo se muestran categorías que pueden recibir subcategorías (máximo 4 niveles).</p>
-            </div>
+          <Select
+            label="Estado"
+            value={status}
+            onChange={e => setStatus(e.target.value as Category['status'])}
+            fullWidth
+          >
+            <option value="active">Activa</option>
+            <option value="inactive">Inactiva</option>
+          </Select>
 
-            <div className="field field--outlined">
-              <label className="field__label">Estado</label>
-              <select
-                className="field__input"
-                value={status}
-                onChange={e => setStatus(e.target.value as Category['status'])}
-              >
-                <option value="active">Activa</option>
-                <option value="inactive">Inactiva</option>
-              </select>
-            </div>
+          {error && (
+            <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-error-600)' }}>{error}</p>
+          )}
+        </Drawer.Body>
 
-            {error && (
-              <p className="field__hint field__hint--error">{error}</p>
-            )}
-          </div>
-
-          <div className="drawer__footer" style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <button type="button" onClick={onClose} className="btn btn--outlined btn--rounded btn--sm">Cancelar</button>
-            <button type="submit" disabled={loading} className="btn btn--filled btn--rounded btn--sm">
-              {loading ? 'Guardando...' : category ? 'Guardar cambios' : 'Crear categoría'}
-            </button>
-          </div>
-        </form>
-      </aside>
-    </div>
+        <Drawer.Footer style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+          <Button type="button" variant="outlined" shape="rounded" size="sm" onClick={onClose}>Cancelar</Button>
+          <Button type="submit" variant="filled" shape="rounded" size="sm" disabled={loading}>
+            {loading ? 'Guardando...' : category ? 'Guardar cambios' : 'Crear categoría'}
+          </Button>
+        </Drawer.Footer>
+      </form>
+    </Drawer>
   );
 }
 
@@ -335,76 +318,80 @@ export default function GestionCategoriasPage() {
     <main style={{ padding: '32px', overflowY: 'auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <h1 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-fg-primary)' }}>Categorías</h1>
-        <button onClick={openCreate} className="btn btn--filled btn--rounded btn--sm">
+        <Button variant="filled" shape="rounded" size="sm" onClick={openCreate}>
           + Nueva categoría
-        </button>
+        </Button>
       </div>
 
       <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
-        <div className="field field--outlined field--sm" style={{ width: '260px' }}>
-          <input
-            className="field__input"
+        <div style={{ width: '260px' }}>
+          <Input
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Buscar por nombre..."
+            size="sm"
+            fullWidth
           />
         </div>
-        <div className="field field--outlined field--sm" style={{ width: '160px' }}>
-          <select
-            className="field__input"
+        <div style={{ width: '160px' }}>
+          <Select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value as Category['status'] | '')}
+            size="sm"
+            fullWidth
           >
             <option value="">Todas</option>
             <option value="active">Activas</option>
             <option value="inactive">Inactivas</option>
-          </select>
+          </Select>
         </div>
       </div>
 
-      <div className="table-wrapper">
-        <table className="table table--compact" style={{ tableLayout: 'fixed' }}>
+      <Table>
+        <Table.Root compact style={{ tableLayout: 'fixed' }}>
           <colgroup>
             <col style={{ width: '40%' }} />
             <col style={{ width: '20%' }} />
             <col style={{ width: '13%' }} />
             <col style={{ width: '27%' }} />
           </colgroup>
-          <thead className="table__head">
+          <Table.Head>
             <tr>
-              <th className="table__th">Nombre</th>
-              <th className="table__th" style={{ textAlign: 'center' }}>Categoría padre</th>
-              <th className="table__th" style={{ textAlign: 'center' }}>Estado</th>
-              <th className="table__th" style={{ textAlign: 'center' }}>Acciones</th>
+              <Table.Th>Nombre</Table.Th>
+              <Table.Th style={{ textAlign: 'center' }}>Categoría padre</Table.Th>
+              <Table.Th style={{ textAlign: 'center' }}>Estado</Table.Th>
+              <Table.Th style={{ textAlign: 'center' }}>Acciones</Table.Th>
             </tr>
-          </thead>
-          <tbody className="table__body">
+          </Table.Head>
+          <Table.Body>
             {loading ? (
-              <tr className="table__row">
-                <td className="table__td" colSpan={4} style={{ textAlign: 'center', color: 'var(--color-fg-muted)' }}>
+              <Table.Row>
+                <Table.Td colSpan={4} style={{ textAlign: 'center', color: 'var(--color-fg-muted)' }}>
                   Cargando...
-                </td>
-              </tr>
+                </Table.Td>
+              </Table.Row>
             ) : visibleRows.length === 0 ? (
-              <tr className="table__row">
-                <td className="table__td" colSpan={4} style={{ textAlign: 'center', color: 'var(--color-fg-muted)' }}>
+              <Table.Row>
+                <Table.Td colSpan={4} style={{ textAlign: 'center', color: 'var(--color-fg-muted)' }}>
                   {search || statusFilter !== 'active'
                     ? 'Sin resultados para los filtros aplicados.'
                     : 'Todavía no hay categorías. ¡Creá la primera!'}
-                </td>
-              </tr>
+                </Table.Td>
+              </Table.Row>
             ) : visibleRows.map(({ category, depth }) => (
-              <tr key={category._id} className="table__row">
-                <td className="table__td" style={{ fontWeight: depth === 0 ? 500 : 400 }}>
+              <Table.Row key={category._id}>
+                <Table.Td style={{ fontWeight: depth === 0 ? 500 : 400 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px', paddingLeft: `${depth * 20}px` }}>
                     {hasChildren(category._id) ? (
-                      <button
+                      <Button
+                        variant="ghost"
+                        shape="square"
+                        size="sm"
                         onClick={() => toggleCollapse(category._id)}
-                        className="btn btn--ghost btn--square"
                         style={{ width: 20, height: 20, minWidth: 0, fontSize: '10px', color: 'var(--color-fg-muted)', flexShrink: 0 }}
                       >
                         {collapsed.has(category._id) ? '▶' : '▼'}
-                      </button>
+                      </Button>
                     ) : (
                       <span style={{ width: '20px', flexShrink: 0, display: 'inline-block' }} />
                     )}
@@ -413,23 +400,25 @@ export default function GestionCategoriasPage() {
                     )}
                     {category.name}
                   </div>
-                </td>
-                <td className="table__td" style={{ textAlign: 'center', color: 'var(--color-fg-secondary)' }}>
+                </Table.Td>
+                <Table.Td style={{ textAlign: 'center', color: 'var(--color-fg-secondary)' }}>
                   {category.parentId
                     ? (parentMap[category.parentId] ?? '—')
-                    : <span className="badge badge--square badge--neutral">raíz</span>
+                    : <Badge type="neutral" shape="square">raíz</Badge>
                   }
-                </td>
-                <td className="table__td" style={{ textAlign: 'center' }}>
-                  <span className={`badge badge--pill badge--${STATUS_BADGE[category.status]}`}>
+                </Table.Td>
+                <Table.Td style={{ textAlign: 'center' }}>
+                  <Badge type={STATUS_BADGE[category.status]} shape="pill">
                     {STATUS_LABELS[category.status]}
-                  </span>
-                </td>
-                <td className="table__td">
+                  </Badge>
+                </Table.Td>
+                <Table.Td>
                   <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
-                    <button
+                    <Button
+                      variant="ghost"
+                      shape="rounded"
+                      size="sm"
                       onClick={() => handleToggleStatus(category)}
-                      className="btn btn--sm btn--rounded btn--ghost"
                       style={{
                         minWidth: '90px',
                         color: category.status === 'active'
@@ -438,24 +427,26 @@ export default function GestionCategoriasPage() {
                       }}
                     >
                       {category.status === 'active' ? 'Desactivar' : 'Activar'}
-                    </button>
-                    <button onClick={() => openEdit(category)} className="btn btn--sm btn--rounded btn--ghost">
+                    </Button>
+                    <Button variant="ghost" shape="rounded" size="sm" onClick={() => openEdit(category)}>
                       Editar
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      shape="rounded"
+                      size="sm"
                       onClick={() => handleDelete(category)}
-                      className="btn btn--sm btn--rounded btn--ghost"
                       style={{ color: 'var(--color-error-600)' }}
                     >
                       Eliminar
-                    </button>
+                    </Button>
                   </div>
-                </td>
-              </tr>
+                </Table.Td>
+              </Table.Row>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </Table.Body>
+        </Table.Root>
+      </Table>
 
       {!loading && categoryList.length > 0 && (
         <p style={{ marginTop: '12px', fontSize: 'var(--font-size-xs)', color: 'var(--color-fg-muted)' }}>

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { isAxiosError } from 'axios';
 import { products as productsApi, categories as categoriesApi } from '@/utils/api';
 import type { Product, ProductPayload, ProductStatus, Category } from '@/utils/api';
+import { Modal, Drawer, Table, Badge, Input, Textarea, Select, Button, Pagination } from 'zoui';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -14,7 +15,7 @@ const STATUS_LABELS: Record<ProductStatus, string> = {
   archived: 'Archivado',
 };
 
-const STATUS_BADGE: Record<ProductStatus, string> = {
+const STATUS_BADGE: Record<ProductStatus, 'success' | 'neutral' | 'warning' | 'error'> = {
   active:   'success',
   draft:    'neutral',
   paused:   'warning',
@@ -78,39 +79,37 @@ interface ConfirmModalProps {
 
 function ConfirmModal({ title, message, confirmLabel, danger = false, onConfirm, onCancel }: ConfirmModalProps) {
   return (
-    <div className="modal-overlay" onClick={onCancel}>
-      <div className="modal modal--sm" onClick={(e) => e.stopPropagation()}>
-        <div className="modal__header">
-          <h3 className="modal__title">{title}</h3>
-        </div>
-        <div className="modal__body">
-          <p style={{ fontSize: 'var(--font-size-base)', color: 'var(--color-fg-secondary)', lineHeight: 'var(--line-height-normal)' }}>{message}</p>
-        </div>
-        <div className="modal__footer">
-          <button
-            onClick={onConfirm}
-            className="btn btn--md btn--rounded btn--filled"
-            style={danger ? { background: 'var(--color-error-500)', borderColor: 'var(--color-error-500)' } : undefined}
-          >
-            {confirmLabel}
-          </button>
-          <button onClick={onCancel} className="btn btn--md btn--rounded btn--outlined">Cancelar</button>
-        </div>
-      </div>
-    </div>
+    <Modal size="sm" onClose={onCancel}>
+      <Modal.Header>{title}</Modal.Header>
+      <Modal.Body>
+        <p style={{ fontSize: 'var(--font-size-base)', color: 'var(--color-fg-secondary)', lineHeight: 'var(--line-height-normal)' }}>{message}</p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button
+          variant="filled"
+          shape="rounded"
+          size="md"
+          onClick={onConfirm}
+          style={danger ? { background: 'var(--color-error-500)', borderColor: 'var(--color-error-500)' } : undefined}
+        >
+          {confirmLabel}
+        </Button>
+        <Button variant="outlined" shape="rounded" size="md" onClick={onCancel}>Cancelar</Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
 // ─── Product Drawer ───────────────────────────────────────────────────────────
 
-interface DrawerProps {
+interface ProductDrawerProps {
   product: Product | null;
   categories: Category[];
   onClose: () => void;
   onSaved: () => void;
 }
 
-function ProductDrawer({ product, categories, onClose, onSaved }: DrawerProps) {
+function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerProps) {
   const [form, setForm] = useState<ProductPayload>(
     product
       ? { name: product.name, description: product.description, price: product.price, salePrice: product.salePrice, stock: product.stock, categoryId: product.categoryId, status: product.status }
@@ -146,92 +145,94 @@ function ProductDrawer({ product, categories, onClose, onSaved }: DrawerProps) {
   }
 
   return (
-    <div className="drawer-overlay" onClick={onClose}>
-      <aside className="drawer drawer--right drawer--lg" onClick={(e) => e.stopPropagation()}>
-        <div className="drawer__header">
-          <h2 className="drawer__title">{product ? 'Editar producto' : 'Nuevo producto'}</h2>
-          <button onClick={onClose} className="btn btn--ghost btn--square btn--sm drawer__close" aria-label="Cerrar">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        </div>
+    <Drawer side="right" size="lg" onClose={onClose} label={product ? 'Editar producto' : 'Nuevo producto'}>
+      <Drawer.Header onClose={onClose}>{product ? 'Editar producto' : 'Nuevo producto'}</Drawer.Header>
+      <form onSubmit={handleSubmit} style={{ display: 'contents' }}>
+        <Drawer.Body style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <Input
+            label="Nombre *"
+            required
+            value={form.name}
+            onChange={e => set('name', e.target.value)}
+            placeholder="Ej: Remera de algodón"
+            fullWidth
+          />
 
-        <form onSubmit={handleSubmit} style={{ display: 'contents' }}>
-          <div className="drawer__body" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <Textarea
+            label="Descripción"
+            value={form.description ?? ''}
+            onChange={e => set('description', e.target.value)}
+            placeholder="Descripción del producto"
+            fullWidth
+          />
 
-            <div className="field field--outlined">
-              <label className="field__label">Nombre *</label>
-              <div className="field__control">
-                <input required value={form.name} onChange={e => set('name', e.target.value)} placeholder="Ej: Remera de algodón" />
-              </div>
-            </div>
-
-            <div className="field field--outlined field--textarea">
-              <label className="field__label">Descripción</label>
-              <div className="field__control">
-                <textarea value={form.description ?? ''} onChange={e => set('description', e.target.value)} placeholder="Descripción del producto" />
-              </div>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              <div className="field field--outlined">
-                <label className="field__label">Precio *</label>
-                <div className="field__control">
-                  <input required type="number" min={0} step={0.01} value={form.price} onChange={e => set('price', parseFloat(e.target.value) || 0)} />
-                </div>
-              </div>
-              <div className="field field--outlined">
-                <label className="field__label">Precio de oferta</label>
-                <div className="field__control">
-                  <input type="number" min={0} step={0.01} value={form.salePrice ?? ''} onChange={e => set('salePrice', e.target.value ? parseFloat(e.target.value) : null)} placeholder="Opcional" />
-                </div>
-              </div>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              <div className="field field--outlined">
-                <label className="field__label">Stock</label>
-                <div className="field__control">
-                  <input type="number" min={0} value={form.stock ?? 0} onChange={e => set('stock', parseInt(e.target.value) || 0)} />
-                </div>
-              </div>
-              <div className="field field--outlined">
-                <label className="field__label">Categoría</label>
-                <div className="field__control">
-                  <select value={form.categoryId ?? ''} onChange={e => set('categoryId', e.target.value || null)}>
-                    <option value="">Sin categoría</option>
-                    {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
-                  </select>
-                  <svg className="field__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
-                </div>
-              </div>
-            </div>
-
-            <div className="field field--outlined">
-              <label className="field__label">Estado</label>
-              <div className="field__control">
-                <select value={form.status} onChange={e => set('status', e.target.value as ProductStatus)}>
-                  {(Object.keys(STATUS_LABELS) as ProductStatus[]).filter(s => s !== 'archived').map(s => (
-                    <option key={s} value={s}>{STATUS_LABELS[s]}</option>
-                  ))}
-                </select>
-                <svg className="field__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
-              </div>
-            </div>
-
-            {error && <p className="field__hint field__hint--error">{error}</p>}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <Input
+              label="Precio *"
+              required
+              type="number"
+              min={0}
+              step={0.01}
+              value={form.price}
+              onChange={e => set('price', parseFloat(e.target.value) || 0)}
+              fullWidth
+            />
+            <Input
+              label="Precio de oferta"
+              type="number"
+              min={0}
+              step={0.01}
+              value={form.salePrice ?? ''}
+              onChange={e => set('salePrice', e.target.value ? parseFloat(e.target.value) : null)}
+              placeholder="Opcional"
+              fullWidth
+            />
           </div>
 
-          <div className="drawer__footer" style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <button type="button" onClick={onClose} className="btn btn--md btn--rounded btn--outlined">Cancelar</button>
-            <button type="submit" disabled={loading} className="btn btn--md btn--rounded btn--filled">
-              {loading ? 'Guardando...' : product ? 'Guardar cambios' : 'Crear producto'}
-            </button>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <Input
+              label="Stock"
+              type="number"
+              min={0}
+              value={form.stock ?? 0}
+              onChange={e => set('stock', parseInt(e.target.value) || 0)}
+              fullWidth
+            />
+            <Select
+              label="Categoría"
+              value={form.categoryId ?? ''}
+              onChange={e => set('categoryId', e.target.value || null)}
+              fullWidth
+            >
+              <option value="">Sin categoría</option>
+              {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+            </Select>
           </div>
-        </form>
-      </aside>
-    </div>
+
+          <Select
+            label="Estado"
+            value={form.status}
+            onChange={e => set('status', e.target.value as ProductStatus)}
+            fullWidth
+          >
+            {(Object.keys(STATUS_LABELS) as ProductStatus[]).filter(s => s !== 'archived').map(s => (
+              <option key={s} value={s}>{STATUS_LABELS[s]}</option>
+            ))}
+          </Select>
+
+          {error && (
+            <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-error-600)' }}>{error}</p>
+          )}
+        </Drawer.Body>
+
+        <Drawer.Footer style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+          <Button type="button" variant="outlined" shape="rounded" size="md" onClick={onClose}>Cancelar</Button>
+          <Button type="submit" variant="filled" shape="rounded" size="md" disabled={loading}>
+            {loading ? 'Guardando...' : product ? 'Guardar cambios' : 'Crear producto'}
+          </Button>
+        </Drawer.Footer>
+      </form>
+    </Drawer>
   );
 }
 
@@ -325,96 +326,101 @@ export default function GestionProductosPage() {
     <main style={{ padding: '32px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <h1 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-fg-primary)' }}>Productos</h1>
-        <button onClick={openCreate} className="btn btn--md btn--rounded btn--filled">
+        <Button variant="filled" shape="rounded" size="md" onClick={openCreate}>
           + Nuevo producto
-        </button>
+        </Button>
       </div>
 
       <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
-        <div className="field field--outlined field--sm" style={{ width: 280 }}>
-          <div className="field__control">
-            <input value={search} onChange={e => handleSearch(e.target.value)} placeholder="Buscar por nombre..." />
-          </div>
+        <div style={{ width: 280 }}>
+          <Input
+            value={search}
+            onChange={e => handleSearch(e.target.value)}
+            placeholder="Buscar por nombre..."
+            size="sm"
+            fullWidth
+          />
         </div>
-        <div className="field field--outlined field--sm" style={{ width: 160 }}>
-          <div className="field__control">
-            <select value={statusFilter} onChange={e => handleStatusFilter(e.target.value as ProductStatus | '')}>
-              {FILTER_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-            </select>
-            <svg className="field__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
-          </div>
+        <div style={{ width: 160 }}>
+          <Select
+            value={statusFilter}
+            onChange={e => handleStatusFilter(e.target.value as ProductStatus | '')}
+            size="sm"
+            fullWidth
+          >
+            {FILTER_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </Select>
         </div>
       </div>
 
-      <div className="table-wrapper">
-        <table className="table table--compact">
-          <thead className="table__head">
+      <Table>
+        <Table.Root compact>
+          <Table.Head>
             <tr>
-              <th className="table__th" style={{ width: 56 }} />
-              <th className="table__th">Nombre</th>
-              <th className="table__th" style={{ textAlign: 'center' }}>Estado</th>
-              <th className="table__th" style={{ textAlign: 'center' }}>Categoría</th>
-              <th className="table__th" style={{ textAlign: 'center' }}>Precio</th>
-              <th className="table__th" style={{ textAlign: 'center' }}>Stock</th>
-              <th className="table__th table__th--right">Acciones</th>
+              <Table.Th style={{ width: 56 }} />
+              <Table.Th>Nombre</Table.Th>
+              <Table.Th style={{ textAlign: 'center' }}>Estado</Table.Th>
+              <Table.Th style={{ textAlign: 'center' }}>Categoría</Table.Th>
+              <Table.Th style={{ textAlign: 'center' }}>Precio</Table.Th>
+              <Table.Th style={{ textAlign: 'center' }}>Stock</Table.Th>
+              <Table.Th align="right">Acciones</Table.Th>
             </tr>
-          </thead>
-          <tbody className="table__body">
+          </Table.Head>
+          <Table.Body>
             {loading ? (
-              <tr className="table__row">
-                <td className="table__td table__td--muted" colSpan={7} style={{ textAlign: 'center', padding: '48px' }}>Cargando...</td>
-              </tr>
+              <Table.Row>
+                <Table.Td colSpan={7} style={{ textAlign: 'center', padding: '48px', color: 'var(--color-fg-muted)' }}>Cargando...</Table.Td>
+              </Table.Row>
             ) : productList.length === 0 ? (
-              <tr className="table__row">
-                <td className="table__td table__td--muted" colSpan={7} style={{ textAlign: 'center', padding: '48px' }}>
+              <Table.Row>
+                <Table.Td colSpan={7} style={{ textAlign: 'center', padding: '48px', color: 'var(--color-fg-muted)' }}>
                   {search || statusFilter ? 'Sin resultados para los filtros aplicados.' : 'Todavía no hay productos. ¡Creá el primero!'}
-                </td>
-              </tr>
+                </Table.Td>
+              </Table.Row>
             ) : productList.map((product) => (
-              <tr key={product._id} className="table__row">
-                <td className="table__td"><MainImage images={product.images} /></td>
-                <td className="table__td" style={{ maxWidth: 240 }}>
+              <Table.Row key={product._id}>
+                <Table.Td><MainImage images={product.images} /></Table.Td>
+                <Table.Td style={{ maxWidth: 240 }}>
                   <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 500 }}>{product.name}</div>
                   {product.salePrice !== null && (
                     <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-fg-muted)', marginTop: 2 }}>Oferta: {formatPrice(product.salePrice)}</div>
                   )}
-                </td>
-                <td className="table__td" style={{ textAlign: 'center' }}>
-                  <span className={`badge badge--pill badge--${STATUS_BADGE[product.status]}`}>{STATUS_LABELS[product.status]}</span>
-                </td>
-                <td className="table__td table__td--muted" style={{ textAlign: 'center' }}>
+                </Table.Td>
+                <Table.Td style={{ textAlign: 'center' }}>
+                  <Badge type={STATUS_BADGE[product.status]} shape="pill">{STATUS_LABELS[product.status]}</Badge>
+                </Table.Td>
+                <Table.Td muted style={{ textAlign: 'center' }}>
                   {product.categoryId ? (categoryMap[product.categoryId] ?? '—') : '—'}
-                </td>
-                <td className="table__td" style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>{formatPrice(product.price)}</td>
-                <td className="table__td" style={{ textAlign: 'center' }}>{product.stock}</td>
-                <td className="table__td table__td--right">
+                </Table.Td>
+                <Table.Td style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>{formatPrice(product.price)}</Table.Td>
+                <Table.Td style={{ textAlign: 'center' }}>{product.stock}</Table.Td>
+                <Table.Td align="right">
                   <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
-                    <button
+                    <Button
+                      variant="ghost"
+                      shape="rounded"
+                      size="sm"
                       onClick={() => handleToggleStatus(product)}
-                      className="btn btn--sm btn--rounded btn--ghost"
                       style={{ color: product.status === 'active' ? 'var(--color-warning-700)' : 'var(--color-success-700)', minWidth: 90 }}
                     >
                       {product.status === 'active' ? 'Desactivar' : 'Activar'}
-                    </button>
-                    <button onClick={() => openEdit(product)} className="btn btn--sm btn--rounded btn--ghost">Editar</button>
-                    <button onClick={() => handleDelete(product)} className="btn btn--sm btn--rounded btn--ghost" style={{ color: 'var(--color-error-500)' }}>Eliminar</button>
+                    </Button>
+                    <Button variant="ghost" shape="rounded" size="sm" onClick={() => openEdit(product)}>Editar</Button>
+                    <Button variant="ghost" shape="rounded" size="sm" onClick={() => handleDelete(product)} style={{ color: 'var(--color-error-500)' }}>Eliminar</Button>
                   </div>
-                </td>
-              </tr>
+                </Table.Td>
+              </Table.Row>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </Table.Body>
+        </Table.Root>
+      </Table>
 
       {totalPages > 1 && (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px' }}>
           <span style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-muted)' }}>
             {total} productos · página {page} de {totalPages}
           </span>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="btn btn--sm btn--rounded btn--outlined">← Anterior</button>
-            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="btn btn--sm btn--rounded btn--outlined">Siguiente →</button>
-          </div>
+          <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
 

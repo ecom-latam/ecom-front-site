@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 
 import { useCart } from '@/context/CartContext';
 import type { Product, ProductVariant } from '@/lib/api/storeClient';
+import { Modal, Button } from 'zoui';
 
 interface Props {
   product: Product;
@@ -132,43 +133,36 @@ export function AddToCartModal({ product, onClose }: Props) {
   }
 
   return (
-    <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="modal modal--md">
-        <div className="modal__header">
-          <div>
-            <h2 className="modal__title">{product.name}</h2>
-            <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-secondary)', marginTop: '2px' }}>
-              ${(product.salePrice ?? product.price).toLocaleString('es-AR')}
-            </p>
-          </div>
-          <button onClick={onClose} className="btn btn--ghost btn--square btn--sm modal__close" aria-label="Cerrar">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        </div>
-        <div className="modal__body">
+    <Modal size="md" onClose={onClose}>
+      <Modal.Header onClose={onClose}>{product.name}</Modal.Header>
+      <Modal.Body>
+        <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-secondary)', marginBottom: '16px' }}>
+          ${(product.salePrice ?? product.price).toLocaleString('es-AR')}
+        </p>
 
         {product.hasVariants && optionNames.length > 0 && (
-          <div className="space-y-4 mb-6">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
             {optionNames.map((name) => (
               <div key={name}>
-                <p className="text-sm font-medium text-gray-700 mb-2">{name}</p>
-                <div className="flex flex-wrap gap-2">
+                <p style={{ fontSize: 'var(--font-size-sm)', fontWeight: 500, color: 'var(--color-fg-primary)', marginBottom: '8px' }}>
+                  {name}
+                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                   {(optionValues[name] ?? []).map((value) => {
                     const isSelected = selectedOptions[name] === value;
                     const available = isValueAvailable(product.variants, name, value, selectedOptions);
                     return (
-                      <button
+                      <Button
                         key={value}
+                        size="sm"
+                        shape="rounded"
+                        variant={isSelected ? 'filled' : 'outlined'}
                         onClick={() => available && selectValue(name, value)}
                         disabled={!available}
-                        className={`btn btn--sm btn--rounded ${
-                          isSelected ? 'btn--filled' : 'btn--outlined'
-                        } ${!available ? 'opacity-40 cursor-not-allowed' : ''}`}
+                        style={!available ? { opacity: 0.4 } : undefined}
                       >
                         {value}
-                      </button>
+                      </Button>
                     );
                   })}
                 </div>
@@ -178,24 +172,29 @@ export function AddToCartModal({ product, onClose }: Props) {
         )}
 
         {!product.hasVariants && (
-          <p className="text-sm text-gray-500 mb-6">¿Confirmás que querés agregar este producto?</p>
+          <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-secondary)', marginBottom: '24px' }}>
+            ¿Confirmás que querés agregar este producto?
+          </p>
         )}
 
-          {error && (
-            <p className="field__hint field__hint--error" style={{ marginTop: '8px' }}>{error}</p>
-          )}
-        </div>
-        <div className="modal__footer">
-          <button
-            onClick={handleConfirm}
-            disabled={!canAddToCart || isSubmitting}
-            className="btn btn--filled btn--pill btn--md"
-            style={{ width: '100%', justifyContent: 'center' }}
-          >
-            {isSubmitting ? 'Agregando...' : 'Agregar al carrito'}
-          </button>
-        </div>
-      </div>
-    </div>
+        {error && (
+          <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-error-600)', marginTop: '8px' }}>
+            {error}
+          </p>
+        )}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button
+          variant="filled"
+          shape="pill"
+          size="md"
+          onClick={handleConfirm}
+          disabled={!canAddToCart || isSubmitting}
+          style={{ width: '100%', justifyContent: 'center' }}
+        >
+          {isSubmitting ? 'Agregando...' : 'Agregar al carrito'}
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }

@@ -79,7 +79,7 @@ function LoginForm() {
         <Input id="email" name="email" type="email" required autoComplete="email" autoFocus label="Email" fullWidth />
         <Input id="password" name="password" type="password" required autoComplete="current-password" label="Contraseña" fullWidth />
 
-        {error && <p className="field__hint field__hint--error">{error}</p>}
+        {error && <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-error-600)' }}>{error}</p>}
 
         <Button type="submit" loading={loading} variant="filled" shape="rounded" size="md" style={{ width: '100%' }}>
           {loading ? 'Ingresando...' : 'Ingresar'}

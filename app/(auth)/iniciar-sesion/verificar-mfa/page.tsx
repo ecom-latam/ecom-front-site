@@ -4,6 +4,7 @@ import { useState, FormEvent, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { isAxiosError } from 'axios';
 import { auth, startSession } from '@/utils/api';
+import { Button, Input } from 'zoui';
 
 const ERRORS: Record<string, string> = {
   INVALID_TOTP: 'Código incorrecto. Verificá tu app de autenticación.',
@@ -68,33 +69,31 @@ function MfaVerifyForm() {
       </p>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div className="field field--outlined">
-          <label htmlFor="code" className="field__label">Código</label>
-          <input
-            id="code"
-            name="code"
-            type="text"
-            inputMode="numeric"
-            pattern="\d{6}"
-            maxLength={6}
-            required
-            autoComplete="one-time-code"
-            autoFocus
-            className="field__input"
-            style={{ textAlign: 'center', letterSpacing: '0.2em', fontFamily: 'monospace' }}
-          />
-        </div>
+        <Input
+          name="code"
+          label="Código"
+          type="text"
+          inputMode="numeric"
+          pattern="\d{6}"
+          maxLength={6}
+          required
+          autoComplete="one-time-code"
+          autoFocus
+          error={error || undefined}
+          style={{ textAlign: 'center', letterSpacing: '0.2em', fontFamily: 'monospace' }}
+          fullWidth
+        />
 
-        {error && <p className="field__hint field__hint--error">{error}</p>}
-
-        <button
+        <Button
           type="submit"
           disabled={loading}
-          className="btn btn--filled btn--rounded btn--md"
+          variant="filled"
+          shape="rounded"
+          size="md"
           style={{ width: '100%', justifyContent: 'center' }}
         >
           {loading ? 'Verificando...' : 'Verificar'}
-        </button>
+        </Button>
       </form>
     </div>
   );

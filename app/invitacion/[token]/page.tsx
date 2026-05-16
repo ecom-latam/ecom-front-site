@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { isAxiosError } from 'axios';
 import { apiClient, startSession } from '@/utils/api';
+import { Button, Input } from 'zoui';
 
 const ROLE_LABELS: Record<string, string> = {
   Manager: 'Manager',
@@ -154,42 +155,37 @@ export default function InvitacionPage() {
         </p>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div className="field field--outlined">
-            <label htmlFor="email" className="field__label">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              autoComplete="email"
-              className="field__input"
-            />
-          </div>
+          <Input
+            name="email"
+            label="Email"
+            type="email"
+            required
+            autoComplete="email"
+            fullWidth
+          />
+          <Input
+            name="password"
+            label="Contraseña"
+            type="password"
+            required
+            minLength={8}
+            autoComplete="new-password"
+            hint="Mínimo 8 caracteres."
+            fullWidth
+          />
 
-          <div className="field field--outlined">
-            <label htmlFor="password" className="field__label">Contraseña</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              minLength={8}
-              autoComplete="new-password"
-              className="field__input"
-            />
-            <p className="field__hint">Mínimo 8 caracteres.</p>
-          </div>
+          {error && <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-error-600)' }}>{error}</p>}
 
-          {error && <p className="field__hint field__hint--error">{error}</p>}
-
-          <button
+          <Button
             type="submit"
             disabled={submitting}
-            className="btn btn--filled btn--rounded btn--md"
+            variant="filled"
+            shape="rounded"
+            size="md"
             style={{ width: '100%', justifyContent: 'center' }}
           >
             {submitting ? 'Creando cuenta...' : 'Aceptar invitación'}
-          </button>
+          </Button>
         </form>
       </div>
     </main>
