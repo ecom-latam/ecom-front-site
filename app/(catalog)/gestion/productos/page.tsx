@@ -250,6 +250,8 @@ export default function GestionProductosPage() {
   const [categoryMap, setCategoryMap] = useState<Record<string, string>>({});
   const [categoryList, setCategoryList] = useState<Category[]>([]);
 
+  const [counts, setCounts] = useState<{ active: number; draft: number; paused: number }>({ active: 0, draft: 0, paused: 0 });
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
   const [confirmModal, setConfirmModal] = useState<{ title: string; message: string; confirmLabel: string; danger?: boolean; onConfirm: () => void } | null>(null);
@@ -271,6 +273,19 @@ export default function GestionProductosPage() {
     }
   }, []);
 
+  const loadCounts = useCallback(async () => {
+    try {
+      const [active, draft, paused] = await Promise.all([
+        productsApi.list({ page: 1, limit: 1, status: 'active' }),
+        productsApi.list({ page: 1, limit: 1, status: 'draft' }),
+        productsApi.list({ page: 1, limit: 1, status: 'paused' }),
+      ]);
+      setCounts({ active: active.data.total, draft: draft.data.total, paused: paused.data.total });
+    } catch {
+      // silent
+    }
+  }, []);
+
   useEffect(() => { load(page, search, statusFilter); }, [load, page, statusFilter]);
 
   useEffect(() => {
@@ -278,7 +293,8 @@ export default function GestionProductosPage() {
       setCategoryList(data);
       setCategoryMap(Object.fromEntries(data.map(c => [c._id, c.name])));
     }).catch(() => {});
-  }, []);
+    loadCounts();
+  }, [loadCounts]);
 
   function handleSearch(value: string) {
     setSearch(value);
@@ -320,7 +336,7 @@ export default function GestionProductosPage() {
     });
   }
 
-  function handleSaved() { setDrawerOpen(false); load(page, search, statusFilter); }
+  function handleSaved() { setDrawerOpen(false); load(page, search, statusFilter); loadCounts(); }
 
   return (
     <main style={{ padding: '32px' }}>
@@ -363,7 +379,7 @@ export default function GestionProductosPage() {
               <Table.Th style={{ textAlign: 'center' }}>Categoría</Table.Th>
               <Table.Th style={{ textAlign: 'center' }}>Precio</Table.Th>
               <Table.Th style={{ textAlign: 'center' }}>Stock</Table.Th>
-              <Table.Th align="right">Acciones</Table.Th>
+              <Table.Th style={{ textAlign: 'center' }}>Acciones</Table.Th>
             </tr>
           </Table.Head>
           <Table.Body>
@@ -394,18 +410,17 @@ export default function GestionProductosPage() {
                 </Table.Td>
                 <Table.Td style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>{formatPrice(product.price)}</Table.Td>
                 <Table.Td style={{ textAlign: 'center' }}>{product.stock}</Table.Td>
-                <Table.Td align="right">
-                  <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
+                <Table.Td style={{ textAlign: 'center' }}>
+                  <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+                    <Button variant="filled" shape="rounded" size="sm" onClick={() => openEdit(product)}>Editar</Button>
                     <Button
-                      variant="ghost"
+                      variant="outlined"
                       shape="rounded"
                       size="sm"
                       onClick={() => handleToggleStatus(product)}
-                      style={{ color: product.status === 'active' ? 'var(--color-warning-700)' : 'var(--color-success-700)', minWidth: 90 }}
                     >
                       {product.status === 'active' ? 'Desactivar' : 'Activar'}
                     </Button>
-                    <Button variant="ghost" shape="rounded" size="sm" onClick={() => openEdit(product)}>Editar</Button>
                     <Button variant="ghost" shape="rounded" size="sm" onClick={() => handleDelete(product)} style={{ color: 'var(--color-error-500)' }}>Eliminar</Button>
                   </div>
                 </Table.Td>
@@ -415,12 +430,12 @@ export default function GestionProductosPage() {
         </Table.Root>
       </Table>
 
-      {totalPages > 1 && (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px' }}>
-          <span style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-muted)' }}>
-            {total} productos · página {page} de {totalPages}
-          </span>
-          <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+      {!loading && (counts.active + counts.draft + counts.paused) > 0 && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
+          <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-fg-muted)' }}>
+            {counts.active + counts.draft + counts.paused} producto{counts.active + counts.draft + counts.paused !== 1 ? 's' : ''} · {counts.active} activo{counts.active !== 1 ? 's' : ''} · {counts.draft} borrador{counts.draft !== 1 ? 'es' : ''} · {counts.paused} inactivo{counts.paused !== 1 ? 's' : ''}
+          </p>
+          {totalPages > 1 && <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />}
         </div>
       )}
 
