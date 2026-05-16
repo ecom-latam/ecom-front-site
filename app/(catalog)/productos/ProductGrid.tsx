@@ -6,11 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 
 import type { Category, Product } from '@/lib/api/storeClient';
-import { ProductCard } from '@/components/ui/ProductCard';
-import { ProductGrid as ProductGridUI } from '@/components/ui/ProductGrid';
-import { ViewToggle } from '@/components/ui/ViewToggle';
-import { Pagination } from '@/components/ui/Pagination';
-import { EmptyState, ICON_SEARCH } from '@/components/ui/EmptyState';
+import { ProductCard, ProductGrid as ProductGridUI, ViewToggle, Pagination, EmptyState, ICON_SEARCH } from 'zoui';
 
 interface Props {
   products: Product[];
@@ -139,6 +135,8 @@ export function ProductGrid({
               <ProductCard
                 key={p._id}
                 variant="classic"
+                as={Link}
+                ImageComponent={Image}
                 name={p.name}
                 price={`$${displayPrice.toLocaleString('es-AR')}`}
                 priceOld={hasDiscount ? `$${p.price.toLocaleString('es-AR')}` : undefined}

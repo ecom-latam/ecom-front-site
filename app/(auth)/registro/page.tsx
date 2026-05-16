@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { isAxiosError } from 'axios';
 import { auth, startSession } from '@/utils/api';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
+import { Button, Input } from 'zoui';
 
 const ERRORS: Record<string, string> = {
   INVALID_EMAIL: 'El email no es válido.',

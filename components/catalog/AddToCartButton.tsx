@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import type { Product } from '@/lib/api/storeClient';
-import { Button } from '@/components/ui/Button';
+import { Button } from 'zoui';
 import { AddToCartModal } from './AddToCartModal';
 
 interface Props {
