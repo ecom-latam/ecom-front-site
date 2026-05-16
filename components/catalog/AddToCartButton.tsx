@@ -35,7 +35,7 @@ export function AddToCartButton({ product, hasSession, availableStock }: Props) 
   if (!hasSession) {
     return (
       <a
-        href={`/login?next=/products/${product._id}`}
+        href={`/iniciar-sesion?next=/producto?id=${product._id}`}
         className="btn btn--filled btn--pill btn--md mt-6"
         style={{ width: '100%', justifyContent: 'center' }}
       >

@@ -30,7 +30,7 @@ export function CartPageContent() {
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
           <p className="text-gray-400 text-lg mb-4">Tu carrito está vacío.</p>
           <Link
-            href="/products"
+            href="/productos"
             className="inline-block bg-gray-900 text-white px-6 py-3 rounded-xl text-sm font-medium hover:bg-gray-700"
           >
             Ver productos
@@ -79,7 +79,7 @@ export function CartPageContent() {
 
                 <div className="flex-1 min-w-0">
                   <Link
-                    href={`/products/${item.productId}`}
+                    href={`/producto?id=${item.productId}`}
                     className="font-medium text-gray-900 hover:underline"
                   >
                     {item.name}
@@ -156,7 +156,7 @@ export function CartPageContent() {
               </button>
 
               <Link
-                href="/products"
+                href="/productos"
                 className="block text-center text-sm text-gray-500 hover:text-gray-900"
               >
                 Seguir comprando

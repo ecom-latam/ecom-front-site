@@ -15,14 +15,17 @@ export function CatalogNavbar({ isLoggedIn, userEmail }: Props) {
   const router = useRouter();
 
   async function handleLogout() {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    router.refresh();
+    const BFF_URL = process.env.NEXT_PUBLIC_BFF_URL ?? 'http://localhost:4000';
+    await fetch(`${BFF_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' }).catch(() => {});
+    localStorage.removeItem('access_token');
+    document.cookie = '_auth=; path=/; max-age=0';
+    router.push('/iniciar-sesion');
   }
 
   return (
     <header className="navbar navbar--bordered" style={{ position: 'sticky', top: 0, zIndex: 40 }}>
       <div className="navbar__inner">
-        <Link href="/products" className="navbar__logo">
+        <Link href="/productos" className="navbar__logo">
           Tienda
         </Link>
 
@@ -40,7 +43,7 @@ export function CatalogNavbar({ isLoggedIn, userEmail }: Props) {
               </button>
             </div>
           ) : (
-            <Link href="/login" className="btn btn--outlined btn--rounded btn--sm">
+            <Link href="/iniciar-sesion" className="btn btn--outlined btn--rounded btn--sm">
               Iniciar sesión
             </Link>
           )}

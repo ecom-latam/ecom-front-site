@@ -49,7 +49,7 @@ export function CartDrawer() {
           <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
             <p className="text-gray-400 text-sm">Tu carrito está vacío.</p>
             <Link
-              href="/products"
+              href="/productos"
               onClick={closeDrawer}
               className="mt-4 text-sm text-gray-900 underline underline-offset-2"
             >
@@ -136,7 +136,7 @@ export function CartDrawer() {
               </div>
 
               <Link
-                href="/cart"
+                href="/carrito"
                 onClick={closeDrawer}
                 className="btn btn--outlined btn--pill btn--md"
                 style={{ width: '100%', justifyContent: 'center' }}
