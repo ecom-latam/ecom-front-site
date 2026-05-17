@@ -9,6 +9,10 @@ function extractSlug(req: NextRequest): string | null {
   if (prod) return prod[1];
   const dev = host.match(/^([^.]+)\.localhost(:\d+)?$/);
   if (dev) return dev[1];
+  if (process.env.NODE_ENV === 'development') {
+    const storeParam = req.nextUrl.searchParams.get('store');
+    if (storeParam) return storeParam;
+  }
   return null;
 }
 
