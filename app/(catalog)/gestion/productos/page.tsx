@@ -156,6 +156,7 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
             onChange={e => set('name', e.target.value)}
             placeholder="Ej: Remera de algodón"
             fullWidth
+            testId="prod-name-input"
           />
 
           <Textarea
@@ -176,6 +177,7 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
               value={form.price}
               onChange={e => set('price', parseFloat(e.target.value) || 0)}
               fullWidth
+              testId="prod-price-input"
             />
             <Input
               label="Precio de oferta"
@@ -197,12 +199,14 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
               value={form.stock ?? 0}
               onChange={e => set('stock', parseInt(e.target.value) || 0)}
               fullWidth
+              testId="prod-stock-input"
             />
             <Select
               label="Categoría"
               value={form.categoryId ?? ''}
               onChange={e => set('categoryId', e.target.value || null)}
               fullWidth
+              testId="prod-category-select"
             >
               <option value="">Sin categoría</option>
               {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
@@ -227,7 +231,7 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
 
         <Drawer.Footer style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           <Button type="button" variant="outlined" shape="rounded" size="md" onClick={onClose}>Cancelar</Button>
-          <Button type="submit" variant="filled" shape="rounded" size="md" disabled={loading}>
+          <Button type="submit" variant="filled" shape="rounded" size="md" disabled={loading} testId="prod-submit-btn">
             {loading ? 'Guardando...' : product ? 'Guardar cambios' : 'Crear producto'}
           </Button>
         </Drawer.Footer>
@@ -342,7 +346,7 @@ export default function GestionProductosPage() {
     <main style={{ padding: '32px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <h1 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-fg-primary)' }}>Productos</h1>
-        <Button variant="filled" shape="rounded" size="md" onClick={openCreate}>
+        <Button variant="filled" shape="rounded" size="md" onClick={openCreate} testId="prod-new-btn">
           + Nuevo producto
         </Button>
       </div>
@@ -440,7 +444,7 @@ export default function GestionProductosPage() {
       )}
 
       {drawerOpen && (
-        <ProductDrawer product={editing} categories={categoryList} onClose={() => setDrawerOpen(false)} onSaved={handleSaved} />
+        <ProductDrawer product={editing} categories={categoryList.filter(c => c.status === 'active')} onClose={() => setDrawerOpen(false)} onSaved={handleSaved} />
       )}
 
       {confirmModal && (

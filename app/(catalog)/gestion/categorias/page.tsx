@@ -43,6 +43,7 @@ function ConfirmModal({ title, message, confirmLabel, danger = false, onConfirm,
           shape="rounded"
           size="sm"
           onClick={onConfirm}
+          testId="cat-confirm-btn"
           style={danger ? { background: 'var(--color-error-600)', borderColor: 'var(--color-error-600)' } : undefined}
         >
           {confirmLabel}
@@ -384,6 +385,7 @@ export default function GestionCategoriasPage() {
             onChange={e => setStatusFilter(e.target.value as Category['status'] | '')}
             size="sm"
             fullWidth
+            testId="cat-status-filter"
           >
             <option value="">Todas</option>
             <option value="active">Activas</option>
@@ -420,7 +422,7 @@ export default function GestionCategoriasPage() {
                 </Table.Td>
               </Table.Row>
             ) : visibleRows.map(({ category, depth }) => (
-              <Table.Row key={category._id}>
+              <Table.Row key={category._id} data-testid={`cat-row-${category.name}`}>
                 <Table.Td style={{ fontWeight: depth === 0 ? 500 : 400 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px', paddingLeft: `${depth * 20}px` }}>
                     {hasChildren(category._id) ? (
@@ -465,6 +467,7 @@ export default function GestionCategoriasPage() {
                       onClick={() => handleToggleStatus(category)}
                       disabled={toggling.has(category._id)}
                       loading={toggling.has(category._id)}
+                      testId="cat-toggle-btn"
                     >
                       {category.status === 'active' ? 'Desactivar' : 'Activar'}
                     </Button>
