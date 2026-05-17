@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 
 import type { Category, Product } from '@/lib/api/storeClient';
-import { ProductCard, ProductGrid as ProductGridUI, ViewToggle, Pagination, EmptyState, ICON_SEARCH, Input, Select, Button, Badge } from 'zoui';
+import { ProductCard, ProductGrid as ProductGridUI, ViewToggle, Pagination, EmptyState, ICON_SEARCH, Input, Select, Button, Badge, Text } from 'zoui';
 
 interface Props {
   products: Product[];
@@ -86,7 +86,7 @@ export function ProductGrid({
               fullWidth
             />
           </div>
-          <Button type="submit" variant="filled" shape="rounded" size="sm">
+          <Button type="submit" variant="filled" shape="rounded" size="md">
             Buscar
           </Button>
         </form>
@@ -113,9 +113,9 @@ export function ProductGrid({
         />
       </div>
 
-      <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-secondary)', marginBottom: '16px' }}>
+      <Text variant="body-sm" color="secondary" style={{ marginBottom: '16px' }}>
         {total === 0 ? 'Sin resultados' : `${total} producto${total !== 1 ? 's' : ''}`}
-      </p>
+      </Text>
 
       {products.length === 0 ? (
         <EmptyState
@@ -204,15 +204,15 @@ function ProductListItem({ product }: { product: Product }) {
         )}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <p style={{ fontSize: 'var(--font-size-sm)', fontWeight: 500, color: 'var(--color-fg-primary)' }}>{product.name}</p>
+        <Text variant="body-sm" weight="medium" as="p">{product.name}</Text>
         <div style={{ marginTop: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontWeight: 600, color: 'var(--color-fg-primary)' }}>
+          <Text variant="body-sm" weight="semibold" as="span">
             ${displayPrice.toLocaleString('es-AR')}
-          </span>
+          </Text>
           {hasDiscount && (
-            <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-fg-muted)', textDecoration: 'line-through' }}>
+            <Text variant="caption" color="muted" as="span" style={{ textDecoration: 'line-through' }}>
               ${product.price.toLocaleString('es-AR')}
-            </span>
+            </Text>
           )}
           {outOfStock && (
             <Badge type="error" shape="pill">Sin stock</Badge>

@@ -122,6 +122,7 @@ export interface StoreInfo {
   name: string;
   description?: string;
   logo_url?: string | null;
+  brand_hue?: number;
 }
 
 export async function getStoreInfo(): Promise<StoreInfo | null> {
@@ -137,3 +138,4 @@ export async function getStoreInfo(): Promise<StoreInfo | null> {
     return null;
   }
 }
+

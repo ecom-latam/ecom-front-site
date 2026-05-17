@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 
+import { Text } from 'zoui';
 import { AddToCartButton } from '@/components/catalog/AddToCartButton';
 import { getCategories, getProduct } from '@/lib/api/storeClient';
 
@@ -59,15 +60,15 @@ export default async function ProductoPage({ searchParams }: Props) {
     : (product.availableStock ?? product.stock);
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <Link href="/productos" className="text-sm text-gray-500 hover:text-gray-900 mb-6 inline-block">
-          ← Volver al catálogo
+        <Link href="/productos" style={{ display: 'inline-block', marginBottom: '24px', textDecoration: 'none' }}>
+          <Text variant="body-sm" color="muted">← Volver al catálogo</Text>
         </Link>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
           <div className="flex flex-col gap-3">
-            <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+            <div className="aspect-square rounded-lg overflow-hidden" style={{ background: 'var(--color-bg-subtle)' }}>
               {mainImage ? (
                 <Image
                   src={mainImage.url}
@@ -78,7 +79,7 @@ export default async function ProductoPage({ searchParams }: Props) {
                   priority
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-300 text-6xl">
+                <div className="w-full h-full flex items-center justify-center text-6xl" style={{ color: 'var(--color-fg-disabled)' }}>
                   □
                 </div>
               )}
@@ -89,7 +90,8 @@ export default async function ProductoPage({ searchParams }: Props) {
                 {secondaryImages.map((img, i) => (
                   <div
                     key={i}
-                    className="w-20 h-20 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden"
+                    className="w-20 h-20 flex-shrink-0 rounded-md overflow-hidden"
+                    style={{ background: 'var(--color-bg-subtle)' }}
                   >
                     <Image
                       src={img.url}
@@ -106,45 +108,40 @@ export default async function ProductoPage({ searchParams }: Props) {
 
           <div className="flex flex-col">
             {category && (
-              <Link
-                href={`/productos?categoryId=${category._id}`}
-                className="text-xs text-gray-500 uppercase tracking-wide hover:text-gray-900 mb-2"
-              >
-                {category.name}
+              <Link href={`/productos?categoryId=${category._id}`} style={{ textDecoration: 'none', marginBottom: '8px', display: 'block' }}>
+                <Text variant="overline" color="muted">{category.name}</Text>
               </Link>
             )}
 
-            <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
+            <Text variant="heading-2" as="h1">{product.name}</Text>
 
-            <div className="mt-3 flex items-baseline gap-3">
-              <span className="text-3xl font-bold text-gray-900">
-                ${displayPrice.toLocaleString('es-AR')}
-              </span>
+            <div style={{ marginTop: '12px', display: 'flex', alignItems: 'baseline', gap: '12px' }}>
+              <Text variant="heading-1" as="span">${displayPrice.toLocaleString('es-AR')}</Text>
               {hasDiscount && (
-                <span className="text-lg text-gray-400 line-through">
+                <Text variant="body" color="muted" as="span" style={{ textDecoration: 'line-through' }}>
                   ${product.price.toLocaleString('es-AR')}
-                </span>
+                </Text>
               )}
             </div>
 
             {product.description && (
-              <p className="mt-4 text-gray-600 text-sm leading-relaxed whitespace-pre-line">
+              <Text variant="body-sm" color="secondary" as="p" style={{ marginTop: '16px', whiteSpace: 'pre-line' }}>
                 {product.description}
-              </p>
+              </Text>
             )}
 
             {product.hasVariants && product.linkedOptions.length > 0 && (
-              <div className="mt-6">
-                <p className="text-sm text-gray-500">
+              <div style={{ marginTop: '24px' }}>
+                <Text variant="body-sm" color="muted" as="p">
                   {product.linkedOptions.map((o) => o.storeOptionName).join(', ')}
-                </p>
+                </Text>
               </div>
             )}
 
             {effectiveStock > 0 ? (
-              <p className="mt-6 text-sm text-green-600">Disponible ({effectiveStock} disponibles)</p>
+              <Text variant="body-sm" as="p" style={{ marginTop: '24px', color: 'var(--color-success-700)' }}>Disponible ({effectiveStock} disponibles)</Text>
             ) : (
-              <p className="mt-6 text-sm text-red-500">Sin stock</p>
+              <Text variant="body-sm" as="p" style={{ marginTop: '24px', color: 'var(--color-error-500)' }}>Sin stock</Text>
             )}
 
             <AddToCartButton product={product} hasSession={hasSession} availableStock={effectiveStock} />

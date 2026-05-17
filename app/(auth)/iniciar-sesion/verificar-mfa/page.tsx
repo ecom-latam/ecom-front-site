@@ -4,7 +4,7 @@ import { useState, FormEvent, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { isAxiosError } from 'axios';
 import { auth, startSession } from '@/utils/api';
-import { Button, Input } from 'zoui';
+import { Button, Input, Text } from 'zoui';
 
 const ERRORS: Record<string, string> = {
   INVALID_TOTP: 'Código incorrecto. Verificá tu app de autenticación.',
@@ -61,12 +61,10 @@ function MfaVerifyForm() {
       border: '1px solid var(--color-border-default)',
       padding: '40px 32px',
     }}>
-      <h1 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 600, color: 'var(--color-fg-primary)', marginBottom: '8px' }}>
-        Verificación en dos pasos
-      </h1>
-      <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-secondary)', marginBottom: '24px' }}>
+      <Text variant="heading-2" as="h1" style={{ marginBottom: '8px' }}>Verificación en dos pasos</Text>
+      <Text variant="body-sm" color="secondary" style={{ marginBottom: '24px' }}>
         Ingresá el código de 6 dígitos de tu app de autenticación.
-      </p>
+      </Text>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <Input

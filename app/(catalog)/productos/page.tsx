@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 
 import { getCategories, getProducts } from '@/lib/api/storeClient';
+import { Text } from 'zoui';
 import { ProductGrid } from './ProductGrid';
 
 interface Props {
@@ -19,9 +20,9 @@ export default async function ProductosPage({ searchParams }: Props) {
   const totalPages = Math.ceil(productsRes.total / limit);
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Productos</h1>
+        <Text variant="heading-2" as="h1" style={{ marginBottom: '24px' }}>Productos</Text>
 
         <Suspense>
           <ProductGrid

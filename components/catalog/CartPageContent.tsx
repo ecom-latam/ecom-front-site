@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import { useCart } from '@/context/CartContext';
-import { Button } from 'zoui';
+import { Button, Text } from 'zoui';
 
 export function CartPageContent() {
   const router = useRouter();
@@ -14,11 +14,11 @@ export function CartPageContent() {
 
   if (isLoading && items.length === 0) {
     return (
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="animate-pulse space-y-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-24 bg-gray-100 rounded-lg" />
+              <div key={i} className="h-24 rounded-lg" style={{ background: 'var(--color-bg-subtle)' }} />
             ))}
           </div>
         </div>
@@ -28,9 +28,9 @@ export function CartPageContent() {
 
   if (items.length === 0) {
     return (
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-          <p className="text-gray-400 text-lg mb-4">Tu carrito está vacío.</p>
+          <Text variant="body" color="muted" style={{ marginBottom: '16px' }}>Tu carrito está vacío.</Text>
           <Button variant="filled" shape="rounded" size="md" onClick={() => router.push('/productos')}>
             Ver productos
           </Button>
@@ -40,17 +40,13 @@ export function CartPageContent() {
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Mi carrito</h1>
-          <button
-            onClick={clearCart}
-            disabled={isLoading}
-            className="text-sm text-gray-400 hover:text-red-500 disabled:opacity-40"
-          >
+          <Text variant="heading-2" as="h1">Mi carrito</Text>
+          <Button variant="ghost" shape="rounded" size="md" onClick={clearCart} disabled={isLoading} style={{ color: 'var(--color-fg-muted)' }}>
             Vaciar carrito
-          </button>
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -58,9 +54,10 @@ export function CartPageContent() {
             {items.map((item) => (
               <div
                 key={item._id}
-                className="flex gap-4 border border-gray-200 rounded-xl p-4"
+                className="flex gap-4 rounded-xl p-4"
+                style={{ border: '1px solid var(--color-border-default)' }}
               >
-                <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0" style={{ background: 'var(--color-bg-subtle)' }}>
                   {item.image ? (
                     <Image
                       src={item.image}
@@ -70,64 +67,57 @@ export function CartPageContent() {
                       className="object-cover w-full h-full"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-300 text-3xl">
+                    <div className="w-full h-full flex items-center justify-center text-3xl" style={{ color: 'var(--color-fg-disabled)' }}>
                       □
                     </div>
                   )}
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <button
-                    onClick={() => router.push(`/producto?id=${item.productId}`)}
-                    className="font-medium text-gray-900 hover:underline text-left"
-                  >
+                  <Button variant="ghost" shape="rounded" size="md" onClick={() => router.push(`/producto?id=${item.productId}`)} style={{ fontWeight: 500, padding: 0, height: 'auto', justifyContent: 'flex-start' }}>
                     {item.name}
-                  </button>
+                  </Button>
 
                   {Object.keys(item.selectedOptions).length > 0 && (
-                    <p className="text-sm text-gray-400 mt-0.5">
+                    <Text variant="body-sm" color="muted" as="p" style={{ marginTop: '2px' }}>
                       {Object.entries(item.selectedOptions)
                         .map(([k, v]) => `${k}: ${v}`)
                         .join(' · ')}
-                    </p>
+                    </Text>
                   )}
 
-                  <p className="text-sm font-semibold text-gray-900 mt-1">
+                  <Text variant="body-sm" weight="semibold" as="p" style={{ marginTop: '4px' }}>
                     ${item.price.toLocaleString('es-AR')}
-                  </p>
+                  </Text>
 
                   <div className="flex items-center gap-2 mt-3">
                     <Button
                       variant="outlined"
                       shape="square"
-                      size="sm"
+                      size="md"
                       onClick={() => updateItem(item._id, item.quantity - 1)}
                       disabled={item.quantity <= 1 || isLoading}
                     >
                       −
                     </Button>
-                    <span className="text-sm font-medium w-6 text-center">{item.quantity}</span>
+                    <Text variant="body-sm" weight="medium" as="span" style={{ width: '24px', textAlign: 'center' }}>{item.quantity}</Text>
                     <Button
                       variant="outlined"
                       shape="square"
-                      size="sm"
+                      size="md"
                       onClick={() => updateItem(item._id, item.quantity + 1)}
                       disabled={isLoading}
                     >
                       +
                     </Button>
 
-                    <span className="ml-4 text-sm text-gray-500">
+                    <Text variant="body-sm" color="secondary" as="span" style={{ marginLeft: '16px' }}>
                       Total: ${(item.price * item.quantity).toLocaleString('es-AR')}
-                    </span>
+                    </Text>
 
-                    <button
-                      onClick={() => removeItem(item._id)}
-                      disabled={isLoading}
-                      className="ml-auto text-sm text-gray-400 hover:text-red-500 disabled:opacity-40"
-                    >
+                    <Button variant="ghost" shape="rounded" size="md" onClick={() => removeItem(item._id)} disabled={isLoading} style={{ marginLeft: 'auto', color: 'var(--color-fg-muted)' }}>
                       Eliminar
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -135,19 +125,19 @@ export function CartPageContent() {
           </div>
 
           <div className="lg:col-span-1">
-            <div className="border border-gray-200 rounded-xl p-5 sticky top-20 space-y-4">
-              <h2 className="font-semibold text-gray-900">Resumen</h2>
+            <div className="rounded-xl p-5 sticky top-20 space-y-4" style={{ border: '1px solid var(--color-border-default)' }}>
+              <Text variant="body" weight="semibold" as="h2">Resumen</Text>
 
-              <div className="space-y-2 text-sm text-gray-600">
+              <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span>Productos ({items.reduce((s, i) => s + i.quantity, 0)})</span>
-                  <span>${subtotal.toLocaleString('es-AR')}</span>
+                  <Text variant="body-sm" color="secondary" as="span">Productos ({items.reduce((s, i) => s + i.quantity, 0)})</Text>
+                  <Text variant="body-sm" color="secondary" as="span">${subtotal.toLocaleString('es-AR')}</Text>
                 </div>
               </div>
 
-              <div className="border-t border-gray-100 pt-3 flex justify-between font-semibold text-gray-900">
-                <span>Subtotal</span>
-                <span>${subtotal.toLocaleString('es-AR')}</span>
+              <div className="pt-3 flex justify-between" style={{ borderTop: '1px solid var(--color-border-default)' }}>
+                <Text variant="body-sm" weight="semibold" as="span">Subtotal</Text>
+                <Text variant="body-sm" weight="semibold" as="span">${subtotal.toLocaleString('es-AR')}</Text>
               </div>
 
               <Button
@@ -161,12 +151,9 @@ export function CartPageContent() {
                 Ir al checkout
               </Button>
 
-              <button
-                onClick={() => router.push('/productos')}
-                className="block text-center text-sm text-gray-500 hover:text-gray-900 w-full"
-              >
+              <Button variant="ghost" shape="rounded" size="md" onClick={() => router.push('/productos')} style={{ width: '100%', justifyContent: 'center', color: 'var(--color-fg-muted)' }}>
                 Seguir comprando
-              </button>
+              </Button>
             </div>
           </div>
         </div>

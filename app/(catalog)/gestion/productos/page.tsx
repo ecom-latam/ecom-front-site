@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { isAxiosError } from 'axios';
 import { products as productsApi, categories as categoriesApi } from '@/utils/api';
 import type { Product, ProductPayload, ProductStatus, Category } from '@/utils/api';
-import { Modal, Drawer, Table, Badge, Input, Textarea, Select, Button, Pagination } from 'zoui';
+import { Modal, Drawer, Table, Badge, Input, Textarea, Select, Button, Pagination, Text } from 'zoui';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -82,7 +82,7 @@ function ConfirmModal({ title, message, confirmLabel, danger = false, onConfirm,
     <Modal size="sm" onClose={onCancel}>
       <Modal.Header>{title}</Modal.Header>
       <Modal.Body>
-        <p style={{ fontSize: 'var(--font-size-base)', color: 'var(--color-fg-secondary)', lineHeight: 'var(--line-height-normal)' }}>{message}</p>
+        <Text variant="body" color="secondary" as="p">{message}</Text>
       </Modal.Body>
       <Modal.Footer>
         <Button
@@ -225,7 +225,7 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
           </Select>
 
           {error && (
-            <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-error-600)' }}>{error}</p>
+            <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }}>{error}</Text>
           )}
         </Drawer.Body>
 
@@ -345,7 +345,7 @@ export default function GestionProductosPage() {
   return (
     <main style={{ padding: '32px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-fg-primary)' }}>Productos</h1>
+        <Text variant="heading-2" as="h1">Productos</Text>
         <Button variant="filled" shape="rounded" size="md" onClick={openCreate} testId="prod-new-btn">
           + Nuevo producto
         </Button>
@@ -401,9 +401,9 @@ export default function GestionProductosPage() {
               <Table.Row key={product._id}>
                 <Table.Td><MainImage images={product.images} /></Table.Td>
                 <Table.Td style={{ maxWidth: 240 }}>
-                  <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 500 }}>{product.name}</div>
+                  <Text variant="body-sm" weight="medium" truncate>{product.name}</Text>
                   {product.salePrice !== null && (
-                    <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-fg-muted)', marginTop: 2 }}>Oferta: {formatPrice(product.salePrice)}</div>
+                    <Text variant="caption" color="muted" as="p" style={{ marginTop: 2 }}>Oferta: {formatPrice(product.salePrice)}</Text>
                   )}
                 </Table.Td>
                 <Table.Td style={{ textAlign: 'center' }}>
@@ -416,17 +416,17 @@ export default function GestionProductosPage() {
                 <Table.Td style={{ textAlign: 'center' }}>{product.stock}</Table.Td>
                 <Table.Td style={{ textAlign: 'center' }}>
                   <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
-                    <Button variant="filled" shape="rounded" size="sm" onClick={() => openEdit(product)}>Editar</Button>
+                    <Button variant="filled" shape="rounded" size="md" onClick={() => openEdit(product)}>Editar</Button>
                     <Button
                       variant="outlined"
                       shape="rounded"
-                      size="sm"
+                      size="md"
                       onClick={() => handleToggleStatus(product)}
                       testId="prod-toggle-btn"
                     >
                       {product.status === 'active' ? 'Desactivar' : 'Activar'}
                     </Button>
-                    <Button variant="ghost" shape="rounded" size="sm" onClick={() => handleDelete(product)} style={{ color: 'var(--color-error-500)' }}>Eliminar</Button>
+                    <Button variant="ghost" shape="rounded" size="md" onClick={() => handleDelete(product)} style={{ color: 'var(--color-error-500)' }}>Eliminar</Button>
                   </div>
                 </Table.Td>
               </Table.Row>
@@ -437,9 +437,9 @@ export default function GestionProductosPage() {
 
       {!loading && (counts.active + counts.draft + counts.paused) > 0 && (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
-          <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-fg-muted)' }}>
+          <Text variant="caption" color="muted" as="p">
             {counts.active + counts.draft + counts.paused} producto{counts.active + counts.draft + counts.paused !== 1 ? 's' : ''} · {counts.active} activo{counts.active !== 1 ? 's' : ''} · {counts.draft} borrador{counts.draft !== 1 ? 'es' : ''} · {counts.paused} inactivo{counts.paused !== 1 ? 's' : ''}
-          </p>
+          </Text>
           {totalPages > 1 && <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />}
         </div>
       )}

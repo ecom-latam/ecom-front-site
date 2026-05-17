@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 
 import { useCart } from '@/context/CartContext';
 import type { Product, ProductVariant } from '@/lib/api/storeClient';
-import { Modal, Button } from 'zoui';
+import { Modal, Button, Text } from 'zoui';
 
 interface Props {
   product: Product;
@@ -136,17 +136,17 @@ export function AddToCartModal({ product, onClose }: Props) {
     <Modal size="md" onClose={onClose}>
       <Modal.Header onClose={onClose}>{product.name}</Modal.Header>
       <Modal.Body>
-        <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-secondary)', marginBottom: '16px' }}>
+        <Text variant="body-sm" color="secondary" as="p" style={{ marginBottom: '16px' }}>
           ${(product.salePrice ?? product.price).toLocaleString('es-AR')}
-        </p>
+        </Text>
 
         {product.hasVariants && optionNames.length > 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
             {optionNames.map((name) => (
               <div key={name}>
-                <p style={{ fontSize: 'var(--font-size-sm)', fontWeight: 500, color: 'var(--color-fg-primary)', marginBottom: '8px' }}>
+                <Text variant="body-sm" weight="medium" as="p" style={{ marginBottom: '8px' }}>
                   {name}
-                </p>
+                </Text>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                   {(optionValues[name] ?? []).map((value) => {
                     const isSelected = selectedOptions[name] === value;
@@ -154,7 +154,7 @@ export function AddToCartModal({ product, onClose }: Props) {
                     return (
                       <Button
                         key={value}
-                        size="sm"
+                        size="md"
                         shape="rounded"
                         variant={isSelected ? 'filled' : 'outlined'}
                         onClick={() => available && selectValue(name, value)}
@@ -172,15 +172,15 @@ export function AddToCartModal({ product, onClose }: Props) {
         )}
 
         {!product.hasVariants && (
-          <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-secondary)', marginBottom: '24px' }}>
+          <Text variant="body-sm" color="secondary" as="p" style={{ marginBottom: '24px' }}>
             ¿Confirmás que querés agregar este producto?
-          </p>
+          </Text>
         )}
 
         {error && (
-          <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-error-600)', marginTop: '8px' }}>
+          <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)', marginTop: '8px' }}>
             {error}
-          </p>
+          </Text>
         )}
       </Modal.Body>
       <Modal.Footer>

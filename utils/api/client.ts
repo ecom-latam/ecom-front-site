@@ -17,6 +17,10 @@ export const apiClient = axios.create({
   withCredentials: true,
 });
 
+let isRefreshing = false;
+type RefreshCallback = (token: string) => void;
+let refreshQueue: RefreshCallback[] = [];
+
 apiClient.interceptors.request.use((config) => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
   const slug = getSlugFromHost();
@@ -30,31 +34,45 @@ const AUTH_ENDPOINTS = ['/api/auth/login', '/api/auth/refresh', '/api/auth/custo
 apiClient.interceptors.response.use(
   (res) => res,
   async (err) => {
-    const url: string = err.config?.url ?? '';
+    const original = err.config;
+    const url: string = original?.url ?? '';
     const isAuthEndpoint = AUTH_ENDPOINTS.some((e) => url.includes(e));
 
-    if (err.response?.status === 401 && !err.config._retry && !isAuthEndpoint) {
-      err.config._retry = true;
-      try {
-        const { data } = await axios.post(
-          `${BFF_URL}/api/auth/refresh`,
-          {},
-          { withCredentials: true }
-        );
-        const newToken = (data as { accessToken: string }).accessToken;
-        localStorage.setItem('access_token', newToken);
-        err.config.headers['Authorization'] = `Bearer ${newToken}`;
-        return apiClient(err.config);
-      } catch (refreshErr) {
-        // Solo desloguear si el refresh token está inválido o expirado (401).
-        // Cualquier otro error (red, servicio caído, 5xx) no debe terminar la sesión.
-        if (axios.isAxiosError(refreshErr) && refreshErr.response?.status === 401) {
-          endSession();
-          window.location.href = '/iniciar-sesion';
-        }
-      }
+    if (err.response?.status !== 401 || original._retry || isAuthEndpoint) {
+      return Promise.reject(err);
     }
-    return Promise.reject(err);
+
+    original._retry = true;
+
+    if (isRefreshing) {
+      return new Promise((resolve) => {
+        refreshQueue.push((token: string) => {
+          original.headers['Authorization'] = `Bearer ${token}`;
+          resolve(apiClient(original));
+        });
+      });
+    }
+
+    isRefreshing = true;
+    try {
+      const { data } = await axios.post(
+        `${BFF_URL}/api/auth/refresh`,
+        {},
+        { withCredentials: true }
+      );
+      const newToken: string = data.accessToken;
+      localStorage.setItem('access_token', newToken);
+      refreshQueue.forEach((cb) => cb(newToken));
+      refreshQueue = [];
+      original.headers['Authorization'] = `Bearer ${newToken}`;
+      return apiClient(original);
+    } catch {
+      endSession();
+      window.location.href = '/iniciar-sesion';
+      return Promise.reject(err);
+    } finally {
+      isRefreshing = false;
+    }
   }
 );
 

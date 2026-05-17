@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { isAxiosError } from 'axios';
 import { apiClient, startSession } from '@/utils/api';
-import { Button, Input } from 'zoui';
+import { Button, Input, Text } from 'zoui';
 
 const ROLE_LABELS: Record<string, string> = {
   Manager: 'Manager',
@@ -95,9 +95,7 @@ export default function InvitacionPage() {
   if (loading) {
     return (
       <main style={centeredLayout}>
-        <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-secondary)' }}>
-          Validando invitación...
-        </p>
+        <Text variant="body-sm" color="secondary">Validando invitación...</Text>
       </main>
     );
   }
@@ -106,10 +104,10 @@ export default function InvitacionPage() {
     return (
       <main style={centeredLayout}>
         <div style={{ textAlign: 'center' }}>
-          <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-error-600)' }}>{tokenError}</p>
-          <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-muted)', marginTop: '8px' }}>
+          <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }}>{tokenError}</Text>
+          <Text variant="body-sm" color="muted" as="p" style={{ marginTop: '8px' }}>
             El link puede haber expirado o ya fue utilizado.
-          </p>
+          </Text>
         </div>
       </main>
     );
@@ -119,19 +117,14 @@ export default function InvitacionPage() {
     return (
       <main style={centeredLayout}>
         <div style={{ textAlign: 'center' }}>
-          <p style={{ fontSize: 'var(--font-size-sm)', fontWeight: 500, color: 'var(--color-fg-primary)' }}>
-            ¡Listo! Tu cuenta fue creada.
-          </p>
-          <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-secondary)', marginTop: '4px' }}>
+          <Text variant="body-sm" weight="medium" as="p">¡Listo! Tu cuenta fue creada.</Text>
+          <Text variant="body-sm" color="secondary" as="p" style={{ marginTop: '4px' }}>
             Podés{' '}
-            <button
-              onClick={() => router.push('/iniciar-sesion')}
-              style={{ color: 'var(--color-fg-primary)', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
-            >
+            <Button variant="ghost" shape="rounded" size="md" onClick={() => router.push('/iniciar-sesion')} style={{ padding: 0, height: 'auto', textDecoration: 'underline', fontWeight: 500 }}>
               iniciar sesión
-            </button>
+            </Button>
             .
-          </p>
+          </Text>
         </div>
       </main>
     );
@@ -147,12 +140,10 @@ export default function InvitacionPage() {
         width: '100%',
         maxWidth: '380px',
       }}>
-        <h1 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 600, color: 'var(--color-fg-primary)', marginBottom: '4px' }}>
-          Aceptar invitación
-        </h1>
-        <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-secondary)', marginBottom: '24px' }}>
+        <Text variant="heading-2" as="h1" style={{ marginBottom: '4px' }}>Aceptar invitación</Text>
+        <Text variant="body-sm" color="secondary" as="p" style={{ marginBottom: '24px' }}>
           Vas a unirte como <strong>{ROLE_LABELS[info!.role] ?? info!.role}</strong>.
-        </p>
+        </Text>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <Input
@@ -174,7 +165,7 @@ export default function InvitacionPage() {
             fullWidth
           />
 
-          {error && <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-error-600)' }}>{error}</p>}
+          {error && <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }}>{error}</Text>}
 
           <Button
             type="submit"

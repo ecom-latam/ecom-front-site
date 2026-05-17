@@ -1,17 +1,17 @@
 'use client';
 
-import { Button } from 'zoui';
+import { Button, Text } from 'zoui';
 import { useRouter } from 'next/navigation';
 
 export default function NotFound() {
   const router = useRouter();
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
-      <p className="text-6xl font-bold text-gray-200 mb-4">404</p>
-      <h1 className="text-2xl font-semibold text-gray-900 mb-3">Página no encontrada</h1>
-      <p className="text-gray-600 mb-8 max-w-sm">
+      <Text variant="heading-1" color="muted" style={{ fontSize: '60px', marginBottom: '16px' }}>404</Text>
+      <Text variant="heading-2" as="h1" style={{ marginBottom: '12px' }}>Página no encontrada</Text>
+      <Text variant="body" color="secondary" style={{ marginBottom: '32px', maxWidth: '360px' }}>
         La página que buscás no existe o fue movida.
-      </p>
+      </Text>
       <Button variant="filled" shape="rounded" size="md" onClick={() => router.push('/productos')}>
         Ver productos
       </Button>

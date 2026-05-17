@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { isAxiosError } from 'axios';
 import { categories as categoriesApi } from '@/utils/api';
 import type { Category, CategoryPayload } from '@/utils/api';
-import { Modal, Drawer, Table, Badge, Input, Select, Button } from 'zoui';
+import { Modal, Drawer, Table, Badge, Input, Select, Button, Text } from 'zoui';
 
 const STATUS_BADGE: Record<Category['status'], 'success' | 'neutral'> = {
   active:   'success',
@@ -34,17 +34,17 @@ function ConfirmModal({ title, message, confirmLabel, danger = false, onConfirm,
     <Modal size="sm" onClose={onCancel}>
       <Modal.Header>{title}</Modal.Header>
       <Modal.Body>
-        <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-secondary)', lineHeight: 1.6 }}>{message}</p>
+        <Text variant="body-sm" color="secondary" as="p" style={{ lineHeight: 1.6 }}>{message}</Text>
       </Modal.Body>
       <Modal.Footer style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-        <Button variant="outlined" shape="rounded" size="sm" onClick={onCancel}>Cancelar</Button>
+        <Button variant="outlined" shape="rounded" size="md" onClick={onCancel}>Cancelar</Button>
         <Button
           variant="filled"
           shape="rounded"
-          size="sm"
+          size="md"
           onClick={onConfirm}
           testId="cat-confirm-btn"
-          style={danger ? { background: 'var(--color-error-600)', borderColor: 'var(--color-error-600)' } : undefined}
+          style={danger ? { background: 'var(--color-error-500)', borderColor: 'var(--color-error-500)' } : undefined}
         >
           {confirmLabel}
         </Button>
@@ -162,13 +162,13 @@ function CategoryDrawer({ category, allCategories, depthMap, onClose, onSaved }:
           </Select>
 
           {error && (
-            <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-error-600)' }}>{error}</p>
+            <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }}>{error}</Text>
           )}
         </Drawer.Body>
 
         <Drawer.Footer style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <Button type="button" variant="outlined" shape="rounded" size="sm" onClick={onClose}>Cancelar</Button>
-          <Button type="submit" variant="filled" shape="rounded" size="sm" disabled={loading} testId="cat-submit-btn">
+          <Button type="button" variant="outlined" shape="rounded" size="md" onClick={onClose}>Cancelar</Button>
+          <Button type="submit" variant="filled" shape="rounded" size="md" disabled={loading} testId="cat-submit-btn">
             {loading ? 'Guardando...' : category ? 'Guardar cambios' : 'Crear categoría'}
           </Button>
         </Drawer.Footer>
@@ -363,7 +363,7 @@ export default function GestionCategoriasPage() {
   return (
     <main style={{ padding: '32px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-fg-primary)' }}>Categorías</h1>
+        <Text variant="heading-2" as="h1">Categorías</Text>
         <Button variant="filled" shape="rounded" size="md" onClick={openCreate} testId="cat-new-btn">
           + Nueva categoría
         </Button>
@@ -429,7 +429,7 @@ export default function GestionCategoriasPage() {
                       <Button
                         variant="ghost"
                         shape="square"
-                        size="sm"
+                        size="md"
                         onClick={() => toggleCollapse(category._id)}
                         style={{ width: 20, height: 20, minWidth: 0, fontSize: '10px', color: 'var(--color-fg-muted)', flexShrink: 0 }}
                       >
@@ -457,13 +457,13 @@ export default function GestionCategoriasPage() {
                 </Table.Td>
                 <Table.Td style={{ textAlign: 'center' }}>
                   <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
-                    <Button variant="filled" shape="rounded" size="sm" onClick={() => openEdit(category)}>
+                    <Button variant="filled" shape="rounded" size="md" onClick={() => openEdit(category)}>
                       Editar
                     </Button>
                     <Button
                       variant="outlined"
                       shape="rounded"
-                      size="sm"
+                      size="md"
                       onClick={() => handleToggleStatus(category)}
                       disabled={toggling.has(category._id)}
                       loading={toggling.has(category._id)}
@@ -471,7 +471,7 @@ export default function GestionCategoriasPage() {
                     >
                       {category.status === 'active' ? 'Desactivar' : 'Activar'}
                     </Button>
-                    <Button variant="ghost" shape="rounded" size="sm" onClick={() => handleDelete(category)} style={{ color: 'var(--color-error-500)' }}>Eliminar</Button>
+                    <Button variant="ghost" shape="rounded" size="md" onClick={() => handleDelete(category)} style={{ color: 'var(--color-error-500)' }}>Eliminar</Button>
                   </div>
                 </Table.Td>
               </Table.Row>
@@ -481,9 +481,9 @@ export default function GestionCategoriasPage() {
       </Table>
 
       {!loading && categoryList.length > 0 && (
-        <p style={{ marginTop: '12px', fontSize: 'var(--font-size-xs)', color: 'var(--color-fg-muted)' }}>
+        <Text variant="caption" color="muted" as="p" style={{ marginTop: '12px' }}>
           {sorted.length} categoría{sorted.length !== 1 ? 's' : ''} · {categoryList.filter(c => c.status === 'active').length} activa{categoryList.filter(c => c.status === 'active').length !== 1 ? 's' : ''} · {categoryList.filter(c => c.status === 'inactive').length} inactiva{categoryList.filter(c => c.status === 'inactive').length !== 1 ? 's' : ''}
-        </p>
+        </Text>
       )}
 
       {drawerOpen && (
@@ -511,7 +511,7 @@ export default function GestionCategoriasPage() {
         <Modal size="sm" onClose={() => setErrorMsg(null)}>
           <Modal.Header>Error</Modal.Header>
           <Modal.Body>
-            <p style={{ fontSize: 'var(--font-size-base)', color: 'var(--color-fg-secondary)', lineHeight: 'var(--line-height-normal)' }}>{errorMsg}</p>
+            <Text variant="body" color="secondary" as="p">{errorMsg}</Text>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="filled" shape="rounded" size="md" onClick={() => setErrorMsg(null)}>Entendido</Button>

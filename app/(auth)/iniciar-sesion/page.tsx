@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { isAxiosError } from 'axios';
 import { auth, startSession } from '@/utils/api';
-import { Button, Input } from 'zoui';
+import { Button, Input, Text } from 'zoui';
 
 const ERRORS: Record<string, string> = {
   INVALID_CREDENTIALS: 'Email o contraseña incorrectos.',
@@ -61,37 +61,39 @@ function LoginForm() {
   }
 
   return (
-    <div className="w-full max-w-sm bg-white rounded-lg shadow-sm border border-gray-200 px-8 py-10">
-      <Link href="/productos" className="block text-sm text-gray-500 hover:text-gray-700 mb-6">
-        ← Volver a la tienda
+    <div style={{ width: '100%', maxWidth: '384px', background: 'var(--color-bg-surface)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--color-border-default)', padding: '40px 32px' }}>
+      <Link href="/productos" style={{ display: 'block', marginBottom: '24px', textDecoration: 'none' }}>
+        <Text variant="body-sm" color="muted">← Volver a la tienda</Text>
       </Link>
 
-      <h1 className="text-xl font-semibold text-gray-900 mb-1">Iniciar sesión</h1>
-      <p className="text-sm text-gray-500 mb-6">Accedé a tu cuenta.</p>
+      <Text variant="heading-2" as="h1" style={{ marginBottom: '4px' }}>Iniciar sesión</Text>
+      <Text variant="body-sm" color="muted" style={{ marginBottom: '24px' }}>Accedé a tu cuenta.</Text>
 
       {registered && (
-        <p className="mb-4 text-sm text-green-700 bg-green-50 border border-green-200 rounded-md px-3 py-2">
-          Cuenta creada. Podés iniciar sesión.
-        </p>
+        <div style={{ marginBottom: '16px', background: 'var(--color-success-50)', border: '1px solid var(--color-success-100)', borderRadius: 'var(--radius-md)', padding: '8px 12px' }}>
+          <Text variant="body-sm" style={{ color: 'var(--color-success-700)' }}>Cuenta creada. Podés iniciar sesión.</Text>
+        </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <Input id="email" name="email" type="email" required autoComplete="email" autoFocus label="Email" fullWidth testId="store-login-email" />
         <Input id="password" name="password" type="password" required autoComplete="current-password" label="Contraseña" fullWidth testId="store-login-password" />
 
-        {error && <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-error-600)' }} data-testid="store-login-error">{error}</p>}
+        {error && (
+          <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }} data-testid="store-login-error">{error}</Text>
+        )}
 
         <Button type="submit" loading={loading} variant="filled" shape="rounded" size="md" style={{ width: '100%' }} testId="store-login-submit">
           {loading ? 'Ingresando...' : 'Ingresar'}
         </Button>
       </form>
 
-      <p className="text-sm text-center text-gray-500 mt-6">
+      <Text variant="body-sm" color="muted" as="p" style={{ textAlign: 'center', marginTop: '24px' }}>
         ¿No tenés cuenta?{' '}
-        <Link href="/registro" className="text-gray-900 font-medium hover:underline">
+        <Link href="/registro" style={{ color: 'var(--color-fg-primary)', fontWeight: 500, textDecoration: 'underline' }}>
           Registrate
         </Link>
-      </p>
+      </Text>
     </div>
   );
 }

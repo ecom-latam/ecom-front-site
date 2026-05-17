@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import { useCart } from '@/context/CartContext';
-import { Drawer, Button } from 'zoui';
+import { Drawer, Button, Text } from 'zoui';
 
 export function CartDrawer() {
   const router = useRouter();
@@ -20,13 +20,10 @@ export function CartDrawer() {
 
       {items.length === 0 ? (
         <Drawer.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-          <p style={{ color: 'var(--color-fg-muted)', fontSize: 'var(--font-size-sm)' }}>Tu carrito está vacío.</p>
-          <button
-            onClick={() => { closeDrawer(); router.push('/productos'); }}
-            style={{ marginTop: '16px', fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-primary)', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: '2px' }}
-          >
+          <Text variant="body-sm" color="muted">Tu carrito está vacío.</Text>
+          <Button variant="ghost" shape="rounded" size="md" onClick={() => { closeDrawer(); router.push('/productos'); }} style={{ marginTop: '16px', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
             Ver productos
-          </button>
+          </Button>
         </Drawer.Body>
       ) : (
         <>
@@ -43,34 +40,34 @@ export function CartDrawer() {
                   </div>
 
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 'var(--font-size-sm)', fontWeight: 500, color: 'var(--color-fg-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</p>
+                    <Text variant="body-sm" weight="medium" as="p" truncate>{item.name}</Text>
 
                     {Object.keys(item.selectedOptions).length > 0 && (
-                      <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-fg-muted)', marginTop: '2px' }}>
+                      <Text variant="caption" color="muted" as="p" style={{ marginTop: '2px' }}>
                         {Object.entries(item.selectedOptions).map(([k, v]) => `${k}: ${v}`).join(' · ')}
-                      </p>
+                      </Text>
                     )}
 
-                    <p style={{ fontSize: 'var(--font-size-sm)', fontWeight: 600, color: 'var(--color-fg-primary)', marginTop: '4px' }}>
+                    <Text variant="body-sm" weight="semibold" as="p" style={{ marginTop: '4px' }}>
                       ${item.price.toLocaleString('es-AR')}
-                    </p>
+                    </Text>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
                       <Button
                         variant="outlined"
                         shape="square"
-                        size="sm"
+                        size="md"
                         onClick={() => updateItem(item._id, item.quantity - 1)}
                         disabled={item.quantity <= 1 || isLoading}
                         style={{ width: 24, height: 24 }}
                       >
                         −
                       </Button>
-                      <span style={{ fontSize: 'var(--font-size-sm)', width: 20, textAlign: 'center' }}>{item.quantity}</span>
+                      <Text variant="body-sm" as="span" style={{ width: 20, textAlign: 'center' }}>{item.quantity}</Text>
                       <Button
                         variant="outlined"
                         shape="square"
-                        size="sm"
+                        size="md"
                         onClick={() => updateItem(item._id, item.quantity + 1)}
                         disabled={isLoading}
                         style={{ width: 24, height: 24 }}
@@ -80,7 +77,7 @@ export function CartDrawer() {
                       <Button
                         variant="ghost"
                         shape="rounded"
-                        size="sm"
+                        size="md"
                         onClick={() => removeItem(item._id)}
                         disabled={isLoading}
                         style={{ marginLeft: 'auto', fontSize: 'var(--font-size-xs)', color: 'var(--color-fg-muted)' }}
@@ -95,9 +92,9 @@ export function CartDrawer() {
           </Drawer.Body>
 
           <Drawer.Footer>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--font-size-sm)', fontWeight: 600, color: 'var(--color-fg-primary)' }}>
-              <span>Subtotal</span>
-              <span>${subtotal.toLocaleString('es-AR')}</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Text variant="body-sm" weight="semibold" as="span">Subtotal</Text>
+              <Text variant="body-sm" weight="semibold" as="span">${subtotal.toLocaleString('es-AR')}</Text>
             </div>
             <Button
               variant="outlined"
