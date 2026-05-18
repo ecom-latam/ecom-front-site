@@ -13,34 +13,31 @@ import type { BadgeType } from 'zoui';
 
 const STATUS_LABEL: Record<string, string> = {
   new: 'Nuevo',
+  notified: 'Transferencia enviada',
   confirmed: 'Confirmado',
   processing: 'En preparación',
   shipped: 'Enviado',
+  ready: 'Listo para retirar',
   delivered: 'Entregado',
   cancelled: 'Cancelado',
 };
 
 const STATUS_TONE: Record<string, BadgeType> = {
   new: 'neutral',
+  notified: 'warning',
   confirmed: 'info',
   processing: 'warning',
   shipped: 'info',
+  ready: 'info',
   delivered: 'success',
   cancelled: 'error',
 };
 
-const PAYMENT_LABEL: Record<string, string> = {
-  pending: 'Pendiente',
-  in_progress: 'Transferencia notificada',
-  paid: 'Pagado',
-  failed: 'Fallido',
-};
-
-const PAYMENT_TONE: Record<string, BadgeType> = {
-  pending: 'neutral',
-  in_progress: 'warning',
-  paid: 'success',
-  failed: 'error',
+const PAYMENT_NOTE: Record<string, string | null> = {
+  pending: null,
+  in_progress: 'Transferencia notificada — el vendedor verificará el pago.',
+  paid: null,
+  failed: null,
 };
 
 interface StorePublic {
@@ -149,8 +146,9 @@ export default function OrderDetailPage() {
     );
   }
 
-  const canNotify = order.paymentMethod === 'transfer' && order.paymentStatus === 'pending' && order.status !== 'cancelled';
-  const canCancel = order.paymentMethod === 'transfer' && order.paymentStatus !== 'paid' && order.status !== 'cancelled';
+  const canNotify = order.paymentStatus === 'pending' && order.status === 'new';
+  const canCancel = order.paymentStatus !== 'paid' && !['cancelled', 'delivered'].includes(order.status);
+  const paymentNote = PAYMENT_NOTE[order.paymentStatus];
 
   return (
     <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
@@ -164,7 +162,6 @@ export default function OrderDetailPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
           <Text variant="heading-2" as="h1">Pedido #{order.orderNumber}</Text>
           <Badge type={STATUS_TONE[order.status]} shape="pill">{STATUS_LABEL[order.status]}</Badge>
-          <Badge type={PAYMENT_TONE[order.paymentStatus]} shape="pill">{PAYMENT_LABEL[order.paymentStatus]}</Badge>
         </div>
 
         {error && (
@@ -219,11 +216,13 @@ export default function OrderDetailPage() {
           {/* Payment */}
           <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '20px' }}>
             <Text variant="heading-3" as="h2" style={{ marginBottom: '12px' }}>Pago</Text>
-            <Text variant="body-sm" as="p">
-              Método: {order.paymentMethod === 'transfer' ? 'Transferencia bancaria' : 'Efectivo en mano'}
-            </Text>
+            <Text variant="body-sm" as="p">Método: Transferencia bancaria</Text>
 
-            {order.paymentMethod === 'transfer' && order.paymentStatus === 'pending' && storeInfo?.transfer_info && (
+            {paymentNote && (
+              <Text variant="body-sm" color="muted" as="p" style={{ marginTop: '8px' }}>{paymentNote}</Text>
+            )}
+
+            {order.paymentStatus === 'pending' && storeInfo?.transfer_info && (
               <div style={{ marginTop: '16px', padding: '16px', background: 'var(--color-brand-50)', border: '1px solid var(--color-brand-200)', borderRadius: 'var(--radius-md)' }}>
                 <Text variant="body-sm" weight="semibold" as="p" style={{ marginBottom: '8px' }}>
                   Datos para transferir:

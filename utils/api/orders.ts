@@ -1,8 +1,9 @@
 import { apiClient } from './client';
 
-export type PaymentMethod = 'transfer' | 'cash';
+export type PaymentMethod = 'transfer';
+export type ShippingMethod = 'delivery' | 'pickup';
 export type PaymentStatus = 'pending' | 'in_progress' | 'paid' | 'failed';
-export type OrderStatus = 'new' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+export type OrderStatus = 'new' | 'notified' | 'confirmed' | 'processing' | 'shipped' | 'ready' | 'delivered' | 'cancelled';
 
 export interface OrderItem {
   productId: string;
@@ -34,6 +35,7 @@ export interface Order {
   total: number;
   shippingAddress: ShippingAddress;
   paymentMethod: PaymentMethod;
+  shippingMethod: ShippingMethod;
   paymentStatus: PaymentStatus;
   status: OrderStatus;
   notes: string;
@@ -51,6 +53,7 @@ export interface OrderListResponse {
 export interface CreateOrderPayload {
   shippingAddress: ShippingAddress;
   paymentMethod: PaymentMethod;
+  shippingMethod: ShippingMethod;
   notes?: string;
 }
 
@@ -63,6 +66,7 @@ export interface AdminOrderListParams {
   status?: OrderStatus;
   paymentStatus?: PaymentStatus;
   paymentMethod?: PaymentMethod;
+  shippingMethod?: ShippingMethod;
 }
 
 export const orders = {

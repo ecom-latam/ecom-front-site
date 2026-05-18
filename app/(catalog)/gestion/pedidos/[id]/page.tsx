@@ -6,23 +6,28 @@ import Image from 'next/image';
 
 import { orders } from '@/utils/api/orders';
 import type { Order, OrderStatus } from '@/utils/api/orders';
-import { Badge, Button, Select, Text, Modal } from 'zoui';
+import { getNextAdminStatuses, getStepLabel } from '@/utils/workflows';
+import { Badge, Button, Text, Modal } from 'zoui';
 import type { BadgeType } from 'zoui';
 
 const STATUS_LABEL: Record<string, string> = {
   new: 'Nuevo',
+  notified: 'Notificado',
   confirmed: 'Confirmado',
   processing: 'En preparación',
   shipped: 'Enviado',
+  ready: 'Listo para retirar',
   delivered: 'Entregado',
   cancelled: 'Cancelado',
 };
 
 const STATUS_TONE: Record<string, BadgeType> = {
   new: 'neutral',
+  notified: 'warning',
   confirmed: 'info',
   processing: 'warning',
   shipped: 'info',
+  ready: 'info',
   delivered: 'success',
   cancelled: 'error',
 };
@@ -41,22 +46,13 @@ const PAYMENT_TONE: Record<string, BadgeType> = {
   failed: 'error',
 };
 
-const NEXT_STATUS: Record<string, OrderStatus[]> = {
-  new: ['cancelled'],
-  confirmed: ['processing', 'cancelled'],
-  processing: ['shipped', 'cancelled'],
-  shipped: ['delivered'],
-  delivered: [],
-  cancelled: [],
-};
-
-const STATUS_ACTION_LABEL: Record<OrderStatus, string> = {
+const STATUS_ACTION_LABEL: Record<string, string> = {
+  notified: 'Transferencia recibida',
+  confirmed: 'Confirmar pedido',
   processing: 'Marcar en preparación',
   shipped: 'Marcar como enviado',
+  ready: 'Preparar para retirar',
   delivered: 'Marcar como entregado',
-  cancelled: 'Cancelar pedido',
-  new: '',
-  confirmed: '',
 };
 
 export default function AdminPedidoDetailPage() {
@@ -141,8 +137,7 @@ export default function AdminPedidoDetailPage() {
   }
 
   const canConfirmPayment = order.paymentStatus === 'in_progress' && order.status !== 'cancelled';
-  const nextStatuses = NEXT_STATUS[order.status] ?? [];
-  const nonCancelNext = nextStatuses.filter((s) => s !== 'cancelled');
+  const nonCancelNext = getNextAdminStatuses(order.paymentMethod, order.shippingMethod, order.status);
   const canCancel = order.status !== 'cancelled' && order.status !== 'delivered';
 
   return (
@@ -321,7 +316,7 @@ export default function AdminPedidoDetailPage() {
           <Modal.Header onClose={() => setConfirmModal(null)}>Actualizar estado</Modal.Header>
           <Modal.Body>
             <Text variant="body-sm" as="p">
-              ¿Confirmás cambiar el estado a &ldquo;{STATUS_LABEL[confirmModal.status]}&rdquo;?
+              ¿Confirmás cambiar el estado a &ldquo;{getStepLabel(order.paymentMethod, order.shippingMethod, confirmModal.status)}&rdquo;?
             </Text>
           </Modal.Body>
           <Modal.Footer>

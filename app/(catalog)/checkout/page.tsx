@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 import { getAccessTokenRole } from '@/utils/helpers';
 import { orders } from '@/utils/api/orders';
-import type { CreateOrderPayload, PaymentMethod } from '@/utils/api/orders';
+import type { CreateOrderPayload, PaymentMethod, ShippingMethod } from '@/utils/api/orders';
 import { Button, Input, Select, Textarea, Text } from 'zoui';
 
 const PROVINCES = [
@@ -52,7 +52,8 @@ export default function CheckoutPage() {
     city: '',
     province: '',
     zip: '',
-    paymentMethod: '' as PaymentMethod | '',
+    shippingMethod: 'delivery' as ShippingMethod,
+    paymentMethod: 'transfer' as PaymentMethod,
     notes: '',
   });
 
@@ -92,8 +93,8 @@ export default function CheckoutPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!form.paymentMethod) {
-      setError('Seleccioná un método de pago.');
+    if (form.shippingMethod === 'delivery' && (!form.address || !form.city || !form.province)) {
+      setError('Completá los datos de envío.');
       return;
     }
 
@@ -106,7 +107,8 @@ export default function CheckoutPage() {
         province: form.province,
         zip: form.zip,
       },
-      paymentMethod: form.paymentMethod as PaymentMethod,
+      paymentMethod: form.paymentMethod,
+      shippingMethod: form.shippingMethod,
       notes: form.notes,
     };
 
@@ -147,7 +149,50 @@ export default function CheckoutPage() {
 
               <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px' }}>
                 <Text variant="heading-3" as="h2" style={{ marginBottom: '20px' }}>
-                  Datos de envío
+                  Método de entrega
+                </Text>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {(['delivery', 'pickup'] as const).map((method) => (
+                    <label
+                      key={method}
+                      data-testid={`checkout-shipping-${method}`}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        padding: '16px',
+                        border: `2px solid ${form.shippingMethod === method ? 'var(--color-brand-500)' : 'var(--color-border-default)'}`,
+                        borderRadius: 'var(--radius-md)',
+                        cursor: 'pointer',
+                        background: form.shippingMethod === method ? 'var(--color-brand-50)' : 'var(--color-bg-default)',
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        name="shippingMethod"
+                        value={method}
+                        checked={form.shippingMethod === method}
+                        onChange={() => set('shippingMethod', method)}
+                        style={{ accentColor: 'var(--color-brand-500)' }}
+                      />
+                      <div>
+                        <Text variant="body-sm" weight="semibold" as="span">
+                          {method === 'delivery' ? 'Envío a domicilio' : 'Retiro en tienda'}
+                        </Text>
+                        <Text variant="caption" color="muted" as="p">
+                          {method === 'delivery'
+                            ? 'Recibís el pedido en tu dirección.'
+                            : 'Retirás el pedido en el local cuando esté listo.'}
+                        </Text>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </section>
+
+              <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px' }}>
+                <Text variant="heading-3" as="h2" style={{ marginBottom: '20px' }}>
+                  {form.shippingMethod === 'delivery' ? 'Datos de envío' : 'Datos de contacto'}
                 </Text>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                   <div style={{ gridColumn: '1 / -1' }}>
@@ -172,54 +217,58 @@ export default function CheckoutPage() {
                       testId="checkout-phone"
                     />
                   </div>
-                  <div style={{ gridColumn: '1 / -1' }}>
-                    <Input
-                      label="Dirección"
-                      value={form.address}
-                      onChange={(e) => set('address', e.target.value)}
-                      required
-                      size="md"
-                      variant="outlined"
-                      testId="checkout-address"
-                    />
-                  </div>
-                  <div>
-                    <Input
-                      label="Ciudad"
-                      value={form.city}
-                      onChange={(e) => set('city', e.target.value)}
-                      required
-                      size="md"
-                      variant="outlined"
-                      testId="checkout-city"
-                    />
-                  </div>
-                  <div>
-                    <Input
-                      label="Código postal"
-                      value={form.zip}
-                      onChange={(e) => set('zip', e.target.value)}
-                      size="md"
-                      variant="outlined"
-                      testId="checkout-zip"
-                    />
-                  </div>
-                  <div style={{ gridColumn: '1 / -1' }}>
-                    <Select
-                      label="Provincia"
-                      value={form.province}
-                      onChange={(e) => set('province', e.target.value)}
-                      required
-                      size="md"
-                      variant="outlined"
-                      testId="checkout-province"
-                    >
-                      <option value="">Seleccioná una provincia</option>
-                      {PROVINCES.map((p) => (
-                        <option key={p} value={p}>{p}</option>
-                      ))}
-                    </Select>
-                  </div>
+                  {form.shippingMethod === 'delivery' && (
+                    <>
+                      <div style={{ gridColumn: '1 / -1' }}>
+                        <Input
+                          label="Dirección"
+                          value={form.address}
+                          onChange={(e) => set('address', e.target.value)}
+                          required
+                          size="md"
+                          variant="outlined"
+                          testId="checkout-address"
+                        />
+                      </div>
+                      <div>
+                        <Input
+                          label="Ciudad"
+                          value={form.city}
+                          onChange={(e) => set('city', e.target.value)}
+                          required
+                          size="md"
+                          variant="outlined"
+                          testId="checkout-city"
+                        />
+                      </div>
+                      <div>
+                        <Input
+                          label="Código postal"
+                          value={form.zip}
+                          onChange={(e) => set('zip', e.target.value)}
+                          size="md"
+                          variant="outlined"
+                          testId="checkout-zip"
+                        />
+                      </div>
+                      <div style={{ gridColumn: '1 / -1' }}>
+                        <Select
+                          label="Provincia"
+                          value={form.province}
+                          onChange={(e) => set('province', e.target.value)}
+                          required
+                          size="md"
+                          variant="outlined"
+                          testId="checkout-province"
+                        >
+                          <option value="">Seleccioná una provincia</option>
+                          {PROVINCES.map((p) => (
+                            <option key={p} value={p}>{p}</option>
+                          ))}
+                        </Select>
+                      </div>
+                    </>
+                  )}
                 </div>
               </section>
 
@@ -227,43 +276,33 @@ export default function CheckoutPage() {
                 <Text variant="heading-3" as="h2" style={{ marginBottom: '20px' }}>
                   Método de pago
                 </Text>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {(['transfer', 'cash'] as const).map((method) => (
-                    <label
-                      key={method}
-                      data-testid={`checkout-payment-${method}`}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        padding: '16px',
-                        border: `2px solid ${form.paymentMethod === method ? 'var(--color-brand-500)' : 'var(--color-border-default)'}`,
-                        borderRadius: 'var(--radius-md)',
-                        cursor: 'pointer',
-                        background: form.paymentMethod === method ? 'var(--color-brand-50)' : 'var(--color-bg-default)',
-                      }}
-                    >
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value={method}
-                        checked={form.paymentMethod === method}
-                        onChange={() => set('paymentMethod', method)}
-                        style={{ accentColor: 'var(--color-brand-500)' }}
-                      />
-                      <div>
-                        <Text variant="body-sm" weight="semibold" as="span">
-                          {method === 'transfer' ? 'Transferencia bancaria' : 'Efectivo en mano'}
-                        </Text>
-                        <Text variant="caption" color="muted" as="p">
-                          {method === 'transfer'
-                            ? 'Recibirás los datos para transferir al confirmar el pedido.'
-                            : 'Pagás en efectivo al momento de recibir el pedido.'}
-                        </Text>
-                      </div>
-                    </label>
-                  ))}
-                </div>
+                <label
+                  data-testid="checkout-payment-transfer"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '16px',
+                    border: '2px solid var(--color-brand-500)',
+                    borderRadius: 'var(--radius-md)',
+                    background: 'var(--color-brand-50)',
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="transfer"
+                    checked
+                    readOnly
+                    style={{ accentColor: 'var(--color-brand-500)' }}
+                  />
+                  <div>
+                    <Text variant="body-sm" weight="semibold" as="span">Transferencia bancaria</Text>
+                    <Text variant="caption" color="muted" as="p">
+                      Recibirás los datos para transferir al confirmar el pedido.
+                    </Text>
+                  </div>
+                </label>
               </section>
 
               <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px' }}>
