@@ -17,7 +17,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const hasSession = !!cookieStore.get('session');
+  const hasSession = !!cookieStore.get('_auth');
   const theme = (cookieStore.get('ui-theme')?.value ?? 'light') as 'light' | 'dark';
   const storeInfo = await getStoreInfo();
   const hue = Math.round(Math.max(0, Math.min(360, storeInfo?.brand_hue ?? 262)));
