@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
+import { apiClient } from '@/utils/api/client';
 import type { Cart, CartItem } from '@/lib/cart/types';
 
 interface CartContextValue {
@@ -43,13 +44,8 @@ export function CartProvider({ children, hasSession }: CartProviderProps) {
   const refreshCart = useCallback(async () => {
     if (!hasSession) return;
     try {
-      const res = await fetch('/api/cart');
-      if (res.ok) {
-        const data: Cart = await res.json();
-        setItems(data.items ?? []);
-      } else {
-        setItems([]);
-      }
+      const { data } = await apiClient.get<Cart>('/api/cart');
+      setItems(data.items ?? []);
     } catch {
       setItems([]);
     }
@@ -63,17 +59,16 @@ export function CartProvider({ children, hasSession }: CartProviderProps) {
     async (payload: { productId: string; selectedOptions?: Record<string, string>; quantity?: number }) => {
       setIsLoading(true);
       try {
-        const res = await fetch('/api/cart/items', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ quantity: 1, ...payload }),
-        });
-        const data = await res.json();
-        if (res.ok) {
-          setItems(data.items ?? []);
-          return { ok: true };
-        }
-        return { ok: false, error: data.error, available: data.available };
+        const { data } = await apiClient.post<Cart>('/api/cart/items', { quantity: 1, ...payload });
+        setItems(data.items ?? []);
+        return { ok: true };
+      } catch (err: unknown) {
+        const axiosErr = err as { response?: { data?: { error?: string; available?: number } } };
+        return {
+          ok: false,
+          error: axiosErr?.response?.data?.error,
+          available: axiosErr?.response?.data?.available,
+        };
       } finally {
         setIsLoading(false);
       }
@@ -84,17 +79,12 @@ export function CartProvider({ children, hasSession }: CartProviderProps) {
   const updateItem = useCallback(async (itemId: string, quantity: number) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/cart/items/${itemId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ quantity }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setItems(data.items ?? []);
-        return { ok: true };
-      }
-      return { ok: false, error: data.error };
+      const { data } = await apiClient.put<Cart>(`/api/cart/items/${itemId}`, { quantity });
+      setItems(data.items ?? []);
+      return { ok: true };
+    } catch (err: unknown) {
+      const axiosErr = err as { response?: { data?: { error?: string } } };
+      return { ok: false, error: axiosErr?.response?.data?.error };
     } finally {
       setIsLoading(false);
     }
@@ -103,11 +93,10 @@ export function CartProvider({ children, hasSession }: CartProviderProps) {
   const removeItem = useCallback(async (itemId: string) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/cart/items/${itemId}`, { method: 'DELETE' });
-      if (res.ok) {
-        const data = await res.json();
-        setItems(data.items ?? []);
-      }
+      const { data } = await apiClient.delete<Cart>(`/api/cart/items/${itemId}`);
+      setItems(data.items ?? []);
+    } catch {
+      // item already gone
     } finally {
       setIsLoading(false);
     }
@@ -116,7 +105,7 @@ export function CartProvider({ children, hasSession }: CartProviderProps) {
   const clearCart = useCallback(async () => {
     setIsLoading(true);
     try {
-      await fetch('/api/cart', { method: 'DELETE' });
+      await apiClient.delete('/api/cart');
       setItems([]);
     } finally {
       setIsLoading(false);
