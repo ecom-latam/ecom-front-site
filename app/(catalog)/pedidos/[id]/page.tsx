@@ -277,28 +277,25 @@ export default function OrderDetailPage() {
       </div>
 
       {/* Confirm notify payment modal */}
-      {confirmModal === 'notify' && (
-        <Modal size="sm" onClose={() => setConfirmModal(null)}>
-          <Modal.Header onClose={() => setConfirmModal(null)}>Confirmar pago</Modal.Header>
-          <Modal.Body>
-            <Text variant="body-sm" as="p">
-              ¿Confirmás que ya realizaste la transferencia? El vendedor la verificará y confirmará tu pedido.
-            </Text>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="ghost" shape="rounded" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>
-              Cancelar
-            </Button>
-            <Button variant="filled" shape="rounded" size="md" onClick={handleNotifyPayment} disabled={actionLoading}>
-              {actionLoading ? 'Enviando...' : 'Sí, ya transferí'}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      )}
+      <Modal open={confirmModal === 'notify'} size="sm" onClose={() => setConfirmModal(null)}>
+        <Modal.Header onClose={() => setConfirmModal(null)}>Confirmar pago</Modal.Header>
+        <Modal.Body>
+          <Text variant="body-sm" as="p">
+            ¿Confirmás que ya realizaste la transferencia? El vendedor la verificará y confirmará tu pedido.
+          </Text>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="ghost" shape="rounded" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>
+            Cancelar
+          </Button>
+          <Button variant="filled" shape="rounded" size="md" onClick={handleNotifyPayment} disabled={actionLoading}>
+            {actionLoading ? 'Enviando...' : 'Sí, ya transferí'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {/* Confirm cancel modal */}
-      {confirmModal === 'cancel' && (
-        <Modal size="sm" onClose={() => setConfirmModal(null)}>
+      <Modal open={confirmModal === 'cancel'} size="sm" onClose={() => setConfirmModal(null)}>
           <Modal.Header onClose={() => setConfirmModal(null)}>Cancelar pedido</Modal.Header>
           <Modal.Body>
             <Text variant="body-sm" as="p">
@@ -320,8 +317,7 @@ export default function OrderDetailPage() {
               {actionLoading ? 'Cancelando...' : 'Cancelar pedido'}
             </Button>
           </Modal.Footer>
-        </Modal>
-      )}
+      </Modal>
     </main>
   );
 }

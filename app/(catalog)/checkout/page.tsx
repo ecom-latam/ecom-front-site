@@ -8,6 +8,8 @@ import { useCart } from '@/context/CartContext';
 import { getAccessTokenRole } from '@/utils/helpers';
 import { orders } from '@/utils/api/orders';
 import type { CreateOrderPayload, PaymentMethod, ShippingMethod } from '@/utils/api/orders';
+import { addresses as addressesApi } from '@/utils/api/addresses';
+import type { Address } from '@/utils/api/addresses';
 import { Button, Input, Select, Textarea, Text } from 'zoui';
 
 const PROVINCES = [
@@ -45,6 +47,9 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [savedAddresses, setSavedAddresses] = useState<Address[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | 'new'>('new');
+
   const [form, setForm] = useState({
     fullName: '',
     phone: '',
@@ -68,7 +73,43 @@ export default function CheckoutPage() {
       return;
     }
     setReady(true);
+    addressesApi.list().then(({ data }) => {
+      setSavedAddresses(data);
+      const def = data.find((a) => a.isDefault) ?? data[0];
+      if (def) {
+        setSelectedAddressId(def._id);
+        setForm((prev) => ({
+          ...prev,
+          fullName: def.fullName,
+          phone: def.phone,
+          address: def.address,
+          city: def.city,
+          province: def.province,
+          zip: def.zip ?? '',
+        }));
+      }
+    }).catch(() => {});
   }, [router]);
+
+  function applyAddress(id: string) {
+    setSelectedAddressId(id);
+    if (id === 'new') {
+      setForm((prev) => ({ ...prev, fullName: '', phone: '', address: '', city: '', province: '', zip: '' }));
+      return;
+    }
+    const addr = savedAddresses.find((a) => a._id === id);
+    if (addr) {
+      setForm((prev) => ({
+        ...prev,
+        fullName: addr.fullName,
+        phone: addr.phone,
+        address: addr.address,
+        city: addr.city,
+        province: addr.province,
+        zip: addr.zip ?? '',
+      }));
+    }
+  }
 
   if (!ready) return null;
 
@@ -199,6 +240,68 @@ export default function CheckoutPage() {
                 <Text variant="heading-3" as="h2" style={{ marginBottom: '20px' }}>
                   {form.shippingMethod === 'delivery' ? 'Datos de envío' : 'Datos de contacto'}
                 </Text>
+
+                {savedAddresses.length > 0 && form.shippingMethod === 'delivery' && (
+                  <div style={{ marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {savedAddresses.map((addr) => (
+                      <label
+                        key={addr._id}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '12px',
+                          padding: '14px',
+                          border: `2px solid ${selectedAddressId === addr._id ? 'var(--color-brand-500)' : 'var(--color-border-default)'}`,
+                          borderRadius: 'var(--radius-md)',
+                          cursor: 'pointer',
+                          background: selectedAddressId === addr._id ? 'var(--color-brand-50)' : 'var(--color-bg-default)',
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name="savedAddress"
+                          value={addr._id}
+                          checked={selectedAddressId === addr._id}
+                          onChange={() => applyAddress(addr._id)}
+                          style={{ accentColor: 'var(--color-brand-500)', marginTop: '2px', flexShrink: 0 }}
+                        />
+                        <div>
+                          <Text variant="body-sm" weight="semibold" as="span">{addr.label}</Text>
+                          {addr.isDefault && (
+                            <Text variant="caption" color="muted" as="span" style={{ marginLeft: '6px' }}>· Predeterminada</Text>
+                          )}
+                          <Text variant="caption" color="muted" as="p">
+                            {addr.address}{addr.floor ? `, ${addr.floor}` : ''} — {addr.city}, {addr.province}
+                          </Text>
+                        </div>
+                      </label>
+                    ))}
+                    <label
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        padding: '14px',
+                        border: `2px solid ${selectedAddressId === 'new' ? 'var(--color-brand-500)' : 'var(--color-border-default)'}`,
+                        borderRadius: 'var(--radius-md)',
+                        cursor: 'pointer',
+                        background: selectedAddressId === 'new' ? 'var(--color-brand-50)' : 'var(--color-bg-default)',
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        name="savedAddress"
+                        value="new"
+                        checked={selectedAddressId === 'new'}
+                        onChange={() => applyAddress('new')}
+                        style={{ accentColor: 'var(--color-brand-500)', flexShrink: 0 }}
+                      />
+                      <Text variant="body-sm" weight="semibold" as="span">Ingresar nueva dirección</Text>
+                    </label>
+                  </div>
+                )}
+
+                {(selectedAddressId === 'new' || form.shippingMethod !== 'delivery') && (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                   <div style={{ gridColumn: '1 / -1' }}>
                     <Input
@@ -275,6 +378,7 @@ export default function CheckoutPage() {
                     </>
                   )}
                 </div>
+                )}
               </section>
 
               <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px' }}>

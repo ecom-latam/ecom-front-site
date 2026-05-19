@@ -8,6 +8,7 @@ import { Modal, Button, Text } from 'zoui';
 
 interface Props {
   product: Product;
+  open: boolean;
   onClose: () => void;
 }
 
@@ -42,7 +43,7 @@ function isValueAvailable(
   );
 }
 
-export function AddToCartModal({ product, onClose }: Props) {
+export function AddToCartModal({ product, open, onClose }: Props) {
   const { addItem, openDrawer } = useCart();
 
   const optionNames = useMemo(
@@ -133,7 +134,7 @@ export function AddToCartModal({ product, onClose }: Props) {
   }
 
   return (
-    <Modal size="md" onClose={onClose}>
+    <Modal open={open} size="md" onClose={onClose}>
       <Modal.Header onClose={onClose}>{product.name}</Modal.Header>
       <Modal.Body>
         <Text variant="body-sm" color="secondary" as="p" style={{ marginBottom: '16px' }}>

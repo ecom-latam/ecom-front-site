@@ -132,22 +132,20 @@ export function CartDrawer() {
       )}
     </Drawer>
 
-    {itemToRemove && (
-      <Modal size="sm" onClose={() => setItemToRemove(null)}>
-        <Modal.Header onClose={() => setItemToRemove(null)}>Eliminar producto</Modal.Header>
-        <Modal.Body>
-          <Text variant="body-sm">¿Querés eliminar este producto del carrito?</Text>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="ghost" shape="rounded" size="md" onClick={() => setItemToRemove(null)}>
-            Cancelar
-          </Button>
-          <Button variant="filled" shape="rounded" size="md" onClick={() => { removeItem(itemToRemove); setItemToRemove(null); }}>
-            Eliminar
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    )}
+    <Modal open={!!itemToRemove} size="sm" onClose={() => setItemToRemove(null)}>
+      <Modal.Header onClose={() => setItemToRemove(null)}>Eliminar producto</Modal.Header>
+      <Modal.Body>
+        <Text variant="body-sm">¿Querés eliminar este producto del carrito?</Text>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="ghost" shape="rounded" size="md" onClick={() => setItemToRemove(null)}>
+          Cancelar
+        </Button>
+        <Button variant="filled" shape="rounded" size="md" onClick={() => { removeItem(itemToRemove!); setItemToRemove(null); }}>
+          Eliminar
+        </Button>
+      </Modal.Footer>
+    </Modal>
     </>
   );
 }

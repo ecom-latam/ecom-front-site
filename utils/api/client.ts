@@ -29,7 +29,7 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
-const AUTH_ENDPOINTS = ['/api/auth/login', '/api/auth/refresh', '/api/auth/customer/register', '/api/auth/mfa/verify'];
+const AUTH_ENDPOINTS = ['/api/auth/login', '/api/auth/refresh', '/api/auth/customer/register', '/api/auth/mfa/verify', '/api/auth/password/change'];
 
 apiClient.interceptors.response.use(
   (res) => res,

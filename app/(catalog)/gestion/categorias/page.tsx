@@ -31,7 +31,7 @@ interface ConfirmModalProps {
 
 function ConfirmModal({ title, message, confirmLabel, danger = false, onConfirm, onCancel }: ConfirmModalProps) {
   return (
-    <Modal size="sm" onClose={onCancel}>
+    <Modal open size="sm" onClose={onCancel}>
       <Modal.Header>{title}</Modal.Header>
       <Modal.Body>
         <Text variant="body-sm" color="secondary" as="p" style={{ lineHeight: 1.6 }}>{message}</Text>
@@ -507,17 +507,15 @@ export default function GestionCategoriasPage() {
         />
       )}
 
-      {errorMsg && (
-        <Modal size="sm" onClose={() => setErrorMsg(null)}>
-          <Modal.Header>Error</Modal.Header>
-          <Modal.Body>
-            <Text variant="body" color="secondary" as="p">{errorMsg}</Text>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="filled" shape="rounded" size="md" onClick={() => setErrorMsg(null)}>Entendido</Button>
-          </Modal.Footer>
-        </Modal>
-      )}
+      <Modal open={!!errorMsg} size="sm" onClose={() => setErrorMsg(null)}>
+        <Modal.Header>Error</Modal.Header>
+        <Modal.Body>
+          <Text variant="body" color="secondary" as="p">{errorMsg}</Text>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="filled" shape="rounded" size="md" onClick={() => setErrorMsg(null)}>Entendido</Button>
+        </Modal.Footer>
+      </Modal>
     </main>
   );
 }

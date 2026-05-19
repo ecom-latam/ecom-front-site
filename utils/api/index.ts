@@ -3,6 +3,8 @@ export { auth } from './auth';
 export { products } from './products';
 export { categories } from './categories';
 export { orders } from './orders';
+export { addresses } from './addresses';
 export type { Product, ProductListResponse, ProductListParams, ProductPayload, ProductStatus, ProductImage } from './products';
 export type { Category, CategoryPayload } from './categories';
 export type { Order, OrderItem, OrderListResponse, CreateOrderPayload, ShippingAddress, PaymentMethod, PaymentStatus, OrderStatus, AdminOrderListParams } from './orders';
+export type { Address, AddressPayload } from './addresses';

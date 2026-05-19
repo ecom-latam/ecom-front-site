@@ -79,7 +79,7 @@ interface ConfirmModalProps {
 
 function ConfirmModal({ title, message, confirmLabel, danger = false, onConfirm, onCancel }: ConfirmModalProps) {
   return (
-    <Modal size="sm" onClose={onCancel}>
+    <Modal open size="sm" onClose={onCancel}>
       <Modal.Header>{title}</Modal.Header>
       <Modal.Body>
         <Text variant="body" color="secondary" as="p">{message}</Text>

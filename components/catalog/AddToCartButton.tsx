@@ -69,9 +69,7 @@ export function AddToCartButton({ product, hasSession, availableStock }: Props) 
         Agregar al carrito
       </Button>
 
-      {modalOpen && (
-        <AddToCartModal product={product} onClose={() => setModalOpen(false)} />
-      )}
+      <AddToCartModal product={product} open={modalOpen} onClose={() => setModalOpen(false)} />
     </>
   );
 }
