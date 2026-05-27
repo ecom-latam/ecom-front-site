@@ -10,7 +10,11 @@ import { orders } from '@/utils/api/orders';
 import type { CreateOrderPayload, PaymentMethod, ShippingMethod } from '@/utils/api/orders';
 import { addresses as addressesApi } from '@/utils/api/addresses';
 import type { Address } from '@/utils/api/addresses';
-import { Button, Input, Select, Textarea, Text } from 'zoui';
+import { Text } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
+import { StoreInput } from '@/components/ui/StoreInput';
+import { StoreSelect } from '@/components/ui/StoreSelect';
+import { StoreTextarea } from '@/components/ui/StoreTextarea';
 
 const PROVINCES = [
   'Buenos Aires',
@@ -120,9 +124,9 @@ export default function CheckoutPage() {
           <Text variant="body" color="muted" style={{ marginBottom: '16px' }}>
             Tu carrito está vacío.
           </Text>
-          <Button variant="filled" shape="rounded" size="md" onClick={() => router.push('/productos')}>
+          <StoreButton size="md" onClick={() => router.push('/productos')}>
             Ver productos
-          </Button>
+          </StoreButton>
         </div>
       </main>
     );
@@ -304,76 +308,60 @@ export default function CheckoutPage() {
                 {(selectedAddressId === 'new' || form.shippingMethod !== 'delivery') && (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                   <div style={{ gridColumn: '1 / -1' }}>
-                    <Input
+                    <StoreInput
                       label="Nombre completo"
                       value={form.fullName}
                       onChange={(e) => set('fullName', e.target.value)}
                       required
-                      size="md"
-                      variant="outlined"
-                      testId="checkout-fullname"
+                      size="md"                      data-testid="checkout-fullname"
                     />
                   </div>
                   <div style={{ gridColumn: '1 / -1' }}>
-                    <Input
+                    <StoreInput
                       label="Teléfono"
                       value={form.phone}
                       onChange={(e) => set('phone', e.target.value)}
                       required
-                      size="md"
-                      variant="outlined"
-                      testId="checkout-phone"
+                      size="md"                      data-testid="checkout-phone"
                     />
                   </div>
                   {form.shippingMethod === 'delivery' && (
                     <>
                       <div style={{ gridColumn: '1 / -1' }}>
-                        <Input
+                        <StoreInput
                           label="Dirección"
                           value={form.address}
                           onChange={(e) => set('address', e.target.value)}
                           required
-                          size="md"
-                          variant="outlined"
-                          testId="checkout-address"
+                          size="md"                          data-testid="checkout-address"
                         />
                       </div>
                       <div>
-                        <Input
+                        <StoreInput
                           label="Ciudad"
                           value={form.city}
                           onChange={(e) => set('city', e.target.value)}
                           required
-                          size="md"
-                          variant="outlined"
-                          testId="checkout-city"
+                          size="md"                          data-testid="checkout-city"
                         />
                       </div>
                       <div>
-                        <Input
+                        <StoreInput
                           label="Código postal"
                           value={form.zip}
                           onChange={(e) => set('zip', e.target.value)}
-                          size="md"
-                          variant="outlined"
-                          testId="checkout-zip"
+                          size="md"                          data-testid="checkout-zip"
                         />
                       </div>
                       <div style={{ gridColumn: '1 / -1' }}>
-                        <Select
+                        <StoreSelect
                           label="Provincia"
-                          value={form.province}
-                          onChange={(e) => set('province', e.target.value)}
+                          value={form.province || undefined}
+                          onValueChange={(val) => set('province', val)}
                           required
-                          size="md"
-                          variant="outlined"
-                          testId="checkout-province"
-                        >
-                          <option value="">Seleccioná una provincia</option>
-                          {PROVINCES.map((p) => (
-                            <option key={p} value={p}>{p}</option>
-                          ))}
-                        </Select>
+                          size="md"                          placeholder="Seleccioná una provincia"
+                          options={PROVINCES.map((p) => ({ value: p, label: p }))}
+                        />
                       </div>
                     </>
                   )}
@@ -418,13 +406,11 @@ export default function CheckoutPage() {
                 <Text variant="heading-3" as="h2" style={{ marginBottom: '16px' }}>
                   Notas del pedido (opcional)
                 </Text>
-                <Textarea
+                <StoreTextarea
                   label="Notas"
                   value={form.notes}
                   onChange={(e) => set('notes', e.target.value)}
-                  placeholder="Instrucciones especiales, referencias de entrega..."
-                  variant="outlined"
-                />
+                  placeholder="Instrucciones especiales, referencias de entrega..."                />
               </section>
             </div>
 
@@ -478,17 +464,15 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
-                <Button
+                <StoreButton
                   type="submit"
-                  variant="filled"
-                  shape="pill"
                   size="md"
                   disabled={submitting}
                   style={{ marginTop: '20px', width: '100%', justifyContent: 'center' }}
                   data-testid="checkout-submit-btn"
                 >
                   {submitting ? 'Procesando...' : 'Confirmar pedido'}
-                </Button>
+                </StoreButton>
               </section>
             </div>
 

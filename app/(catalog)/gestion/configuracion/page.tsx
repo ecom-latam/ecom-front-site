@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Text, ColorWheel, Textarea, Button, useToast } from 'zoui';
+import { Text, ColorPicker, useToast } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
+import { StoreTextarea } from '@/components/ui/StoreTextarea';
 import { apiClient } from '@/utils/api/client';
 
 function getInitialHue(): number {
@@ -92,11 +94,11 @@ export default function ConfiguracionPage() {
           El color elegido se aplica en toda la tienda para todos los visitantes.
         </Text>
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px', flexWrap: 'wrap' }}>
-          <ColorWheel
-            value={hue}
-            onChange={handleHueChange}
+          <ColorPicker
+            hue={hue}
+            sat={72}
+            onHue={handleHueChange}
             size={160}
-            testId="store-color-wheel"
           />
           <button
             onClick={handleSaveColor}
@@ -129,24 +131,20 @@ export default function ConfiguracionPage() {
           <div className="animate-pulse h-20 rounded" style={{ background: 'var(--color-bg-subtle)' }} />
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <Textarea
+            <StoreTextarea
               label="Instrucciones de pago"
               value={transferInfo}
               onChange={(e) => setTransferInfo(e.target.value)}
-              placeholder={"Banco: Banco Ejemplo\nCBU: 0000000000000000000000\nAlias: mi.alias\nTitular: Nombre Apellido\nCUIT: 20-12345678-9"}
-              variant="outlined"
-              data-testid="transfer-info-input"
+              placeholder={"Banco: Banco Ejemplo\nCBU: 0000000000000000000000\nAlias: mi.alias\nTitular: Nombre Apellido\nCUIT: 20-12345678-9"}              data-testid="transfer-info-input"
             />
-            <Button
-              variant="filled"
-              shape="rounded"
+            <StoreButton
               size="md"
               onClick={handleSaveTransfer}
               disabled={savingTransfer}
               data-testid="transfer-info-save-btn"
             >
               {savingTransfer ? 'Guardando…' : 'Guardar'}
-            </Button>
+            </StoreButton>
           </div>
         )}
       </div>

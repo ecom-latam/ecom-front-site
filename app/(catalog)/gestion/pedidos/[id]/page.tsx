@@ -8,7 +8,8 @@ import { orders } from '@/utils/api/orders';
 import type { Order, OrderStatus } from '@/utils/api/orders';
 import { getNextAdminStatuses, getStepLabel } from '@/utils/workflows';
 import { Badge, Button, Text, Modal } from 'zoui';
-import type { BadgeType } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
+import type { BadgeTone } from 'zoui';
 
 const STATUS_LABEL: Record<string, string> = {
   new: 'Nuevo',
@@ -21,7 +22,7 @@ const STATUS_LABEL: Record<string, string> = {
   cancelled: 'Cancelado',
 };
 
-const STATUS_TONE: Record<string, BadgeType> = {
+const STATUS_TONE: Record<string, BadgeTone> = {
   new: 'neutral',
   notified: 'warning',
   confirmed: 'info',
@@ -29,7 +30,7 @@ const STATUS_TONE: Record<string, BadgeType> = {
   shipped: 'info',
   ready: 'info',
   delivered: 'success',
-  cancelled: 'error',
+  cancelled: 'danger',
 };
 
 const PAYMENT_LABEL: Record<string, string> = {
@@ -39,11 +40,11 @@ const PAYMENT_LABEL: Record<string, string> = {
   failed: 'Fallido',
 };
 
-const PAYMENT_TONE: Record<string, BadgeType> = {
+const PAYMENT_TONE: Record<string, BadgeTone> = {
   pending: 'neutral',
   in_progress: 'warning',
   paid: 'success',
-  failed: 'error',
+  failed: 'danger',
 };
 
 const STATUS_ACTION_LABEL: Record<string, string> = {
@@ -129,9 +130,9 @@ export default function AdminPedidoDetailPage() {
     return (
       <main style={{ padding: '32px' }}>
         <Text variant="body" color="muted">Pedido no encontrado.</Text>
-        <Button variant="ghost" shape="rounded" size="md" style={{ marginTop: '12px' }} onClick={() => router.push('/gestion/pedidos')}>
+        <StoreButton variant="ghost" size="md" style={{ marginTop: '12px' }} onClick={() => router.push('/gestion/pedidos')}>
           ← Volver a pedidos
-        </Button>
+        </StoreButton>
       </main>
     );
   }
@@ -151,8 +152,8 @@ export default function AdminPedidoDetailPage() {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
         <Text variant="heading-2" as="h1">Pedido #{order.orderNumber}</Text>
-        <Badge type={STATUS_TONE[order.status]} shape="pill" data-testid="order-status-badge">{STATUS_LABEL[order.status]}</Badge>
-        <Badge type={PAYMENT_TONE[order.paymentStatus]} shape="pill" data-testid="order-payment-badge">{PAYMENT_LABEL[order.paymentStatus]}</Badge>
+        <Badge tone={STATUS_TONE[order.status]} variant="pill" data-testid="order-status-badge">{STATUS_LABEL[order.status]}</Badge>
+        <Badge tone={PAYMENT_TONE[order.paymentStatus]} variant="pill" data-testid="order-payment-badge">{PAYMENT_LABEL[order.paymentStatus]}</Badge>
       </div>
 
       {error && (
@@ -229,9 +230,7 @@ export default function AdminPedidoDetailPage() {
               {order.paymentMethod === 'transfer' ? 'Transferencia bancaria' : 'Efectivo en mano'}
             </Text>
             {canConfirmPayment && (
-              <Button
-                variant="filled"
-                shape="rounded"
+              <StoreButton
                 size="md"
                 onClick={() => setConfirmModal({ type: 'confirmPayment' })}
                 disabled={actionLoading}
@@ -239,7 +238,7 @@ export default function AdminPedidoDetailPage() {
                 style={{ width: '100%', justifyContent: 'center' }}
               >
                 Confirmar pago recibido
-              </Button>
+              </StoreButton>
             )}
           </section>
 
@@ -249,23 +248,21 @@ export default function AdminPedidoDetailPage() {
               <Text variant="heading-3" as="h2" style={{ marginBottom: '12px' }}>Estado del pedido</Text>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {nonCancelNext.map((status) => (
-                  <Button
+                  <StoreButton
                     key={status}
-                    variant="outlined"
-                    shape="rounded"
+                    variant="secondary"
                     size="md"
-                    onClick={() => setConfirmModal({ type: 'status', status })}
+                    onClick={() => setConfirmModal({ type: 'status', status: status as OrderStatus })}
                     disabled={actionLoading}
                     data-testid={`status-btn-${status}`}
                     style={{ justifyContent: 'center' }}
                   >
                     {STATUS_ACTION_LABEL[status]}
-                  </Button>
+                  </StoreButton>
                 ))}
                 {canCancel && (
-                  <Button
-                    variant="outlined"
-                    shape="rounded"
+                  <StoreButton
+                    variant="secondary"
                     size="md"
                     onClick={() => setConfirmModal({ type: 'cancel' })}
                     disabled={actionLoading}
@@ -273,7 +270,7 @@ export default function AdminPedidoDetailPage() {
                     style={{ justifyContent: 'center', color: 'var(--color-error-600)', borderColor: 'var(--color-error-300)' }}
                   >
                     Cancelar pedido
-                  </Button>
+                  </StoreButton>
                 )}
               </div>
             </section>
@@ -294,49 +291,47 @@ export default function AdminPedidoDetailPage() {
 
       {/* Confirm payment modal */}
       <Modal open={confirmModal?.type === 'confirmPayment'} size="sm" onClose={() => setConfirmModal(null)}>
-        <Modal.Header onClose={() => setConfirmModal(null)}>Confirmar pago</Modal.Header>
+        <Modal.Header>Confirmar pago</Modal.Header>
         <Modal.Body>
           <Text variant="body-sm" as="p">
             ¿Confirmás que recibiste el pago? El pedido pasará a estado "Confirmado".
           </Text>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="ghost" shape="rounded" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>Cancelar</Button>
-          <Button variant="filled" shape="rounded" size="md" onClick={handleConfirmPayment} disabled={actionLoading} data-testid="confirm-payment-confirm-btn">
+          <StoreButton variant="ghost" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>Cancelar</StoreButton>
+          <StoreButton size="md" onClick={handleConfirmPayment} disabled={actionLoading} data-testid="confirm-payment-confirm-btn">
             {actionLoading ? 'Confirmando...' : 'Confirmar'}
-          </Button>
+          </StoreButton>
         </Modal.Footer>
       </Modal>
 
       {/* Status update modal */}
       <Modal open={!!(confirmModal?.type === 'status' && confirmModal.status)} size="sm" onClose={() => setConfirmModal(null)}>
-        <Modal.Header onClose={() => setConfirmModal(null)}>Actualizar estado</Modal.Header>
+        <Modal.Header>Actualizar estado</Modal.Header>
         <Modal.Body>
           <Text variant="body-sm" as="p">
             ¿Confirmás cambiar el estado a &ldquo;{confirmModal?.type === 'status' && confirmModal.status ? getStepLabel(order.paymentMethod, order.shippingMethod, confirmModal.status) : ''}&rdquo;?
           </Text>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="ghost" shape="rounded" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>Cancelar</Button>
-          <Button variant="filled" shape="rounded" size="md" onClick={() => confirmModal?.type === 'status' && handleStatusUpdate(confirmModal.status!)} disabled={actionLoading} data-testid="status-confirm-btn">
+          <StoreButton variant="ghost" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>Cancelar</StoreButton>
+          <StoreButton size="md" onClick={() => confirmModal?.type === 'status' && handleStatusUpdate(confirmModal.status!)} disabled={actionLoading} data-testid="status-confirm-btn">
             {actionLoading ? 'Actualizando...' : 'Confirmar'}
-          </Button>
+          </StoreButton>
         </Modal.Footer>
       </Modal>
 
       {/* Cancel modal */}
       <Modal open={confirmModal?.type === 'cancel'} size="sm" onClose={() => setConfirmModal(null)}>
-          <Modal.Header onClose={() => setConfirmModal(null)}>Cancelar pedido</Modal.Header>
+          <Modal.Header>Cancelar pedido</Modal.Header>
           <Modal.Body>
             <Text variant="body-sm" as="p">
               ¿Estás seguro de que querés cancelar este pedido? Esta acción no se puede deshacer.
             </Text>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="ghost" shape="rounded" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>Volver</Button>
-            <Button
-              variant="filled"
-              shape="rounded"
+            <StoreButton variant="ghost" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>Volver</StoreButton>
+            <StoreButton
               size="md"
               onClick={handleCancel}
               disabled={actionLoading}
@@ -344,7 +339,7 @@ export default function AdminPedidoDetailPage() {
               style={{ background: 'var(--color-error-600)', borderColor: 'var(--color-error-600)' }}
             >
               {actionLoading ? 'Cancelando...' : 'Cancelar pedido'}
-            </Button>
+            </StoreButton>
           </Modal.Footer>
       </Modal>
     </main>

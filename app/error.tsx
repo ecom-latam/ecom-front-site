@@ -1,6 +1,7 @@
 'use client';
 
-import { Button, Text } from 'zoui';
+import { Text } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
 
 export default function GlobalError({
   reset,
@@ -15,9 +16,9 @@ export default function GlobalError({
       <Text variant="body" color="secondary" style={{ marginBottom: '32px', maxWidth: '360px' }}>
         Ocurrió un error inesperado. Podés intentar de nuevo o volver al inicio.
       </Text>
-      <Button variant="filled" shape="rounded" size="md" onClick={reset}>
+      <StoreButton size="md" onClick={reset}>
         Reintentar
-      </Button>
+      </StoreButton>
     </main>
   );
 }

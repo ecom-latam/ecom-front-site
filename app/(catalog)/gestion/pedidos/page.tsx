@@ -4,8 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { orders } from '@/utils/api/orders';
 import type { Order, OrderStatus, PaymentStatus, PaymentMethod } from '@/utils/api/orders';
-import { Badge, Button, Select, Table, Text, Pagination } from 'zoui';
-import type { BadgeType } from 'zoui';
+import { Badge, Table, Text, Pagination } from 'zoui';
+import { StoreSelect } from '@/components/ui/StoreSelect';
+import { StoreButton } from '@/components/ui/StoreButton';
+import type { BadgeTone } from 'zoui';
 
 const STATUS_LABEL: Record<string, string> = {
   new: 'Nuevo',
@@ -16,13 +18,13 @@ const STATUS_LABEL: Record<string, string> = {
   cancelled: 'Cancelado',
 };
 
-const STATUS_TONE: Record<string, BadgeType> = {
+const STATUS_TONE: Record<string, BadgeTone> = {
   new: 'neutral',
   confirmed: 'info',
   processing: 'warning',
   shipped: 'info',
   delivered: 'success',
-  cancelled: 'error',
+  cancelled: 'danger',
 };
 
 const PAYMENT_LABEL: Record<string, string> = {
@@ -32,11 +34,11 @@ const PAYMENT_LABEL: Record<string, string> = {
   failed: 'Fallido',
 };
 
-const PAYMENT_TONE: Record<string, BadgeType> = {
+const PAYMENT_TONE: Record<string, BadgeTone> = {
   pending: 'neutral',
   in_progress: 'warning',
   paid: 'success',
-  failed: 'error',
+  failed: 'danger',
 };
 
 const LIMIT = 20;
@@ -94,50 +96,53 @@ export default function AdminPedidosPage() {
 
       {/* Filters */}
       <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
-        <Select
-          label="Estado de orden"
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value as OrderStatus | '')}
-          size="md"
-          variant="outlined"
-          style={{ minWidth: '180px' }}
-        >
-          <option value="">Todos los estados</option>
-          <option value="new">Nuevo</option>
-          <option value="confirmed">Confirmado</option>
-          <option value="processing">En preparación</option>
-          <option value="shipped">Enviado</option>
-          <option value="delivered">Entregado</option>
-          <option value="cancelled">Cancelado</option>
-        </Select>
+        <div style={{ minWidth: '180px' }}>
+          <StoreSelect
+            label="Estado de orden"
+            value={filterStatus || '__all__'}
+            onValueChange={(val) => setFilterStatus(val === '__all__' ? '' : val as OrderStatus)}
+            size="md"
+            options={[
+              { value: '__all__', label: 'Todos los estados' },
+              { value: 'new', label: 'Nuevo' },
+              { value: 'confirmed', label: 'Confirmado' },
+              { value: 'processing', label: 'En preparación' },
+              { value: 'shipped', label: 'Enviado' },
+              { value: 'delivered', label: 'Entregado' },
+              { value: 'cancelled', label: 'Cancelado' },
+            ]}
+          />
+        </div>
 
-        <Select
-          label="Estado de pago"
-          value={filterPayment}
-          onChange={(e) => setFilterPayment(e.target.value as PaymentStatus | '')}
-          size="md"
-          variant="outlined"
-          style={{ minWidth: '180px' }}
-        >
-          <option value="">Todos los pagos</option>
-          <option value="pending">Pendiente</option>
-          <option value="in_progress">Notificado</option>
-          <option value="paid">Pagado</option>
-          <option value="failed">Fallido</option>
-        </Select>
+        <div style={{ minWidth: '180px' }}>
+          <StoreSelect
+            label="Estado de pago"
+            value={filterPayment || '__all__'}
+            onValueChange={(val) => setFilterPayment(val === '__all__' ? '' : val as PaymentStatus)}
+            size="md"
+            options={[
+              { value: '__all__', label: 'Todos los pagos' },
+              { value: 'pending', label: 'Pendiente' },
+              { value: 'in_progress', label: 'Notificado' },
+              { value: 'paid', label: 'Pagado' },
+              { value: 'failed', label: 'Fallido' },
+            ]}
+          />
+        </div>
 
-        <Select
-          label="Método de pago"
-          value={filterMethod}
-          onChange={(e) => setFilterMethod(e.target.value as PaymentMethod | '')}
-          size="md"
-          variant="outlined"
-          style={{ minWidth: '180px' }}
-        >
-          <option value="">Todos los métodos</option>
-          <option value="transfer">Transferencia</option>
-          <option value="cash">Efectivo</option>
-        </Select>
+        <div style={{ minWidth: '180px' }}>
+          <StoreSelect
+            label="Método de pago"
+            value={filterMethod || '__all__'}
+            onValueChange={(val) => setFilterMethod(val === '__all__' ? '' : val as PaymentMethod)}
+            size="md"
+            options={[
+              { value: '__all__', label: 'Todos los métodos' },
+              { value: 'transfer', label: 'Transferencia' },
+              { value: 'cash', label: 'Efectivo' },
+            ]}
+          />
+        </div>
       </div>
 
       {loading ? (
@@ -182,25 +187,24 @@ export default function AdminPedidosPage() {
                     {order.paymentMethod === 'transfer' ? 'Transferencia' : 'Efectivo'}
                   </Table.Td>
                   <Table.Td>
-                    <Badge type={PAYMENT_TONE[order.paymentStatus]} shape="pill">
+                    <Badge tone={PAYMENT_TONE[order.paymentStatus]} variant="pill">
                       {PAYMENT_LABEL[order.paymentStatus]}
                     </Badge>
                   </Table.Td>
                   <Table.Td>
-                    <Badge type={STATUS_TONE[order.status]} shape="pill">
+                    <Badge tone={STATUS_TONE[order.status]} variant="pill">
                       {STATUS_LABEL[order.status]}
                     </Badge>
                   </Table.Td>
                   <Table.Td>
-                    <Button
+                    <StoreButton
                       variant="ghost"
-                      shape="rounded"
                       size="md"
                       onClick={() => router.push(`/gestion/pedidos/${order._id}`)}
                       data-testid={`order-view-btn-${order._id}`}
                     >
                       Ver
-                    </Button>
+                    </StoreButton>
                   </Table.Td>
                 </Table.Row>
               ))}

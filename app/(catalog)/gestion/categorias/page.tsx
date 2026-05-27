@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react';
 import { isAxiosError } from 'axios';
 import { categories as categoriesApi } from '@/utils/api';
 import type { Category, CategoryPayload } from '@/utils/api';
-import { Modal, Drawer, Table, Badge, Input, Select, Button, Text } from 'zoui';
+import { Modal, Drawer, Table, Badge, Button, Text } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
+import { StoreInput } from '@/components/ui/StoreInput';
+import { StoreSelect } from '@/components/ui/StoreSelect';
 
 const STATUS_BADGE: Record<Category['status'], 'success' | 'neutral'> = {
   active:   'success',
@@ -37,17 +40,15 @@ function ConfirmModal({ title, message, confirmLabel, danger = false, onConfirm,
         <Text variant="body-sm" color="secondary" as="p" style={{ lineHeight: 1.6 }}>{message}</Text>
       </Modal.Body>
       <Modal.Footer style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-        <Button variant="outlined" shape="rounded" size="md" onClick={onCancel}>Cancelar</Button>
-        <Button
-          variant="filled"
-          shape="rounded"
+        <StoreButton variant="secondary" size="md" onClick={onCancel}>Cancelar</StoreButton>
+        <StoreButton
           size="md"
           onClick={onConfirm}
-          testId="cat-confirm-btn"
+          data-testid="cat-confirm-btn"
           style={danger ? { background: 'var(--color-error-500)', borderColor: 'var(--color-error-500)' } : undefined}
         >
           {confirmLabel}
-        </Button>
+        </StoreButton>
       </Modal.Footer>
     </Modal>
   );
@@ -124,42 +125,41 @@ function CategoryDrawer({ category, allCategories, depthMap, onClose, onSaved }:
 
   return (
     <Drawer side="right" size="md" onClose={onClose} label={category ? 'Editar categoría' : 'Nueva categoría'}>
-      <Drawer.Header onClose={onClose}>{category ? 'Editar categoría' : 'Nueva categoría'}</Drawer.Header>
+      <Drawer.Header>{category ? 'Editar categoría' : 'Nueva categoría'}</Drawer.Header>
       <form onSubmit={handleSubmit} style={{ display: 'contents' }}>
         <Drawer.Body style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <Input
+          <StoreInput
             label="Nombre *"
             required
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder="Ej: Ropa de hombre"
             fullWidth
-            testId="cat-name-input"
+            data-testid="cat-name-input"
           />
 
-          <Select
+          <StoreSelect
             label="Categoría padre"
-            value={parentId}
-            onChange={e => setParentId(e.target.value)}
+            value={parentId || '__none__'}
+            onValueChange={val => setParentId(val === '__none__' ? '' : val)}
             hint="Solo se muestran categorías que pueden recibir subcategorías (máximo 4 niveles)."
+            options={[
+              { value: '__none__', label: 'Sin categoría padre (raíz)' },
+              ...candidates.map(c => ({ value: c._id, label: c.name })),
+            ]}
             fullWidth
-            testId="cat-parent-select"
-          >
-            <option value="">Sin categoría padre (raíz)</option>
-            {candidates.map(c => (
-              <option key={c._id} value={c._id}>{c.name}</option>
-            ))}
-          </Select>
+          />
 
-          <Select
+          <StoreSelect
             label="Estado"
             value={status}
-            onChange={e => setStatus(e.target.value as Category['status'])}
+            onValueChange={val => setStatus(val as Category['status'])}
+            options={[
+              { value: 'active', label: 'Activa' },
+              { value: 'inactive', label: 'Inactiva' },
+            ]}
             fullWidth
-          >
-            <option value="active">Activa</option>
-            <option value="inactive">Inactiva</option>
-          </Select>
+          />
 
           {error && (
             <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }}>{error}</Text>
@@ -167,10 +167,10 @@ function CategoryDrawer({ category, allCategories, depthMap, onClose, onSaved }:
         </Drawer.Body>
 
         <Drawer.Footer style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <Button type="button" variant="outlined" shape="rounded" size="md" onClick={onClose}>Cancelar</Button>
-          <Button type="submit" variant="filled" shape="rounded" size="md" disabled={loading} testId="cat-submit-btn">
+          <StoreButton type="button" variant="secondary" size="md" onClick={onClose}>Cancelar</StoreButton>
+          <StoreButton type="submit" size="md" disabled={loading} data-testid="cat-submit-btn">
             {loading ? 'Guardando...' : category ? 'Guardar cambios' : 'Crear categoría'}
-          </Button>
+          </StoreButton>
         </Drawer.Footer>
       </form>
     </Drawer>
@@ -364,14 +364,14 @@ export default function GestionCategoriasPage() {
     <main style={{ padding: '32px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <Text variant="heading-2" as="h1">Categorías</Text>
-        <Button variant="filled" shape="rounded" size="md" onClick={openCreate} testId="cat-new-btn">
+        <StoreButton size="md" onClick={openCreate} data-testid="cat-new-btn">
           + Nueva categoría
-        </Button>
+        </StoreButton>
       </div>
 
       <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
         <div style={{ width: 280 }}>
-          <Input
+          <StoreInput
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Buscar por nombre..."
@@ -380,17 +380,17 @@ export default function GestionCategoriasPage() {
           />
         </div>
         <div style={{ width: '160px' }}>
-          <Select
-            value={statusFilter}
-            onChange={e => setStatusFilter(e.target.value as Category['status'] | '')}
+          <StoreSelect
+            value={statusFilter || '__all__'}
+            onValueChange={val => setStatusFilter(val === '__all__' ? '' : val as Category['status'])}
+            options={[
+              { value: '__all__', label: 'Todas' },
+              { value: 'active', label: 'Activas' },
+              { value: 'inactive', label: 'Inactivas' },
+            ]}
             size="sm"
             fullWidth
-            testId="cat-status-filter"
-          >
-            <option value="">Todas</option>
-            <option value="active">Activas</option>
-            <option value="inactive">Inactivas</option>
-          </Select>
+          />
         </div>
       </div>
 
@@ -426,15 +426,14 @@ export default function GestionCategoriasPage() {
                 <Table.Td style={{ fontWeight: depth === 0 ? 500 : 400 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px', paddingLeft: `${depth * 20}px` }}>
                     {hasChildren(category._id) ? (
-                      <Button
+                      <StoreButton
                         variant="ghost"
-                        shape="square"
                         size="md"
                         onClick={() => toggleCollapse(category._id)}
                         style={{ width: 20, height: 20, minWidth: 0, fontSize: '10px', color: 'var(--color-fg-muted)', flexShrink: 0 }}
                       >
                         {collapsed.has(category._id) ? '▶' : '▼'}
-                      </Button>
+                      </StoreButton>
                     ) : (
                       <span style={{ width: '20px', flexShrink: 0, display: 'inline-block' }} />
                     )}
@@ -447,31 +446,30 @@ export default function GestionCategoriasPage() {
                 <Table.Td style={{ textAlign: 'center', color: 'var(--color-fg-secondary)' }}>
                   {category.parentId
                     ? (parentMap[category.parentId] ?? '—')
-                    : <Badge type="neutral" shape="square">raíz</Badge>
+                    : <Badge tone="neutral">raíz</Badge>
                   }
                 </Table.Td>
                 <Table.Td style={{ textAlign: 'center' }}>
-                  <Badge type={STATUS_BADGE[category.status]} shape="pill">
+                  <Badge tone={STATUS_BADGE[category.status]} variant="pill">
                     {STATUS_LABELS[category.status]}
                   </Badge>
                 </Table.Td>
                 <Table.Td style={{ textAlign: 'center' }}>
                   <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
-                    <Button variant="filled" shape="rounded" size="md" onClick={() => openEdit(category)}>
+                    <StoreButton size="md" onClick={() => openEdit(category)}>
                       Editar
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      shape="rounded"
+                    </StoreButton>
+                    <StoreButton
+                      variant="secondary"
                       size="md"
                       onClick={() => handleToggleStatus(category)}
                       disabled={toggling.has(category._id)}
                       loading={toggling.has(category._id)}
-                      testId="cat-toggle-btn"
+                      data-testid="cat-toggle-btn"
                     >
                       {category.status === 'active' ? 'Desactivar' : 'Activar'}
-                    </Button>
-                    <Button variant="ghost" shape="rounded" size="md" onClick={() => handleDelete(category)} style={{ color: 'var(--color-error-500)' }}>Eliminar</Button>
+                    </StoreButton>
+                    <StoreButton variant="ghost" size="md" onClick={() => handleDelete(category)} style={{ color: 'var(--color-error-500)' }}>Eliminar</StoreButton>
                   </div>
                 </Table.Td>
               </Table.Row>
@@ -513,7 +511,7 @@ export default function GestionCategoriasPage() {
           <Text variant="body" color="secondary" as="p">{errorMsg}</Text>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="filled" shape="rounded" size="md" onClick={() => setErrorMsg(null)}>Entendido</Button>
+          <StoreButton size="md" onClick={() => setErrorMsg(null)}>Entendido</StoreButton>
         </Modal.Footer>
       </Modal>
     </main>

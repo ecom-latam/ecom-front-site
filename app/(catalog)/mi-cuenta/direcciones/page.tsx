@@ -1,7 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Button, Text, Input, Select, Badge, Modal } from 'zoui';
+import { Text, Badge, Modal } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
+import { StoreInput } from '@/components/ui/StoreInput';
+import { StoreSelect } from '@/components/ui/StoreSelect';
 import { addresses } from '@/utils/api/addresses';
 import type { Address, AddressPayload } from '@/utils/api/addresses';
 
@@ -182,9 +185,7 @@ export default function DireccionesPage() {
             Guardá hasta 5 direcciones de envío
           </Text>
         </div>
-        <Button
-          variant="filled"
-          shape="rounded"
+        <StoreButton
           size="md"
           onClick={openCreate}
           disabled={atLimit}
@@ -193,7 +194,7 @@ export default function DireccionesPage() {
         >
           <PlusIcon />
           Agregar
-        </Button>
+        </StoreButton>
       </div>
 
       {/* Slots indicator */}
@@ -214,7 +215,7 @@ export default function DireccionesPage() {
             />
           ))}
         </div>
-        <Text variant="caption" color={atLimit ? 'default' : 'muted'} style={{ fontWeight: atLimit ? 600 : 400 }}>
+        <Text variant="caption" color="muted" style={{ fontWeight: atLimit ? 600 : 400 }}>
           {count} / {MAX}
           {atLimit && ' — límite alcanzado'}
         </Text>
@@ -261,7 +262,7 @@ export default function DireccionesPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
                 <Text variant="body-sm" weight="semibold" as="span">{addr.label}</Text>
                 {addr.isDefault && (
-                  <Badge type="info" shape="pill" size="sm">Predeterminada</Badge>
+                  <Badge tone="info" variant="pill" size="sm">Predeterminada</Badge>
                 )}
               </div>
 
@@ -278,20 +279,18 @@ export default function DireccionesPage() {
 
               {/* Actions */}
               <div style={{ display: 'flex', gap: '8px', marginTop: '16px', flexWrap: 'wrap' }}>
-                <Button
+                <StoreButton
                   variant="ghost"
-                  shape="rounded"
                   size="sm"
                   onClick={() => openEdit(addr)}
                   style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
                 >
                   <EditIcon /> Editar
-                </Button>
+                </StoreButton>
 
                 {!addr.isDefault && (
-                  <Button
+                  <StoreButton
                     variant="ghost"
-                    shape="rounded"
                     size="sm"
                     disabled={settingDefault === addr._id}
                     onClick={() => handleSetDefault(addr._id)}
@@ -299,12 +298,11 @@ export default function DireccionesPage() {
                   >
                     <StarIcon />
                     {settingDefault === addr._id ? 'Guardando...' : 'Marcar predeterminada'}
-                  </Button>
+                  </StoreButton>
                 )}
 
-                <Button
+                <StoreButton
                   variant="ghost"
-                  shape="rounded"
                   size="sm"
                   disabled={deleting === addr._id}
                   onClick={() => handleDelete(addr._id)}
@@ -312,7 +310,7 @@ export default function DireccionesPage() {
                 >
                   <TrashIcon />
                   {deleting === addr._id ? 'Eliminando...' : 'Eliminar'}
-                </Button>
+                </StoreButton>
               </div>
             </div>
           ))}
@@ -329,7 +327,7 @@ export default function DireccionesPage() {
 
         <Modal.Body>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <Input
+            <StoreInput
               label="Etiqueta"
               labelAction={<Req />}
               placeholder='Ej: "Casa", "Trabajo"'
@@ -337,13 +335,11 @@ export default function DireccionesPage() {
               onChange={(e) => set('label', e.target.value)}
               onBlur={() => touch('label')}
               error={touched.label ? formErrors.label : undefined}
-              maxLength={30}
-              variant="outlined"
-              size="md"
+              maxLength={30}              size="md"
             />
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div style={{ gridColumn: '1 / -1' }}>
-                <Input
+                <StoreInput
                   label="Nombre completo"
                   labelAction={<Req />}
                   value={form.fullName}
@@ -355,7 +351,7 @@ export default function DireccionesPage() {
                 />
               </div>
               <div style={{ gridColumn: '1 / -1' }}>
-                <Input
+                <StoreInput
                   label="Teléfono"
                   labelAction={<Req />}
                   placeholder="Ej: 1112345678"
@@ -369,7 +365,7 @@ export default function DireccionesPage() {
                 />
               </div>
               <div style={{ gridColumn: '1 / -1' }}>
-                <Input
+                <StoreInput
                   label="Dirección"
                   labelAction={<Req />}
                   placeholder="Calle y número"
@@ -382,7 +378,7 @@ export default function DireccionesPage() {
                 />
               </div>
               <div style={{ gridColumn: '1 / -1' }}>
-                <Input
+                <StoreInput
                   label="Piso / Depto"
                   hint="Opcional"
                   placeholder="Ej: 3° B"
@@ -393,7 +389,7 @@ export default function DireccionesPage() {
                 />
               </div>
               <div>
-                <Input
+                <StoreInput
                   label="Ciudad"
                   labelAction={<Req />}
                   value={form.city}
@@ -405,7 +401,7 @@ export default function DireccionesPage() {
                 />
               </div>
               <div>
-                <Input
+                <StoreInput
                   label="Código postal"
                   hint="Opcional"
                   placeholder="Ej: 1425"
@@ -419,21 +415,17 @@ export default function DireccionesPage() {
                 />
               </div>
               <div style={{ gridColumn: '1 / -1' }}>
-                <Select
+                <StoreSelect
                   label="Provincia"
                   labelAction={<Req />}
-                  value={form.province}
-                  onChange={(e) => set('province', e.target.value)}
-                  onBlur={() => touch('province')}
+                  value={form.province || undefined}
+                  onValueChange={(val) => { set('province', val); touch('province'); }}
                   error={touched.province ? formErrors.province : undefined}
+                  placeholder="Seleccioná una provincia"
+                  options={PROVINCES.map((p) => ({ value: p, label: p }))}
                   variant="outlined"
                   size="md"
-                >
-                  <option value="">Seleccioná una provincia</option>
-                  {PROVINCES.map((p) => (
-                    <option key={p} value={p}>{p}</option>
-                  ))}
-                </Select>
+                />
               </div>
             </div>
 
@@ -446,12 +438,12 @@ export default function DireccionesPage() {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="ghost" shape="rounded" size="md" onClick={() => setModalOpen(false)} disabled={saving}>
+          <StoreButton variant="ghost" size="md" onClick={() => setModalOpen(false)} disabled={saving}>
             Cancelar
-          </Button>
-          <Button variant="filled" shape="rounded" size="md" onClick={handleSave} disabled={saving || !isFormValid}>
+          </StoreButton>
+          <StoreButton size="md" onClick={handleSave} disabled={saving || !isFormValid}>
             {saving ? 'Guardando...' : editing ? 'Guardar cambios' : 'Agregar dirección'}
-          </Button>
+          </StoreButton>
         </Modal.Footer>
       </Modal>
     </main>

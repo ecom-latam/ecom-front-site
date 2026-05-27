@@ -6,8 +6,9 @@ import { useRouter } from 'next/navigation';
 import { getAccessTokenRole } from '@/utils/helpers';
 import { orders } from '@/utils/api/orders';
 import type { Order } from '@/utils/api/orders';
-import { Badge, Button, Text } from 'zoui';
-import type { BadgeType } from 'zoui';
+import { Badge, Text } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
+import type { BadgeTone } from 'zoui';
 
 const STATUS_LABEL: Record<string, string> = {
   new: 'Nuevo',
@@ -18,13 +19,13 @@ const STATUS_LABEL: Record<string, string> = {
   cancelled: 'Cancelado',
 };
 
-const STATUS_TONE: Record<string, BadgeType> = {
+const STATUS_TONE: Record<string, BadgeTone> = {
   new: 'neutral',
   confirmed: 'info',
   processing: 'warning',
   shipped: 'info',
   delivered: 'success',
-  cancelled: 'error',
+  cancelled: 'danger',
 };
 
 export default function MisPedidosPage() {
@@ -76,9 +77,9 @@ export default function MisPedidosPage() {
             <Text variant="body" color="muted" style={{ marginBottom: '16px' }}>
               Todavía no tenés pedidos.
             </Text>
-            <Button variant="filled" shape="rounded" size="md" onClick={() => router.push('/productos')}>
+            <StoreButton size="md" onClick={() => router.push('/productos')}>
               Ver productos
-            </Button>
+            </StoreButton>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -115,7 +116,7 @@ export default function MisPedidosPage() {
                     ${order.total.toLocaleString('es-AR')}
                   </Text>
                 </div>
-                <Badge type={STATUS_TONE[order.status]} shape="pill">
+                <Badge tone={STATUS_TONE[order.status]} variant="pill">
                   {STATUS_LABEL[order.status]}
                 </Badge>
               </button>

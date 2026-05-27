@@ -6,7 +6,9 @@ import { useRouter } from 'next/navigation';
 import type { Product } from '@/lib/api/storeClient';
 import { isBuyer } from '@/utils/helpers';
 import { Button } from 'zoui';
+import type { ButtonVariant } from 'zoui';
 import { AddToCartModal } from './AddToCartModal';
+import { useStoreConfig } from '@/context/StoreConfigContext';
 
 interface Props {
   product: Product;
@@ -16,6 +18,8 @@ interface Props {
 
 export function AddToCartButton({ product, hasSession, availableStock }: Props) {
   const router = useRouter();
+  const { components_presets } = useStoreConfig();
+  const btnVariant = (components_presets?.button ?? 'primary') as ButtonVariant;
   const [modalOpen, setModalOpen] = useState(false);
   const [canBuy, setCanBuy] = useState<boolean | null>(null);
 
@@ -32,8 +36,7 @@ export function AddToCartButton({ product, hasSession, availableStock }: Props) 
   if (isOutOfStock) {
     return (
       <Button
-        variant="outlined"
-        shape="pill"
+        variant="secondary"
         size="md"
         style={{ marginTop: '24px', width: '100%' }}
         disabled
@@ -46,8 +49,7 @@ export function AddToCartButton({ product, hasSession, availableStock }: Props) 
   if (!hasSession) {
     return (
       <Button
-        variant="filled"
-        shape="pill"
+        variant={btnVariant}
         size="md"
         style={{ marginTop: '24px', width: '100%', justifyContent: 'center' }}
         onClick={() => router.push(`/iniciar-sesion?next=/producto?id=${product._id}`)}
@@ -61,8 +63,7 @@ export function AddToCartButton({ product, hasSession, availableStock }: Props) 
     <>
       <Button
         onClick={() => setModalOpen(true)}
-        variant="filled"
-        shape="pill"
+        variant={btnVariant}
         size="md"
         style={{ marginTop: '24px', width: '100%' }}
       >

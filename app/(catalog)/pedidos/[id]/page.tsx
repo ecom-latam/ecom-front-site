@@ -9,7 +9,8 @@ import { orders } from '@/utils/api/orders';
 import type { Order } from '@/utils/api/orders';
 import { apiClient } from '@/utils/api';
 import { Button, Badge, Text, Modal } from 'zoui';
-import type { BadgeType } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
+import type { BadgeTone } from 'zoui';
 
 const STATUS_LABEL: Record<string, string> = {
   new: 'Nuevo',
@@ -22,7 +23,7 @@ const STATUS_LABEL: Record<string, string> = {
   cancelled: 'Cancelado',
 };
 
-const STATUS_TONE: Record<string, BadgeType> = {
+const STATUS_TONE: Record<string, BadgeTone> = {
   new: 'neutral',
   notified: 'warning',
   confirmed: 'info',
@@ -30,7 +31,7 @@ const STATUS_TONE: Record<string, BadgeType> = {
   shipped: 'info',
   ready: 'info',
   delivered: 'success',
-  cancelled: 'error',
+  cancelled: 'danger',
 };
 
 const PAYMENT_NOTE: Record<string, string | null> = {
@@ -142,9 +143,9 @@ export default function OrderDetailPage() {
       <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
         <div className="max-w-3xl mx-auto px-4 py-16 text-center">
           <Text variant="body" color="muted">Pedido no encontrado.</Text>
-          <Button variant="filled" shape="rounded" size="md" style={{ marginTop: '16px' }} onClick={() => router.push('/mis-pedidos')}>
+          <StoreButton size="md" style={{ marginTop: '16px' }} onClick={() => router.push('/mis-pedidos')}>
             Mis pedidos
-          </Button>
+          </StoreButton>
         </div>
       </main>
     );
@@ -165,7 +166,7 @@ export default function OrderDetailPage() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
           <Text variant="heading-2" as="h1">Pedido #{order.orderNumber}</Text>
-          <Badge type={STATUS_TONE[order.status]} shape="pill">{STATUS_LABEL[order.status]}</Badge>
+          <Badge tone={STATUS_TONE[order.status]} variant="pill">{STATUS_LABEL[order.status]}</Badge>
         </div>
 
         {error && (
@@ -248,27 +249,24 @@ export default function OrderDetailPage() {
           {(canNotify || canCancel) && (
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
               {canNotify && (
-                <Button
-                  variant="filled"
-                  shape="rounded"
+                <StoreButton
                   size="md"
                   onClick={() => setConfirmModal('notify')}
                   disabled={actionLoading}
                 >
                   Ya transferí
-                </Button>
+                </StoreButton>
               )}
               {canCancel && (
-                <Button
-                  variant="outlined"
-                  shape="rounded"
+                <StoreButton
+                  variant="secondary"
                   size="md"
                   onClick={() => setConfirmModal('cancel')}
                   disabled={actionLoading}
                   style={{ color: 'var(--color-error-600)', borderColor: 'var(--color-error-300)' }}
                 >
                   Cancelar pedido
-                </Button>
+                </StoreButton>
               )}
             </div>
           )}
@@ -278,44 +276,42 @@ export default function OrderDetailPage() {
 
       {/* Confirm notify payment modal */}
       <Modal open={confirmModal === 'notify'} size="sm" onClose={() => setConfirmModal(null)}>
-        <Modal.Header onClose={() => setConfirmModal(null)}>Confirmar pago</Modal.Header>
+        <Modal.Header>Confirmar pago</Modal.Header>
         <Modal.Body>
           <Text variant="body-sm" as="p">
             ¿Confirmás que ya realizaste la transferencia? El vendedor la verificará y confirmará tu pedido.
           </Text>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="ghost" shape="rounded" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>
+          <StoreButton variant="ghost" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>
             Cancelar
-          </Button>
-          <Button variant="filled" shape="rounded" size="md" onClick={handleNotifyPayment} disabled={actionLoading}>
+          </StoreButton>
+          <StoreButton size="md" onClick={handleNotifyPayment} disabled={actionLoading}>
             {actionLoading ? 'Enviando...' : 'Sí, ya transferí'}
-          </Button>
+          </StoreButton>
         </Modal.Footer>
       </Modal>
 
       {/* Confirm cancel modal */}
       <Modal open={confirmModal === 'cancel'} size="sm" onClose={() => setConfirmModal(null)}>
-          <Modal.Header onClose={() => setConfirmModal(null)}>Cancelar pedido</Modal.Header>
+          <Modal.Header>Cancelar pedido</Modal.Header>
           <Modal.Body>
             <Text variant="body-sm" as="p">
               ¿Estás seguro de que querés cancelar este pedido? Esta acción no se puede deshacer.
             </Text>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="ghost" shape="rounded" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>
+            <StoreButton variant="ghost" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>
               Volver
-            </Button>
-            <Button
-              variant="filled"
-              shape="rounded"
+            </StoreButton>
+            <StoreButton
               size="md"
               onClick={handleCancel}
               disabled={actionLoading}
               style={{ background: 'var(--color-error-600)', borderColor: 'var(--color-error-600)' }}
             >
               {actionLoading ? 'Cancelando...' : 'Cancelar pedido'}
-            </Button>
+            </StoreButton>
           </Modal.Footer>
       </Modal>
     </main>

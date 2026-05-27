@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import "./globals.css";
+import "./zoui.css";
 import { ToastProvider } from "zoui";
-import "zoui/styles";
 import { CartProvider } from "@/context/CartContext";
+import { DynamicStoreTheme } from "@/components/DynamicStoreTheme";
 import { getStoreInfo } from "@/lib/api/storeClient";
 
 export const metadata: Metadata = {
@@ -21,7 +22,9 @@ export default async function RootLayout({
   const theme = (cookieStore.get('ui-theme')?.value ?? 'light') as 'light' | 'dark';
   const storeInfo = await getStoreInfo();
   const hue = Math.round(Math.max(0, Math.min(360, storeInfo?.brand_hue ?? 262)));
+  const storeTheme = storeInfo?.components_presets?.button ?? 'primary';
   const brandContrast = hue >= 45 && hue <= 75 ? '#000000' : '#ffffff';
+  const fontFamily = storeInfo?.font_family ?? 'Geist';
   const brandStyles = `
     :root {
       --color-brand-50:       hsl(${hue}, 95%, 97%);
@@ -33,18 +36,21 @@ export default async function RootLayout({
       --color-brand-600:      hsl(${hue}, 75%, 42%);
       --color-brand-700:      hsl(${hue}, 80%, 34%);
       --color-brand-contrast: ${brandContrast};
+      --font-ui:              '${fontFamily}', sans-serif;
     }
   `.trim();
 
   return (
-    <html lang="es" data-theme={theme}>
+    <html lang="es" data-theme={theme} data-store-theme={storeTheme}>
       <body className="antialiased">
         <style dangerouslySetInnerHTML={{ __html: brandStyles }} />
-        <ToastProvider>
-          <CartProvider hasSession={hasSession}>
-            {children}
-          </CartProvider>
-        </ToastProvider>
+        <DynamicStoreTheme initialConfig={(storeInfo ?? {}) as Record<string, unknown>}>
+          <ToastProvider>
+            <CartProvider hasSession={hasSession}>
+              {children}
+            </CartProvider>
+          </ToastProvider>
+        </DynamicStoreTheme>
       </body>
     </html>
   );

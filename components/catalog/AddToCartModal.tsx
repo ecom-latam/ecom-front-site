@@ -5,6 +5,8 @@ import { useMemo, useState } from 'react';
 import { useCart } from '@/context/CartContext';
 import type { Product, ProductVariant } from '@/lib/api/storeClient';
 import { Modal, Button, Text } from 'zoui';
+import type { ButtonVariant } from 'zoui';
+import { useStoreConfig } from '@/context/StoreConfigContext';
 
 interface Props {
   product: Product;
@@ -45,6 +47,8 @@ function isValueAvailable(
 
 export function AddToCartModal({ product, open, onClose }: Props) {
   const { addItem, openDrawer } = useCart();
+  const { components_presets } = useStoreConfig();
+  const btnVariant = (components_presets?.button ?? 'primary') as ButtonVariant;
 
   const optionNames = useMemo(
     () => product.linkedOptions.map((o) => o.storeOptionName),
@@ -135,7 +139,7 @@ export function AddToCartModal({ product, open, onClose }: Props) {
 
   return (
     <Modal open={open} size="md" onClose={onClose}>
-      <Modal.Header onClose={onClose}>{product.name}</Modal.Header>
+      <Modal.Header>{product.name}</Modal.Header>
       <Modal.Body>
         <Text variant="body-sm" color="secondary" as="p" style={{ marginBottom: '16px' }}>
           ${(product.salePrice ?? product.price).toLocaleString('es-AR')}
@@ -156,8 +160,7 @@ export function AddToCartModal({ product, open, onClose }: Props) {
                       <Button
                         key={value}
                         size="md"
-                        shape="rounded"
-                        variant={isSelected ? 'filled' : 'outlined'}
+                        variant={isSelected ? btnVariant : 'secondary'}
                         onClick={() => available && selectValue(name, value)}
                         disabled={!available}
                         style={!available ? { opacity: 0.4 } : undefined}
@@ -186,8 +189,7 @@ export function AddToCartModal({ product, open, onClose }: Props) {
       </Modal.Body>
       <Modal.Footer>
         <Button
-          variant="filled"
-          shape="pill"
+          variant={btnVariant}
           size="md"
           onClick={handleConfirm}
           disabled={!canAddToCart || isSubmitting}

@@ -5,7 +5,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { isAxiosError } from 'axios';
 import { auth, startSession } from '@/utils/api';
-import { Button, Input, Text } from 'zoui';
+import { Text } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
+import { StoreInput } from '@/components/ui/StoreInput';
 
 const ERRORS: Record<string, string> = {
   INVALID_CREDENTIALS: 'Email o contraseña incorrectos.',
@@ -76,16 +78,16 @@ function LoginForm() {
       )}
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <Input id="email" name="email" type="email" required autoComplete="email" autoFocus label="Email" fullWidth testId="store-login-email" />
-        <Input id="password" name="password" type="password" required autoComplete="current-password" label="Contraseña" fullWidth testId="store-login-password" />
+        <StoreInput id="email" name="email" type="email" required autoComplete="email" autoFocus label="Email" fullWidth />
+        <StoreInput id="password" name="password" type="password" required autoComplete="current-password" label="Contraseña" fullWidth />
 
         {error && (
           <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }} data-testid="store-login-error">{error}</Text>
         )}
 
-        <Button type="submit" loading={loading} variant="filled" shape="rounded" size="md" style={{ width: '100%' }} testId="store-login-submit">
+        <StoreButton type="submit" loading={loading} size="md" style={{ width: '100%' }} data-testid="store-login-submit">
           {loading ? 'Ingresando...' : 'Ingresar'}
-        </Button>
+        </StoreButton>
       </form>
 
       <Text variant="body-sm" color="muted" as="p" style={{ textAlign: 'center', marginTop: '24px' }}>

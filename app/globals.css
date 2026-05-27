@@ -1,3 +1,65 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ── Store theme backgrounds ────────────────────────────────────────────────── */
+
+/* Boutique — ivory cálido */
+[data-store-theme="boutique"] {
+  --color-bg-surface: #faf7f2;
+  --color-bg-subtle:  #f2ebe0;
+  --color-bg-muted:   #e8dfd0;
+  --color-border-default: #d0c4b0;
+}
+[data-theme="dark"][data-store-theme="boutique"] {
+  --color-bg-surface: #1e1a14;
+  --color-bg-subtle:  #2a231a;
+  --color-bg-muted:   #352b1f;
+  --color-border-default: #4a3e30;
+}
+
+/* Terminal — siempre oscuro */
+[data-store-theme="terminal"] {
+  --color-bg-surface: #0e0f11;
+  --color-bg-subtle:  #161820;
+  --color-bg-muted:   #202230;
+  --color-border-default: #2a2d38;
+  --color-fg-primary:   #c9d1d9;
+  --color-fg-secondary: #8b949e;
+  --color-fg-muted:     #6e7681;
+}
+[data-theme="dark"][data-store-theme="terminal"] {
+  --color-bg-surface: #060708;
+  --color-bg-subtle:  #0d0e12;
+  --color-bg-muted:   #141620;
+}
+
+/* Retro — sepia cálido */
+[data-store-theme="retro"] {
+  --color-bg-surface: #fdf6e3;
+  --color-bg-subtle:  #f5e8cc;
+  --color-bg-muted:   #eddc9e;
+  --color-border-default: #c8a870;
+}
+[data-theme="dark"][data-store-theme="retro"] {
+  --color-bg-surface: #1a1409;
+  --color-bg-subtle:  #231b0d;
+  --color-bg-muted:   #2e2412;
+  --color-border-default: #4a3a1f;
+}
+
+/* Neon — dark cyber */
+[data-store-theme="neon"] {
+  --color-bg-surface: #05050a;
+  --color-bg-subtle:  #0a0a14;
+  --color-bg-muted:   #12121e;
+  --color-border-default: #1e1e32;
+}
+
+/* Glass — mantiene bg del sistema pero con borders translúcidos */
+[data-store-theme="glass"] {
+  --color-border-default: rgba(200, 200, 200, 0.3);
+}
+[data-theme="dark"][data-store-theme="glass"] {
+  --color-border-default: rgba(255, 255, 255, 0.12);
+}

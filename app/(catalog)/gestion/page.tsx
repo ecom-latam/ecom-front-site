@@ -17,11 +17,11 @@ const ORDERS_MOCK = [
   { id: '#0037', customer: 'Valentina López', total: '$2.100', status: 'Cancelado' },
 ];
 
-const STATUS_BADGE: Record<string, 'warning' | 'info' | 'success' | 'error'> = {
+const STATUS_BADGE: Record<string, 'warning' | 'info' | 'success' | 'danger'> = {
   Pendiente: 'warning',
   Enviado:   'info',
   Entregado: 'success',
-  Cancelado: 'error',
+  Cancelado: 'danger',
 };
 
 export default function GestionPage() {
@@ -66,7 +66,7 @@ export default function GestionPage() {
                   <Table.Td>{order.customer}</Table.Td>
                   <Table.Td>{order.total}</Table.Td>
                   <Table.Td>
-                    <Badge type={STATUS_BADGE[order.status]} shape="pill">
+                    <Badge tone={STATUS_BADGE[order.status]} variant="pill">
                       {order.status}
                     </Badge>
                   </Table.Td>

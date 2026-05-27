@@ -1,6 +1,7 @@
 'use client';
 
-import { Button, Text } from 'zoui';
+import { Text } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
 import { useRouter } from 'next/navigation';
 
 export default function NotFound() {
@@ -12,9 +13,9 @@ export default function NotFound() {
       <Text variant="body" color="secondary" style={{ marginBottom: '32px', maxWidth: '360px' }}>
         La página que buscás no existe o fue movida.
       </Text>
-      <Button variant="filled" shape="rounded" size="md" onClick={() => router.push('/productos')}>
+      <StoreButton size="md" onClick={() => router.push('/productos')}>
         Ver productos
-      </Button>
+      </StoreButton>
     </main>
   );
 }

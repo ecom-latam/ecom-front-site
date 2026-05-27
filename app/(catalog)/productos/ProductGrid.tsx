@@ -2,11 +2,17 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+
+const NextLink = Link as any;
+const NextImage = Image as any;
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 
 import type { Category, Product } from '@/lib/api/storeClient';
-import { ProductCard, ProductGrid as ProductGridUI, ViewToggle, Pagination, EmptyState, ICON_SEARCH, Input, Select, Button, Badge, Text } from 'zoui';
+import { ProductCard, ProductGrid as ProductGridUI, Pagination, EmptyState, Icon, Badge, Text } from 'zoui';
+import type { ProductCardVariant } from 'zoui';
+import { StoreCatalogBar } from '@/components/catalog/StoreCatalogBar';
+import { useStoreConfig } from '@/context/StoreConfigContext';
 
 interface Props {
   products: Product[];
@@ -52,6 +58,8 @@ export function ProductGrid({
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { components_presets } = useStoreConfig();
+  const cardVariant = components_presets?.product_card as ProductCardVariant | undefined;
 
   const navigate = useCallback(
     (updates: Record<string, string | undefined>) => {
@@ -68,64 +76,34 @@ export function ProductGrid({
     [router, searchParams]
   );
 
-  function handleSearch(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const q = (e.currentTarget.elements.namedItem('q') as HTMLInputElement).value.trim();
-    navigate({ q: q || undefined, page: undefined });
-  }
+  const catalogCategories = categories.map((c) => ({ label: c.name, value: c._id }));
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
-        <form onSubmit={handleSearch} style={{ display: 'flex', gap: '8px', flex: 1, minWidth: '200px' }}>
-          <div style={{ flex: 1 }}>
-            <Input
-              name="q"
-              defaultValue={currentQ ?? ''}
-              placeholder="Buscar productos..."
-              fullWidth
-            />
-          </div>
-          <Button type="submit" variant="filled" shape="rounded" size="md">
-            Buscar
-          </Button>
-        </form>
+      <StoreCatalogBar
+        searchValue={currentQ ?? ''}
+        onSearch={(q) => navigate({ q: q || undefined, page: undefined })}
+        categories={catalogCategories}
+        categoryValue={currentCategoryId ?? ''}
+        onCategoryChange={(val) => navigate({ categoryId: val || undefined, page: undefined })}
+        view={currentView}
+        onViewChange={(v) => navigate({ view: v })}
+      />
 
-        <div style={{ minWidth: '180px' }}>
-          <Select
-            value={currentCategoryId ?? ''}
-            onChange={(e) => navigate({ categoryId: e.target.value || undefined, page: undefined })}
-            fullWidth
-          >
-            <option value="">Todas las categorías</option>
-            {categories.map((cat) => (
-              <option key={cat._id} value={cat._id}>
-                {cat.name}
-              </option>
-            ))}
-          </Select>
-        </div>
-
-        <ViewToggle
-          value={currentView}
-          onChange={(v) => navigate({ view: v })}
-          iconOnly
-        />
-      </div>
-
-      <Text variant="body-sm" color="secondary" style={{ marginBottom: '16px' }}>
+      <Text variant="body-sm" color="secondary" style={{ margin: '16px 0' }}>
         {total === 0 ? 'Sin resultados' : `${total} producto${total !== 1 ? 's' : ''}`}
       </Text>
 
       {products.length === 0 ? (
         <EmptyState
-          icon={ICON_SEARCH}
+          icon={<Icon name="search" />}
           title="Sin resultados"
           description="Probá con menos filtros o ajustá los términos."
           tone="neutral"
+          variant={cardVariant}
         />
       ) : currentView === 'grid' ? (
-        <ProductGridUI variant="normal">
+        <ProductGridUI>
           {products.map((p) => {
             const mainImage = getMainImage(p);
             const displayPrice = getDisplayPrice(p);
@@ -134,9 +112,9 @@ export function ProductGrid({
             return (
               <ProductCard
                 key={p._id}
-                variant="classic"
-                as={Link}
-                ImageComponent={Image}
+                as={NextLink}
+                ImageComponent={NextImage}
+                variant={cardVariant}
                 name={p.name}
                 price={`$${displayPrice.toLocaleString('es-AR')}`}
                 priceOld={hasDiscount ? `$${p.price.toLocaleString('es-AR')}` : undefined}
@@ -215,7 +193,7 @@ function ProductListItem({ product }: { product: Product }) {
             </Text>
           )}
           {outOfStock && (
-            <Badge type="error" shape="pill">Sin stock</Badge>
+            <Badge tone="danger" variant="pill">Sin stock</Badge>
           )}
         </div>
       </div>

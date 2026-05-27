@@ -6,10 +6,14 @@ import { useRouter } from 'next/navigation';
 
 import { useCart } from '@/context/CartContext';
 import { Drawer, Button, Text, Modal } from 'zoui';
+import type { ButtonVariant } from 'zoui';
+import { useStoreConfig } from '@/context/StoreConfigContext';
 
 export function CartDrawer() {
   const router = useRouter();
   const { items, isLoading, drawerOpen, closeDrawer, updateItem, removeItem } = useCart();
+  const { components_presets } = useStoreConfig();
+  const btnVariant = (components_presets?.button ?? 'primary') as ButtonVariant;
   const [itemToRemove, setItemToRemove] = useState<string | null>(null);
   const [stockLimits, setStockLimits] = useState<Record<string, number>>({});
 
@@ -20,12 +24,12 @@ export function CartDrawer() {
   return (
     <>
     <Drawer side="right" size="sm" onClose={closeDrawer} label="Carrito de compras">
-      <Drawer.Header onClose={closeDrawer}>Carrito</Drawer.Header>
+      <Drawer.Header>Carrito</Drawer.Header>
 
       {items.length === 0 ? (
         <Drawer.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
           <Text variant="body-sm" color="muted">Tu carrito está vacío.</Text>
-          <Button variant="ghost" shape="rounded" size="md" onClick={() => { closeDrawer(); router.push('/productos'); }} style={{ marginTop: '16px', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+          <Button variant="ghost" size="md" onClick={() => { closeDrawer(); router.push('/productos'); }} style={{ marginTop: '16px', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
             Ver productos
           </Button>
         </Drawer.Body>
@@ -58,8 +62,7 @@ export function CartDrawer() {
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
                       <Button
-                        variant="outlined"
-                        shape="square"
+                        variant="secondary"
                         size="md"
                         onClick={() => item.quantity <= 1 ? setItemToRemove(item._id) : updateItem(item._id, item.quantity - 1)}
                         disabled={isLoading}
@@ -69,8 +72,7 @@ export function CartDrawer() {
                       </Button>
                       <Text variant="body-sm" as="span" style={{ width: 20, textAlign: 'center' }}>{item.quantity}</Text>
                       <Button
-                        variant="outlined"
-                        shape="square"
+                        variant="secondary"
                         size="md"
                         onClick={async () => {
                           const result = await updateItem(item._id, item.quantity + 1);
@@ -89,7 +91,6 @@ export function CartDrawer() {
                       </Button>
                       <Button
                         variant="ghost"
-                        shape="rounded"
                         size="md"
                         onClick={() => setItemToRemove(item._id)}
                         disabled={isLoading}
@@ -110,8 +111,7 @@ export function CartDrawer() {
               <Text variant="body-sm" weight="semibold" as="span">${subtotal.toLocaleString('es-AR')}</Text>
             </div>
             <Button
-              variant="outlined"
-              shape="pill"
+              variant="secondary"
               size="md"
               style={{ justifyContent: 'center' }}
               onClick={() => { closeDrawer(); router.push('/carrito'); }}
@@ -119,8 +119,7 @@ export function CartDrawer() {
               Ver carrito completo
             </Button>
             <Button
-              variant="filled"
-              shape="pill"
+              variant={btnVariant}
               size="md"
               style={{ justifyContent: 'center' }}
               onClick={() => { closeDrawer(); router.push('/checkout'); }}
@@ -133,15 +132,15 @@ export function CartDrawer() {
     </Drawer>
 
     <Modal open={!!itemToRemove} size="sm" onClose={() => setItemToRemove(null)}>
-      <Modal.Header onClose={() => setItemToRemove(null)}>Eliminar producto</Modal.Header>
+      <Modal.Header>Eliminar producto</Modal.Header>
       <Modal.Body>
         <Text variant="body-sm">¿Querés eliminar este producto del carrito?</Text>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="ghost" shape="rounded" size="md" onClick={() => setItemToRemove(null)}>
+        <Button variant="ghost" size="md" onClick={() => setItemToRemove(null)}>
           Cancelar
         </Button>
-        <Button variant="filled" shape="rounded" size="md" onClick={() => { removeItem(itemToRemove!); setItemToRemove(null); }}>
+        <Button variant={btnVariant} size="md" onClick={() => { removeItem(itemToRemove!); setItemToRemove(null); }}>
           Eliminar
         </Button>
       </Modal.Footer>

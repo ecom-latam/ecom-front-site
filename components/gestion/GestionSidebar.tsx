@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation';
 import { Sidebar } from 'zoui';
 import type React from 'react';
 
+const NextLink = Link as any;
+
 const ELEVATED_ROLES = ['Admin', 'Manager'];
 
 interface NavItem {
@@ -124,7 +126,7 @@ export function GestionSidebar({ role }: Props) {
               <Sidebar.Item
                 key={item.href}
                 disabled
-                icon={item.icon}
+                icon={item.icon as any}
               >
                 {item.label}
               </Sidebar.Item>
@@ -134,10 +136,10 @@ export function GestionSidebar({ role }: Props) {
           return (
             <Sidebar.Item
               key={item.href}
-              as={Link}
+              as={NextLink}
               href={item.href}
               active={isActive}
-              icon={item.icon}
+              icon={item.icon as any}
             >
               {item.label}
             </Sidebar.Item>
@@ -146,10 +148,10 @@ export function GestionSidebar({ role }: Props) {
 
         {isElevated && (
           <Sidebar.Item
-            as={Link}
+            as={NextLink}
             href={CONFIG_ITEM.href}
             active={pathname === CONFIG_ITEM.href || pathname.startsWith(`${CONFIG_ITEM.href}/`)}
-            icon={CONFIG_ITEM.icon}
+            icon={CONFIG_ITEM.icon as any}
           >
             {CONFIG_ITEM.label}
           </Sidebar.Item>

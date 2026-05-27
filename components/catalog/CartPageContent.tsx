@@ -6,10 +6,14 @@ import { useRouter } from 'next/navigation';
 
 import { useCart } from '@/context/CartContext';
 import { Button, Text, Modal } from 'zoui';
+import type { ButtonVariant } from 'zoui';
+import { useStoreConfig } from '@/context/StoreConfigContext';
 
 export function CartPageContent() {
   const router = useRouter();
   const { items, isLoading, updateItem, removeItem, clearCart } = useCart();
+  const { components_presets } = useStoreConfig();
+  const btnVariant = (components_presets?.button ?? 'primary') as ButtonVariant;
   const [itemToRemove, setItemToRemove] = useState<string | null>(null);
   const [stockLimits, setStockLimits] = useState<Record<string, number>>({});
 
@@ -34,7 +38,7 @@ export function CartPageContent() {
       <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
           <Text variant="body" color="muted" style={{ marginBottom: '16px' }}>Tu carrito está vacío.</Text>
-          <Button variant="filled" shape="rounded" size="md" onClick={() => router.push('/productos')}>
+          <Button variant={btnVariant} size="md" onClick={() => router.push('/productos')}>
             Ver productos
           </Button>
         </div>
@@ -48,7 +52,7 @@ export function CartPageContent() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <Text variant="heading-2" as="h1">Mi carrito</Text>
-          <Button variant="ghost" shape="rounded" size="md" onClick={clearCart} disabled={isLoading} style={{ color: 'var(--color-fg-muted)' }}>
+          <Button variant="ghost" size="md" onClick={clearCart} disabled={isLoading} style={{ color: 'var(--color-fg-muted)' }}>
             Vaciar carrito
           </Button>
         </div>
@@ -78,7 +82,7 @@ export function CartPageContent() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <Button variant="ghost" shape="rounded" size="md" onClick={() => router.push(`/producto?id=${item.productId}`)} style={{ fontWeight: 500, padding: 0, height: 'auto', justifyContent: 'flex-start' }}>
+                  <Button variant="ghost" size="md" onClick={() => router.push(`/producto?id=${item.productId}`)} style={{ fontWeight: 500, padding: 0, height: 'auto', justifyContent: 'flex-start' }}>
                     {item.name}
                   </Button>
 
@@ -96,8 +100,7 @@ export function CartPageContent() {
 
                   <div className="flex items-center gap-2 mt-3">
                     <Button
-                      variant="outlined"
-                      shape="square"
+                      variant="secondary"
                       size="md"
                       onClick={() => item.quantity <= 1 ? setItemToRemove(item._id) : updateItem(item._id, item.quantity - 1)}
                       disabled={isLoading}
@@ -106,8 +109,7 @@ export function CartPageContent() {
                     </Button>
                     <Text variant="body-sm" weight="medium" as="span" style={{ width: '24px', textAlign: 'center' }}>{item.quantity}</Text>
                     <Button
-                      variant="outlined"
-                      shape="square"
+                      variant="secondary"
                       size="md"
                       onClick={async () => {
                         const result = await updateItem(item._id, item.quantity + 1);
@@ -128,7 +130,7 @@ export function CartPageContent() {
                       Total: ${(item.price * item.quantity).toLocaleString('es-AR')}
                     </Text>
 
-                    <Button variant="ghost" shape="rounded" size="md" onClick={() => setItemToRemove(item._id)} disabled={isLoading} style={{ marginLeft: 'auto', color: 'var(--color-fg-muted)' }}>
+                    <Button variant="ghost" size="md" onClick={() => setItemToRemove(item._id)} disabled={isLoading} style={{ marginLeft: 'auto', color: 'var(--color-fg-muted)' }}>
                       Eliminar
                     </Button>
                   </div>
@@ -154,8 +156,7 @@ export function CartPageContent() {
               </div>
 
               <Button
-                variant="filled"
-                shape="pill"
+                variant={btnVariant}
                 size="md"
                 onClick={() => router.push('/checkout')}
                 style={{ width: '100%', justifyContent: 'center' }}
@@ -163,7 +164,7 @@ export function CartPageContent() {
                 Ir al checkout
               </Button>
 
-              <Button variant="ghost" shape="rounded" size="md" onClick={() => router.push('/productos')} style={{ width: '100%', justifyContent: 'center', color: 'var(--color-fg-muted)' }}>
+              <Button variant="ghost" size="md" onClick={() => router.push('/productos')} style={{ width: '100%', justifyContent: 'center', color: 'var(--color-fg-muted)' }}>
                 Seguir comprando
               </Button>
             </div>
@@ -173,15 +174,15 @@ export function CartPageContent() {
     </main>
 
     <Modal open={!!itemToRemove} size="sm" onClose={() => setItemToRemove(null)}>
-      <Modal.Header onClose={() => setItemToRemove(null)}>Eliminar producto</Modal.Header>
+      <Modal.Header>Eliminar producto</Modal.Header>
       <Modal.Body>
         <Text variant="body-sm">¿Querés eliminar este producto del carrito?</Text>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="ghost" shape="rounded" size="md" onClick={() => setItemToRemove(null)}>
+        <Button variant="ghost" size="md" onClick={() => setItemToRemove(null)}>
           Cancelar
         </Button>
-        <Button variant="filled" shape="rounded" size="md" onClick={() => { removeItem(itemToRemove!); setItemToRemove(null); }}>
+        <Button variant={btnVariant} size="md" onClick={() => { removeItem(itemToRemove!); setItemToRemove(null); }}>
           Eliminar
         </Button>
       </Modal.Footer>

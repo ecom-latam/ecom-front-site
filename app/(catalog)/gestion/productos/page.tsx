@@ -4,7 +4,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { isAxiosError } from 'axios';
 import { products as productsApi, categories as categoriesApi } from '@/utils/api';
 import type { Product, ProductPayload, ProductStatus, Category } from '@/utils/api';
-import { Modal, Drawer, Table, Badge, Input, Textarea, Select, Button, Pagination, Text } from 'zoui';
+import { Modal, Drawer, Table, Badge, Pagination, Text } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
+import { StoreInput } from '@/components/ui/StoreInput';
+import { StoreSelect } from '@/components/ui/StoreSelect';
+import { StoreTextarea } from '@/components/ui/StoreTextarea';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -15,15 +19,15 @@ const STATUS_LABELS: Record<ProductStatus, string> = {
   archived: 'Archivado',
 };
 
-const STATUS_BADGE: Record<ProductStatus, 'success' | 'neutral' | 'warning' | 'error'> = {
+const STATUS_BADGE: Record<ProductStatus, 'success' | 'neutral' | 'warning' | 'danger'> = {
   active:   'success',
   draft:    'neutral',
   paused:   'warning',
-  archived: 'error',
+  archived: 'danger',
 };
 
-const FILTER_OPTIONS: { label: string; value: ProductStatus | '' }[] = [
-  { label: 'Todos', value: '' },
+const FILTER_OPTIONS: { label: string; value: ProductStatus | '__all__' }[] = [
+  { label: 'Todos', value: '__all__' },
   { label: 'Activos', value: 'active' },
   { label: 'Borradores', value: 'draft' },
   { label: 'Inactivos', value: 'paused' },
@@ -85,16 +89,14 @@ function ConfirmModal({ title, message, confirmLabel, danger = false, onConfirm,
         <Text variant="body" color="secondary" as="p">{message}</Text>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          variant="filled"
-          shape="rounded"
+        <StoreButton
           size="md"
           onClick={onConfirm}
           style={danger ? { background: 'var(--color-error-500)', borderColor: 'var(--color-error-500)' } : undefined}
         >
           {confirmLabel}
-        </Button>
-        <Button variant="outlined" shape="rounded" size="md" onClick={onCancel}>Cancelar</Button>
+        </StoreButton>
+        <StoreButton variant="secondary" size="md" onClick={onCancel}>Cancelar</StoreButton>
       </Modal.Footer>
     </Modal>
   );
@@ -146,20 +148,20 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
 
   return (
     <Drawer side="right" size="lg" onClose={onClose} label={product ? 'Editar producto' : 'Nuevo producto'}>
-      <Drawer.Header onClose={onClose}>{product ? 'Editar producto' : 'Nuevo producto'}</Drawer.Header>
+      <Drawer.Header>{product ? 'Editar producto' : 'Nuevo producto'}</Drawer.Header>
       <form onSubmit={handleSubmit} style={{ display: 'contents' }}>
         <Drawer.Body style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <Input
+          <StoreInput
             label="Nombre *"
             required
             value={form.name}
             onChange={e => set('name', e.target.value)}
             placeholder="Ej: Remera de algodón"
             fullWidth
-            testId="prod-name-input"
+            data-testid="prod-name-input"
           />
 
-          <Textarea
+          <StoreTextarea
             label="Descripción"
             value={form.description ?? ''}
             onChange={e => set('description', e.target.value)}
@@ -168,7 +170,7 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
           />
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            <Input
+            <StoreInput
               label="Precio *"
               required
               type="number"
@@ -177,9 +179,9 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
               value={form.price}
               onChange={e => set('price', parseFloat(e.target.value) || 0)}
               fullWidth
-              testId="prod-price-input"
+              data-testid="prod-price-input"
             />
-            <Input
+            <StoreInput
               label="Precio de oferta"
               type="number"
               min={0}
@@ -192,37 +194,36 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            <Input
+            <StoreInput
               label="Stock"
               type="number"
               min={0}
               value={form.stock ?? 0}
               onChange={e => set('stock', parseInt(e.target.value) || 0)}
               fullWidth
-              testId="prod-stock-input"
+              data-testid="prod-stock-input"
             />
-            <Select
+            <StoreSelect
               label="Categoría"
-              value={form.categoryId ?? ''}
-              onChange={e => set('categoryId', e.target.value || null)}
+              value={form.categoryId || '__none__'}
+              onValueChange={val => set('categoryId', val === '__none__' ? null : val)}
+              options={[
+                { value: '__none__', label: 'Sin categoría' },
+                ...categories.map(c => ({ value: c._id, label: c.name })),
+              ]}
               fullWidth
-              testId="prod-category-select"
-            >
-              <option value="">Sin categoría</option>
-              {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
-            </Select>
+            />
           </div>
 
-          <Select
+          <StoreSelect
             label="Estado"
             value={form.status}
-            onChange={e => set('status', e.target.value as ProductStatus)}
+            onValueChange={val => set('status', val as ProductStatus)}
+            options={(Object.keys(STATUS_LABELS) as ProductStatus[])
+              .filter(s => s !== 'archived')
+              .map(s => ({ value: s, label: STATUS_LABELS[s] }))}
             fullWidth
-          >
-            {(Object.keys(STATUS_LABELS) as ProductStatus[]).filter(s => s !== 'archived').map(s => (
-              <option key={s} value={s}>{STATUS_LABELS[s]}</option>
-            ))}
-          </Select>
+          />
 
           {error && (
             <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }}>{error}</Text>
@@ -230,10 +231,10 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
         </Drawer.Body>
 
         <Drawer.Footer style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <Button type="button" variant="outlined" shape="rounded" size="md" onClick={onClose}>Cancelar</Button>
-          <Button type="submit" variant="filled" shape="rounded" size="md" disabled={loading} testId="prod-submit-btn">
+          <StoreButton type="button" variant="secondary" size="md" onClick={onClose}>Cancelar</StoreButton>
+          <StoreButton type="submit" size="md" disabled={loading} data-testid="prod-submit-btn">
             {loading ? 'Guardando...' : product ? 'Guardar cambios' : 'Crear producto'}
-          </Button>
+          </StoreButton>
         </Drawer.Footer>
       </form>
     </Drawer>
@@ -346,14 +347,14 @@ export default function GestionProductosPage() {
     <main style={{ padding: '32px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <Text variant="heading-2" as="h1">Productos</Text>
-        <Button variant="filled" shape="rounded" size="md" onClick={openCreate} testId="prod-new-btn">
+        <StoreButton size="md" onClick={openCreate} data-testid="prod-new-btn">
           + Nuevo producto
-        </Button>
+        </StoreButton>
       </div>
 
       <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
         <div style={{ width: 280 }}>
-          <Input
+          <StoreInput
             value={search}
             onChange={e => handleSearch(e.target.value)}
             placeholder="Buscar por nombre..."
@@ -362,14 +363,13 @@ export default function GestionProductosPage() {
           />
         </div>
         <div style={{ width: 160 }}>
-          <Select
-            value={statusFilter}
-            onChange={e => handleStatusFilter(e.target.value as ProductStatus | '')}
+          <StoreSelect
+            value={statusFilter || '__all__'}
+            onValueChange={val => handleStatusFilter(val === '__all__' ? '' : val as ProductStatus)}
+            options={FILTER_OPTIONS.map(o => ({ value: o.value, label: o.label }))}
             size="sm"
             fullWidth
-          >
-            {FILTER_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-          </Select>
+          />
         </div>
       </div>
 
@@ -407,7 +407,7 @@ export default function GestionProductosPage() {
                   )}
                 </Table.Td>
                 <Table.Td style={{ textAlign: 'center' }}>
-                  <Badge type={STATUS_BADGE[product.status]} shape="pill">{STATUS_LABELS[product.status]}</Badge>
+                  <Badge tone={STATUS_BADGE[product.status]} variant="pill">{STATUS_LABELS[product.status]}</Badge>
                 </Table.Td>
                 <Table.Td muted style={{ textAlign: 'center' }}>
                   {product.categoryId ? (categoryMap[product.categoryId] ?? '—') : '—'}
@@ -416,17 +416,16 @@ export default function GestionProductosPage() {
                 <Table.Td style={{ textAlign: 'center' }}>{product.stock}</Table.Td>
                 <Table.Td style={{ textAlign: 'center' }}>
                   <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
-                    <Button variant="filled" shape="rounded" size="md" onClick={() => openEdit(product)}>Editar</Button>
-                    <Button
-                      variant="outlined"
-                      shape="rounded"
+                    <StoreButton size="md" onClick={() => openEdit(product)}>Editar</StoreButton>
+                    <StoreButton
+                      variant="secondary"
                       size="md"
                       onClick={() => handleToggleStatus(product)}
-                      testId="prod-toggle-btn"
+                      data-testid="prod-toggle-btn"
                     >
                       {product.status === 'active' ? 'Desactivar' : 'Activar'}
-                    </Button>
-                    <Button variant="ghost" shape="rounded" size="md" onClick={() => handleDelete(product)} style={{ color: 'var(--color-error-500)' }}>Eliminar</Button>
+                    </StoreButton>
+                    <StoreButton variant="ghost" size="md" onClick={() => handleDelete(product)} style={{ color: 'var(--color-error-500)' }}>Eliminar</StoreButton>
                   </div>
                 </Table.Td>
               </Table.Row>

@@ -4,7 +4,9 @@ import { useState, FormEvent, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { isAxiosError } from 'axios';
 import { auth, startSession } from '@/utils/api';
-import { Button, Input, Text } from 'zoui';
+import { Text } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
+import { StoreInput } from '@/components/ui/StoreInput';
 
 const ERRORS: Record<string, string> = {
   INVALID_TOTP: 'Código incorrecto. Verificá tu app de autenticación.',
@@ -67,7 +69,7 @@ function MfaVerifyForm() {
       </Text>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <Input
+        <StoreInput
           name="code"
           label="Código"
           type="text"
@@ -82,16 +84,14 @@ function MfaVerifyForm() {
           fullWidth
         />
 
-        <Button
+        <StoreButton
           type="submit"
           disabled={loading}
-          variant="filled"
-          shape="rounded"
           size="md"
           style={{ width: '100%', justifyContent: 'center' }}
         >
           {loading ? 'Verificando...' : 'Verificar'}
-        </Button>
+        </StoreButton>
       </form>
     </div>
   );

@@ -118,17 +118,32 @@ export async function getCategories(): Promise<Category[]> {
   });
 }
 
+export interface ComponentsPresets {
+  button?: string;
+  input?: string;
+  select?: string;
+  textarea?: string;
+  navbar?: string;
+  product_card?: string;
+  view_toggle?: string;
+}
+
 export interface StoreInfo {
   name: string;
   description?: string;
   logo_url?: string | null;
   brand_hue?: number;
+  font_family?: string;
+  components_presets?: ComponentsPresets;
+  product_detail_layout?: string;
+  cart_layout?: string;
+  search_preset?: string;
 }
 
 export async function getStoreInfo(): Promise<StoreInfo | null> {
   const slug = await getSlug();
   try {
-    const res = await fetch(`${BFF_BASE_URL}/api/store/public`, {
+    const res = await fetch(`${BFF_BASE_URL}/api/store/public?_store=${slug}`, {
       headers: { 'X-Tenant-Slug': slug },
       next: { revalidate: 60 },
     });

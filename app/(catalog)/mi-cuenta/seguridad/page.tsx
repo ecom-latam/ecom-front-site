@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, Text, Input } from 'zoui';
+import { Text } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
+import { StoreInput } from '@/components/ui/StoreInput';
 import { security } from '@/utils/api/security';
 
 const EyeIcon = () => (
@@ -114,19 +116,17 @@ export default function SeguridadPage() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <Input
+          <StoreInput
             label="Contraseña actual"
             type={show.current ? 'text' : 'password'}
             value={form.current}
             onChange={(e) => set('current', e.target.value)}
             onBlur={() => touch('current')}
             error={touched.current ? errors.current : undefined}
-            labelAction={eyeAction('current')}
-            variant="outlined"
-            size="md"
+            labelAction={eyeAction('current')}            size="md"
             autoComplete="current-password"
           />
-          <Input
+          <StoreInput
             label="Nueva contraseña"
             type={show.next ? 'text' : 'password'}
             value={form.next}
@@ -134,21 +134,17 @@ export default function SeguridadPage() {
             onBlur={() => touch('next')}
             error={touched.next ? errors.next : undefined}
             hint={!touched.next || !errors.next ? 'Mínimo 8 caracteres.' : undefined}
-            labelAction={eyeAction('next')}
-            variant="outlined"
-            size="md"
+            labelAction={eyeAction('next')}            size="md"
             autoComplete="new-password"
           />
-          <Input
+          <StoreInput
             label="Confirmar nueva contraseña"
             type={show.confirm ? 'text' : 'password'}
             value={form.confirm}
             onChange={(e) => set('confirm', e.target.value)}
             onBlur={() => touch('confirm')}
             error={touched.confirm ? errors.confirm : undefined}
-            labelAction={eyeAction('confirm')}
-            variant="outlined"
-            size="md"
+            labelAction={eyeAction('confirm')}            size="md"
             autoComplete="new-password"
           />
         </div>
@@ -166,15 +162,13 @@ export default function SeguridadPage() {
         )}
 
         <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'flex-end' }}>
-          <Button
-            variant="filled"
-            shape="rounded"
+          <StoreButton
             size="md"
             onClick={handleSave}
             disabled={saving}
           >
             {saving ? 'Guardando...' : 'Guardar contraseña'}
-          </Button>
+          </StoreButton>
         </div>
       </section>
 
@@ -221,9 +215,9 @@ export default function SeguridadPage() {
                 </div>
               </div>
 
-              <Button variant="outlined" shape="rounded" size="sm" disabled>
+              <StoreButton variant="secondary" size="sm" disabled>
                 Activar
-              </Button>
+              </StoreButton>
             </div>
           </div>
         </div>

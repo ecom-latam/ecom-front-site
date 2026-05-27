@@ -4,7 +4,9 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { isAxiosError } from 'axios';
 import { apiClient, startSession } from '@/utils/api';
-import { Button, Input, Text } from 'zoui';
+import { Text } from 'zoui';
+import { StoreButton } from '@/components/ui/StoreButton';
+import { StoreInput } from '@/components/ui/StoreInput';
 
 const ROLE_LABELS: Record<string, string> = {
   Manager: 'Manager',
@@ -120,9 +122,9 @@ export default function InvitacionPage() {
           <Text variant="body-sm" weight="medium" as="p">¡Listo! Tu cuenta fue creada.</Text>
           <Text variant="body-sm" color="secondary" as="p" style={{ marginTop: '4px' }}>
             Podés{' '}
-            <Button variant="ghost" shape="rounded" size="md" onClick={() => router.push('/iniciar-sesion')} style={{ padding: 0, height: 'auto', textDecoration: 'underline', fontWeight: 500 }}>
+            <StoreButton variant="ghost" size="md" onClick={() => router.push('/iniciar-sesion')} style={{ padding: 0, height: 'auto', textDecoration: 'underline', fontWeight: 500 }}>
               iniciar sesión
-            </Button>
+            </StoreButton>
             .
           </Text>
         </div>
@@ -146,7 +148,7 @@ export default function InvitacionPage() {
         </Text>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <Input
+          <StoreInput
             name="email"
             label="Email"
             type="email"
@@ -154,7 +156,7 @@ export default function InvitacionPage() {
             autoComplete="email"
             fullWidth
           />
-          <Input
+          <StoreInput
             name="password"
             label="Contraseña"
             type="password"
@@ -167,16 +169,14 @@ export default function InvitacionPage() {
 
           {error && <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }}>{error}</Text>}
 
-          <Button
+          <StoreButton
             type="submit"
             disabled={submitting}
-            variant="filled"
-            shape="rounded"
             size="md"
             style={{ width: '100%', justifyContent: 'center' }}
           >
             {submitting ? 'Creando cuenta...' : 'Aceptar invitación'}
-          </Button>
+          </StoreButton>
         </form>
       </div>
     </main>
