@@ -1,4 +1,5 @@
 import { apiClient } from './client';
+import type { AxiosRequestConfig } from 'axios';
 
 export type PaymentMethod = 'transfer';
 export type ShippingMethod = 'delivery' | 'pickup';
@@ -70,8 +71,8 @@ export interface AdminOrderListParams {
 }
 
 export const orders = {
-  create: (payload: CreateOrderPayload) =>
-    apiClient.post<Order>(BASE, payload),
+  create: (payload: CreateOrderPayload, config?: AxiosRequestConfig) =>
+    apiClient.post<Order>(BASE, payload, config),
 
   getMy: (page = 1, limit = 20) =>
     apiClient.get<OrderListResponse>(`${BASE}/my?page=${page}&limit=${limit}`),

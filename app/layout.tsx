@@ -6,6 +6,7 @@ import { ToastProvider } from "zoui";
 import { CartProvider } from "@/context/CartContext";
 import { DynamicStoreTheme } from "@/components/DynamicStoreTheme";
 import { getStoreInfo } from "@/lib/api/storeClient";
+import { ErrorModalProvider } from "@/components/ui/ErrorModal";
 
 export const metadata: Metadata = {
   title: "ecom store",
@@ -46,9 +47,11 @@ export default async function RootLayout({
         <style dangerouslySetInnerHTML={{ __html: brandStyles }} />
         <DynamicStoreTheme initialConfig={(storeInfo ?? {}) as Record<string, unknown>}>
           <ToastProvider>
-            <CartProvider hasSession={hasSession}>
-              {children}
-            </CartProvider>
+            <ErrorModalProvider>
+              <CartProvider hasSession={hasSession}>
+                {children}
+              </CartProvider>
+            </ErrorModalProvider>
           </ToastProvider>
         </DynamicStoreTheme>
       </body>
