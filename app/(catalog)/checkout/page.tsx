@@ -165,7 +165,7 @@ export default function CheckoutPage() {
     setError(null);
 
     try {
-      const { data: order } = await orders.create(payload);
+      const { data: order } = await orders.create(payload, { _skipModal: true });
       await clearCart();
       router.push(`/pedidos/${order._id}`);
     } catch (err: unknown) {

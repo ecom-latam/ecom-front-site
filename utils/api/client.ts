@@ -1,4 +1,13 @@
 import axios from 'axios';
+import type { AxiosRequestConfig } from 'axios';
+import { triggerErrorModal } from '@/lib/errorModal';
+import { getErrorDefinition } from '@/lib/errors';
+
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    _skipModal?: boolean;
+  }
+}
 
 const BFF_URL = process.env.NEXT_PUBLIC_BFF_URL ?? 'http://localhost:4000';
 
@@ -39,6 +48,12 @@ apiClient.interceptors.response.use(
     const isAuthEndpoint = AUTH_ENDPOINTS.some((e) => url.includes(e));
 
     if (err.response?.status !== 401 || original._retry || isAuthEndpoint) {
+      if (!original?._skipModal) {
+        const code: string = err.response?.data?.error?.code
+          ?? (typeof err.response?.data?.error === 'string' ? err.response.data.error : null)
+          ?? 'INTERNAL_ERROR';
+        triggerErrorModal(getErrorDefinition(code));
+      }
       return Promise.reject(err);
     }
 

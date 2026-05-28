@@ -35,7 +35,7 @@ function LoginForm() {
     const password = form.get('password') as string;
 
     try {
-      const { data } = await auth.login(email, password);
+      const { data } = await auth.login(email, password, { _skipModal: true });
       const res = data as { status?: string; mfaToken?: string; accessToken?: string };
 
       if (res.status === 'MFA_REQUIRED') {

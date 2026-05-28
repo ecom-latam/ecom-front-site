@@ -33,8 +33,8 @@ export default function RegistroPage() {
     const password = form.get('password') as string;
 
     try {
-      await auth.registerCustomer(email, password);
-      const { data } = await auth.login(email, password);
+      await auth.registerCustomer(email, password, { _skipModal: true });
+      const { data } = await auth.login(email, password, { _skipModal: true });
       const res = data as { accessToken?: string };
       if (res.accessToken) startSession(res.accessToken);
       router.push('/');
