@@ -123,7 +123,7 @@ function CategoryDrawer({ category, allCategories, depthMap, onClose, onSaved }:
   }
 
   return (
-    <Drawer side="right" size="md" onClose={onClose} label={category ? 'Editar categoría' : 'Nueva categoría'}>
+    <Drawer open side="right" size="md" onClose={onClose} label={category ? 'Editar categoría' : 'Nueva categoría'}>
       <Drawer.Header>{category ? 'Editar categoría' : 'Nueva categoría'}</Drawer.Header>
       <>
         <Drawer.Body style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
