@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 
 import { Text } from 'zoui';
 import { AddToCartButton } from '@/components/catalog/AddToCartButton';
+import { Price } from '@/components/catalog/Price';
 import { getCategories, getProduct } from '@/lib/api/storeClient';
 
 interface Props {
@@ -116,10 +117,10 @@ export default async function ProductoPage({ searchParams }: Props) {
             <Text variant="heading-2" as="h1">{product.name}</Text>
 
             <div style={{ marginTop: '12px', display: 'flex', alignItems: 'baseline', gap: '12px' }}>
-              <Text variant="heading-1" as="span">${displayPrice.toLocaleString('es-AR')}</Text>
+              <Text variant="heading-1" as="span"><Price value={displayPrice} /></Text>
               {hasDiscount && (
                 <Text variant="body" color="muted" as="span" style={{ textDecoration: 'line-through' }}>
-                  ${product.price.toLocaleString('es-AR')}
+                  <Price value={product.price} />
                 </Text>
               )}
             </div>

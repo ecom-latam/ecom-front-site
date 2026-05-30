@@ -77,6 +77,7 @@ function toStoreConfig(raw: Record<string, unknown>): StoreConfig {
     product_detail_layout: raw.product_detail_layout as string | undefined,
     cart_layout:           raw.cart_layout           as string | undefined,
     search_preset:         raw.search_preset         as string | undefined,
+    currency:              raw.currency === 'USD' ? 'USD' : 'ARS',
   };
 }
 

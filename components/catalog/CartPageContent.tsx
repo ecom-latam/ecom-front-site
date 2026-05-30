@@ -8,11 +8,12 @@ import { useCart } from '@/context/CartContext';
 import { Button, Text, Modal } from 'zoui';
 import type { ButtonVariant } from 'zoui';
 import { useStoreConfig } from '@/context/StoreConfigContext';
+import { formatPrice } from '@/lib/format';
 
 export function CartPageContent() {
   const router = useRouter();
   const { items, isLoading, updateItem, removeItem, clearCart } = useCart();
-  const { components_presets } = useStoreConfig();
+  const { components_presets, currency } = useStoreConfig();
   const btnVariant = (components_presets?.button ?? 'primary') as ButtonVariant;
   const [itemToRemove, setItemToRemove] = useState<string | null>(null);
   const [stockLimits, setStockLimits] = useState<Record<string, number>>({});
@@ -95,7 +96,7 @@ export function CartPageContent() {
                   )}
 
                   <Text variant="body-sm" weight="semibold" as="p" style={{ marginTop: '4px' }}>
-                    ${item.price.toLocaleString('es-AR')}
+                    {formatPrice(item.price, currency)}
                   </Text>
 
                   <div className="flex items-center gap-2 mt-3">
@@ -127,7 +128,7 @@ export function CartPageContent() {
                     </Button>
 
                     <Text variant="body-sm" color="secondary" as="span" style={{ marginLeft: '16px' }}>
-                      Total: ${(item.price * item.quantity).toLocaleString('es-AR')}
+                      Total: {formatPrice(item.price * item.quantity, currency)}
                     </Text>
 
                     <Button variant="ghost" size="md" onClick={() => setItemToRemove(item._id)} disabled={isLoading} style={{ marginLeft: 'auto', color: 'var(--color-fg-muted)' }}>
@@ -146,13 +147,13 @@ export function CartPageContent() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <Text variant="body-sm" color="secondary" as="span">Productos ({items.reduce((s, i) => s + i.quantity, 0)})</Text>
-                  <Text variant="body-sm" color="secondary" as="span">${subtotal.toLocaleString('es-AR')}</Text>
+                  <Text variant="body-sm" color="secondary" as="span">{formatPrice(subtotal, currency)}</Text>
                 </div>
               </div>
 
               <div className="pt-3 flex justify-between" style={{ borderTop: '1px solid var(--color-border-default)' }}>
                 <Text variant="body-sm" weight="semibold" as="span">Subtotal</Text>
-                <Text variant="body-sm" weight="semibold" as="span">${subtotal.toLocaleString('es-AR')}</Text>
+                <Text variant="body-sm" weight="semibold" as="span">{formatPrice(subtotal, currency)}</Text>
               </div>
 
               <Button

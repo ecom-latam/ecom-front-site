@@ -9,6 +9,8 @@ import { orders } from '@/utils/api/orders';
 import type { Order } from '@/utils/api/orders';
 import { apiClient } from '@/utils/api';
 import { Button, Badge, Text, Modal } from 'zoui';
+import { useStoreConfig } from '@/context/StoreConfigContext';
+import { formatPrice } from '@/lib/format';
 import { StoreButton } from '@/components/ui/StoreButton';
 import type { BadgeTone } from 'zoui';
 
@@ -48,6 +50,7 @@ interface StorePublic {
 export default function OrderDetailPage() {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
+  const { currency } = useStoreConfig();
 
   const [order, setOrder] = useState<Order | null>(null);
   const [storeInfo, setStoreInfo] = useState<StorePublic | null>(null);
@@ -197,15 +200,15 @@ export default function OrderDetailPage() {
                         {Object.entries(item.selectedOptions).map(([k, v]) => `${k}: ${v}`).join(' · ')}
                       </Text>
                     )}
-                    <Text variant="caption" color="muted" as="p">x{item.quantity} · ${item.price.toLocaleString('es-AR')} c/u</Text>
+                    <Text variant="caption" color="muted" as="p">x{item.quantity} · {formatPrice(item.price, currency)} c/u</Text>
                   </div>
-                  <Text variant="body-sm" weight="semibold" as="span">${item.subtotal.toLocaleString('es-AR')}</Text>
+                  <Text variant="body-sm" weight="semibold" as="span">{formatPrice(item.subtotal, currency)}</Text>
                 </li>
               ))}
             </ul>
             <div style={{ borderTop: '1px solid var(--color-border-default)', marginTop: '16px', paddingTop: '16px', display: 'flex', justifyContent: 'space-between' }}>
               <Text variant="body" weight="semibold" as="span">Total</Text>
-              <Text variant="body" weight="semibold" as="span">${order.total.toLocaleString('es-AR')}</Text>
+              <Text variant="body" weight="semibold" as="span">{formatPrice(order.total, currency)}</Text>
             </div>
           </section>
 

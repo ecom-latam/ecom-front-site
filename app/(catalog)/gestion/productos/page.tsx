@@ -8,8 +8,11 @@ import { Modal, Drawer, Table, Badge, Pagination, Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
 import { StoreMoneyInput } from '@/components/ui/StoreMoneyInput';
+import { StoreNumberInput } from '@/components/ui/StoreNumberInput';
 import { StoreSelect } from '@/components/ui/StoreSelect';
 import { StoreTextarea } from '@/components/ui/StoreTextarea';
+import { useStoreConfig } from '@/context/StoreConfigContext';
+import { formatPrice } from '@/lib/format';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -47,10 +50,6 @@ const EMPTY_FORM: ProductPayload = {
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
-
-function formatPrice(n: number) {
-  return '$' + n.toLocaleString('es-AR');
-}
 
 function MainImage({ images }: { images: Product['images'] }) {
   const main = images.find(i => i.isMain) ?? images[0];
@@ -171,7 +170,6 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <StoreMoneyInput
               label="Precio *"
-              currency="ARS"
               value={form.price}
               onValueChange={v => set('price', v ?? 0)}
               fullWidth
@@ -179,7 +177,6 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
             />
             <StoreMoneyInput
               label="Precio de oferta"
-              currency="ARS"
               value={form.salePrice ?? null}
               onValueChange={v => set('salePrice', v)}
               placeholder="Opcional"
@@ -188,12 +185,10 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            <StoreInput
+            <StoreNumberInput
               label="Stock"
-              type="number"
-              min={0}
-              value={form.stock ?? 0}
-              onChange={e => set('stock', parseInt(e.target.value) || 0)}
+              value={form.stock ? String(form.stock) : ''}
+              onChange={e => set('stock', parseInt(e.target.value, 10) || 0)}
               fullWidth
               data-testid="prod-stock-input"
             />
@@ -239,6 +234,7 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 export default function GestionProductosPage() {
+  const { currency } = useStoreConfig();
   const [productList, setProductList] = useState<Product[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -398,7 +394,7 @@ export default function GestionProductosPage() {
                 <Table.Td style={{ maxWidth: 240 }}>
                   <Text variant="body-sm" weight="medium" truncate>{product.name}</Text>
                   {product.salePrice !== null && (
-                    <Text variant="caption" color="muted" as="p" style={{ marginTop: 2 }}>Oferta: {formatPrice(product.salePrice)}</Text>
+                    <Text variant="caption" color="muted" as="p" style={{ marginTop: 2 }}>Oferta: {formatPrice(product.salePrice, currency)}</Text>
                   )}
                 </Table.Td>
                 <Table.Td style={{ textAlign: 'center' }}>
@@ -407,7 +403,7 @@ export default function GestionProductosPage() {
                 <Table.Td muted style={{ textAlign: 'center' }}>
                   {product.categoryId ? (categoryMap[product.categoryId] ?? '—') : '—'}
                 </Table.Td>
-                <Table.Td style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>{formatPrice(product.price)}</Table.Td>
+                <Table.Td style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>{formatPrice(product.price, currency)}</Table.Td>
                 <Table.Td style={{ textAlign: 'center' }}>{product.stock}</Table.Td>
                 <Table.Td style={{ textAlign: 'center' }}>
                   <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
