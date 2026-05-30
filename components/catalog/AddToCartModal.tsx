@@ -7,6 +7,7 @@ import type { Product, ProductVariant } from '@/lib/api/storeClient';
 import { Modal, Button, Text } from 'zoui';
 import type { ButtonVariant } from 'zoui';
 import { useStoreConfig } from '@/context/StoreConfigContext';
+import { formatPrice } from '@/lib/format';
 
 interface Props {
   product: Product;
@@ -47,7 +48,7 @@ function isValueAvailable(
 
 export function AddToCartModal({ product, open, onClose }: Props) {
   const { addItem, openDrawer } = useCart();
-  const { components_presets } = useStoreConfig();
+  const { components_presets, currency } = useStoreConfig();
   const btnVariant = (components_presets?.button ?? 'primary') as ButtonVariant;
 
   const optionNames = useMemo(
@@ -142,7 +143,7 @@ export function AddToCartModal({ product, open, onClose }: Props) {
       <Modal.Header>{product.name}</Modal.Header>
       <Modal.Body>
         <Text variant="body-sm" color="secondary" as="p" style={{ marginBottom: '16px' }}>
-          ${(product.salePrice ?? product.price).toLocaleString('es-AR')}
+          {formatPrice(product.salePrice ?? product.price, currency)}
         </Text>
 
         {product.hasVariants && optionNames.length > 0 && (

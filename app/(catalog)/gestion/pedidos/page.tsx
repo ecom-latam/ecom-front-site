@@ -8,6 +8,8 @@ import { Badge, Table, Text, Pagination } from 'zoui';
 import { StoreSelect } from '@/components/ui/StoreSelect';
 import { StoreButton } from '@/components/ui/StoreButton';
 import type { BadgeTone } from 'zoui';
+import { useStoreConfig } from '@/context/StoreConfigContext';
+import { formatPrice } from '@/lib/format';
 
 const STATUS_LABEL: Record<string, string> = {
   new: 'Nuevo',
@@ -45,6 +47,7 @@ const LIMIT = 20;
 
 export default function AdminPedidosPage() {
   const router = useRouter();
+  const { currency } = useStoreConfig();
 
   const [orderList, setOrderList] = useState<Order[]>([]);
   const [total, setTotal] = useState(0);
@@ -182,7 +185,7 @@ export default function AdminPedidosPage() {
                       {order.shippingAddress.fullName}
                     </Text>
                   </Table.Td>
-                  <Table.Td>${order.total.toLocaleString('es-AR')}</Table.Td>
+                  <Table.Td>{formatPrice(order.total, currency)}</Table.Td>
                   <Table.Td>
                     {order.paymentMethod === 'transfer' ? 'Transferencia' : 'Efectivo'}
                   </Table.Td>

@@ -12,11 +12,14 @@ export interface ComponentsPresets {
   view_toggle?: string;
 }
 
+export type Currency = 'ARS' | 'USD';
+
 export interface StoreConfig {
   components_presets?: ComponentsPresets;
   product_detail_layout?: string;
   cart_layout?: string;
   search_preset?: string;
+  currency?: Currency;
 }
 
 export const StoreConfigContext = createContext<StoreConfig>({});

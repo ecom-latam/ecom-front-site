@@ -15,6 +15,8 @@ import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
 import { StoreSelect } from '@/components/ui/StoreSelect';
 import { StoreTextarea } from '@/components/ui/StoreTextarea';
+import { useStoreConfig } from '@/context/StoreConfigContext';
+import { formatPrice } from '@/lib/format';
 
 const PROVINCES = [
   'Buenos Aires',
@@ -46,6 +48,7 @@ const PROVINCES = [
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, itemCount, clearCart } = useCart();
+  const { currency } = useStoreConfig();
 
   const [ready, setReady] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -436,7 +439,7 @@ export default function CheckoutPage() {
                         <Text variant="caption" color="muted" as="p">x{item.quantity}</Text>
                       </div>
                       <Text variant="body-sm" weight="semibold" as="span" style={{ flexShrink: 0 }}>
-                        ${(item.price * item.quantity).toLocaleString('es-AR')}
+                        {formatPrice(item.price * item.quantity, currency)}
                       </Text>
                     </li>
                   ))}
@@ -445,7 +448,7 @@ export default function CheckoutPage() {
                 <div style={{ borderTop: '1px solid var(--color-border-default)', marginTop: '16px', paddingTop: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
                     <Text variant="body-sm" color="muted" as="span">Subtotal</Text>
-                    <Text variant="body-sm" as="span">${subtotal.toLocaleString('es-AR')}</Text>
+                    <Text variant="body-sm" as="span">{formatPrice(subtotal, currency)}</Text>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Text variant="body-sm" color="muted" as="span">Envío</Text>
@@ -455,7 +458,7 @@ export default function CheckoutPage() {
 
                 <div style={{ borderTop: '1px solid var(--color-border-default)', marginTop: '16px', paddingTop: '16px', display: 'flex', justifyContent: 'space-between' }}>
                   <Text variant="body" weight="semibold" as="span">Total</Text>
-                  <Text variant="body" weight="semibold" as="span">${subtotal.toLocaleString('es-AR')}</Text>
+                  <Text variant="body" weight="semibold" as="span">{formatPrice(subtotal, currency)}</Text>
                 </div>
 
                 {error && (

@@ -8,6 +8,8 @@ import type { Order } from '@/utils/api/orders';
 import { Badge, Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import type { BadgeTone } from 'zoui';
+import { useStoreConfig } from '@/context/StoreConfigContext';
+import { formatPrice } from '@/lib/format';
 
 const STATUS_LABEL: Record<string, string> = {
   new: 'Nuevo',
@@ -29,6 +31,7 @@ const STATUS_TONE: Record<string, BadgeTone> = {
 
 export default function MiCuentaPedidosPage() {
   const router = useRouter();
+  const { currency } = useStoreConfig();
   const [orderList, setOrderList] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -102,7 +105,7 @@ export default function MiCuentaPedidosPage() {
                     {' · '}
                     {order.items.length} {order.items.length === 1 ? 'producto' : 'productos'}
                     {' · '}
-                    ${order.total.toLocaleString('es-AR')}
+                    {formatPrice(order.total, currency)}
                   </Text>
                 </div>
                 <Badge tone={STATUS_TONE[order.status]} variant="pill">

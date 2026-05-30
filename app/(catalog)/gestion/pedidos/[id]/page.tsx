@@ -9,6 +9,8 @@ import type { Order, OrderStatus } from '@/utils/api/orders';
 import { getNextAdminStatuses, getStepLabel } from '@/utils/workflows';
 import { Badge, Button, Text, Modal } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
+import { useStoreConfig } from '@/context/StoreConfigContext';
+import { formatPrice } from '@/lib/format';
 import type { BadgeTone } from 'zoui';
 
 const STATUS_LABEL: Record<string, string> = {
@@ -59,6 +61,7 @@ const STATUS_ACTION_LABEL: Record<string, string> = {
 export default function AdminPedidoDetailPage() {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
+  const { currency } = useStoreConfig();
 
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
@@ -187,15 +190,15 @@ export default function AdminPedidoDetailPage() {
                         {Object.entries(item.selectedOptions).map(([k, v]) => `${k}: ${v}`).join(' · ')}
                       </Text>
                     )}
-                    <Text variant="caption" color="muted" as="p">x{item.quantity} · ${item.price.toLocaleString('es-AR')}</Text>
+                    <Text variant="caption" color="muted" as="p">x{item.quantity} · {formatPrice(item.price, currency)}</Text>
                   </div>
-                  <Text variant="body-sm" weight="semibold" as="span">${item.subtotal.toLocaleString('es-AR')}</Text>
+                  <Text variant="body-sm" weight="semibold" as="span">{formatPrice(item.subtotal, currency)}</Text>
                 </li>
               ))}
             </ul>
             <div style={{ borderTop: '1px solid var(--color-border-default)', marginTop: '16px', paddingTop: '16px', display: 'flex', justifyContent: 'space-between' }}>
               <Text variant="body" weight="semibold" as="span">Total</Text>
-              <Text variant="body" weight="semibold" as="span">${order.total.toLocaleString('es-AR')}</Text>
+              <Text variant="body" weight="semibold" as="span">{formatPrice(order.total, currency)}</Text>
             </div>
           </section>
 

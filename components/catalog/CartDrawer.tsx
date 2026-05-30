@@ -8,22 +8,21 @@ import { useCart } from '@/context/CartContext';
 import { Drawer, Button, Text, Modal } from 'zoui';
 import type { ButtonVariant } from 'zoui';
 import { useStoreConfig } from '@/context/StoreConfigContext';
+import { formatPrice } from '@/lib/format';
 
 export function CartDrawer() {
   const router = useRouter();
   const { items, isLoading, drawerOpen, closeDrawer, updateItem, removeItem } = useCart();
-  const { components_presets } = useStoreConfig();
+  const { components_presets, currency } = useStoreConfig();
   const btnVariant = (components_presets?.button ?? 'primary') as ButtonVariant;
   const [itemToRemove, setItemToRemove] = useState<string | null>(null);
   const [stockLimits, setStockLimits] = useState<Record<string, number>>({});
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  if (!drawerOpen) return null;
-
   return (
     <>
-    <Drawer side="right" size="sm" onClose={closeDrawer} label="Carrito de compras">
+    <Drawer open={drawerOpen} side="right" size="sm" onClose={closeDrawer} label="Carrito de compras">
       <Drawer.Header>Carrito</Drawer.Header>
 
       {items.length === 0 ? (
@@ -57,7 +56,7 @@ export function CartDrawer() {
                     )}
 
                     <Text variant="body-sm" weight="semibold" as="p" style={{ marginTop: '4px' }}>
-                      ${item.price.toLocaleString('es-AR')}
+                      {formatPrice(item.price, currency)}
                     </Text>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
@@ -108,7 +107,7 @@ export function CartDrawer() {
           <Drawer.Footer>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <Text variant="body-sm" weight="semibold" as="span">Subtotal</Text>
-              <Text variant="body-sm" weight="semibold" as="span">${subtotal.toLocaleString('es-AR')}</Text>
+              <Text variant="body-sm" weight="semibold" as="span">{formatPrice(subtotal, currency)}</Text>
             </div>
             <Button
               variant="secondary"

@@ -13,6 +13,7 @@ import { ProductCard, ProductGrid as ProductGridUI, Pagination, EmptyState, Icon
 import type { ProductCardVariant } from 'zoui';
 import { StoreCatalogBar } from '@/components/catalog/StoreCatalogBar';
 import { useStoreConfig } from '@/context/StoreConfigContext';
+import { formatPrice } from '@/lib/format';
 
 interface Props {
   products: Product[];
@@ -58,7 +59,7 @@ export function ProductGrid({
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { components_presets } = useStoreConfig();
+  const { components_presets, currency } = useStoreConfig();
   const cardVariant = components_presets?.product_card as ProductCardVariant | undefined;
 
   const navigate = useCallback(
@@ -118,8 +119,8 @@ export function ProductGrid({
                 ImageComponent={NextImage}
                 variant={cardVariant}
                 name={p.name}
-                price={`$${displayPrice.toLocaleString('es-AR')}`}
-                priceOld={hasDiscount ? `$${p.price.toLocaleString('es-AR')}` : undefined}
+                price={formatPrice(displayPrice, currency)}
+                priceOld={hasDiscount ? formatPrice(p.price, currency) : undefined}
                 discount={getDiscount(p)}
                 image={mainImage ? { url: mainImage.url, alt: p.name } : undefined}
                 href={`/producto?id=${p._id}`}
@@ -150,6 +151,7 @@ export function ProductGrid({
 }
 
 function ProductListItem({ product }: { product: Product }) {
+  const { currency } = useStoreConfig();
   const mainImage = getMainImage(product);
   const displayPrice = getDisplayPrice(product);
   const hasDiscount = product.salePrice !== null && product.salePrice < product.price;
@@ -187,11 +189,11 @@ function ProductListItem({ product }: { product: Product }) {
         <Text variant="body-sm" weight="medium" as="p">{product.name}</Text>
         <div style={{ marginTop: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Text variant="body-sm" weight="semibold" as="span">
-            ${displayPrice.toLocaleString('es-AR')}
+            {formatPrice(displayPrice, currency)}
           </Text>
           {hasDiscount && (
             <Text variant="caption" color="muted" as="span" style={{ textDecoration: 'line-through' }}>
-              ${product.price.toLocaleString('es-AR')}
+              {formatPrice(product.price, currency)}
             </Text>
           )}
           {outOfStock && (
