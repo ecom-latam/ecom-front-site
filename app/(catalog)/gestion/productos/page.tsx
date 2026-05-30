@@ -146,7 +146,7 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
   }
 
   return (
-    <Drawer side="right" size="lg" onClose={onClose} label={product ? 'Editar producto' : 'Nuevo producto'}>
+    <Drawer open side="right" size="lg" onClose={onClose} label={product ? 'Editar producto' : 'Nuevo producto'}>
       <Drawer.Header>{product ? 'Editar producto' : 'Nuevo producto'}</Drawer.Header>
       <>
         <Drawer.Body style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
