@@ -133,6 +133,8 @@ export interface StoreInfo {
   description?: string;
   logo_url?: string | null;
   brand_hue?: number;
+  brand_saturation?: number;
+  brand_lightness?: number;
   font_family?: string;
   components_presets?: ComponentsPresets;
   product_detail_layout?: string;

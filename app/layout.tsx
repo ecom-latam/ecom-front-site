@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import "./globals.css";
 import "./zoui.css";
-import { ToastProvider } from "zoui";
+import { ToastProvider, brandScale } from "zoui";
 import { CartProvider } from "@/context/CartContext";
 import { DynamicStoreTheme } from "@/components/DynamicStoreTheme";
 import { getStoreInfo } from "@/lib/api/storeClient";
@@ -23,19 +23,22 @@ export default async function RootLayout({
   const theme = (cookieStore.get('ui-theme')?.value ?? 'light') as 'light' | 'dark';
   const storeInfo = await getStoreInfo();
   const hue = Math.round(Math.max(0, Math.min(360, storeInfo?.brand_hue ?? 262)));
+  const sat = Math.round(Math.max(0, Math.min(100, storeInfo?.brand_saturation ?? 72)));
+  const lit = Math.round(Math.max(0, Math.min(100, storeInfo?.brand_lightness ?? 50)));
   const storeTheme = storeInfo?.components_presets?.button ?? 'primary';
-  const brandContrast = hue >= 45 && hue <= 75 ? '#000000' : '#ffffff';
+  const brandContrast = (lit >= 62 || (hue >= 45 && hue <= 75)) ? '#000000' : '#ffffff';
   const fontFamily = storeInfo?.font_family ?? 'Geist';
+  const scale = brandScale(hue, sat, lit);
   const brandStyles = `
     :root {
-      --color-brand-50:       hsl(${hue}, 95%, 97%);
-      --color-brand-100:      hsl(${hue}, 90%, 93%);
-      --color-brand-200:      hsl(${hue}, 85%, 86%);
-      --color-brand-300:      hsl(${hue}, 80%, 75%);
-      --color-brand-400:      hsl(${hue}, 75%, 62%);
-      --color-brand-500:      hsl(${hue}, 72%, 50%);
-      --color-brand-600:      hsl(${hue}, 75%, 42%);
-      --color-brand-700:      hsl(${hue}, 80%, 34%);
+      --color-brand-50:       ${scale[50]};
+      --color-brand-100:      ${scale[100]};
+      --color-brand-200:      ${scale[200]};
+      --color-brand-300:      ${scale[300]};
+      --color-brand-400:      ${scale[400]};
+      --color-brand-500:      ${scale[500]};
+      --color-brand-600:      ${scale[600]};
+      --color-brand-700:      ${scale[700]};
       --color-brand-contrast: ${brandContrast};
       --font-ui:              '${fontFamily}', sans-serif;
     }
