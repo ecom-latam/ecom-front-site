@@ -1,23 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { brandScale, BRAND_STEPS } from 'zoui';
 import { StoreConfigContext } from '@/context/StoreConfigContext';
 import type { StoreConfig } from '@/context/StoreConfigContext';
 
 const SESSION_KEY = 'store-theme-config';
 const BFF_URL = process.env.NEXT_PUBLIC_BFF_URL ?? 'http://localhost:4000';
 
-function applyBrandHue(hue: number) {
+function applyBrandColor(hue: number, sat: number, lit: number) {
   const root = document.documentElement;
-  const contrast = hue >= 45 && hue <= 75 ? '#000000' : '#ffffff';
-  root.style.setProperty('--color-brand-50',       `hsl(${hue}, 95%, 97%)`);
-  root.style.setProperty('--color-brand-100',      `hsl(${hue}, 90%, 93%)`);
-  root.style.setProperty('--color-brand-200',      `hsl(${hue}, 85%, 86%)`);
-  root.style.setProperty('--color-brand-300',      `hsl(${hue}, 80%, 75%)`);
-  root.style.setProperty('--color-brand-400',      `hsl(${hue}, 75%, 62%)`);
-  root.style.setProperty('--color-brand-500',      `hsl(${hue}, 72%, 50%)`);
-  root.style.setProperty('--color-brand-600',      `hsl(${hue}, 75%, 42%)`);
-  root.style.setProperty('--color-brand-700',      `hsl(${hue}, 80%, 34%)`);
+  const contrast = (lit >= 62 || (hue >= 45 && hue <= 75)) ? '#000000' : '#ffffff';
+  const scale = brandScale(hue, sat, lit);
+  for (const step of BRAND_STEPS) {
+    root.style.setProperty(`--color-brand-${step}`, scale[step]);
+  }
   root.style.setProperty('--color-brand-contrast', contrast);
 }
 
@@ -91,7 +88,11 @@ export function DynamicStoreTheme({
   const [config, setConfig] = useState<StoreConfig>(() => toStoreConfig(initialConfig));
 
   function apply(raw: Record<string, unknown>) {
-    if (typeof raw.brand_hue === 'number') applyBrandHue(raw.brand_hue);
+    if (typeof raw.brand_hue === 'number') {
+      const sat = typeof raw.brand_saturation === 'number' ? raw.brand_saturation : 72;
+      const lit = typeof raw.brand_lightness === 'number' ? raw.brand_lightness : 50;
+      applyBrandColor(raw.brand_hue, sat, lit);
+    }
     if (typeof raw.font_family === 'string') applyFont(raw.font_family);
     const presets = raw.components_presets as Record<string, unknown> | undefined;
     if (typeof presets?.button === 'string') applyStoreTheme(presets.button);
