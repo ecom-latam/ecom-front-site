@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const NextLink = Link as any;
 const NextImage = Image as any;
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 
 import type { Category, Product } from '@/lib/api/storeClient';
@@ -58,13 +58,18 @@ export function ProductGrid({
   currentView,
 }: Props) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { components_presets, currency } = useStoreConfig();
   const cardVariant = components_presets?.product_card as ProductCardVariant | undefined;
 
+  // Reconstruimos los params desde los props (server-passed) en vez de useSearchParams:
+  // así esta vista no fuerza el client-render bailout del Suspense (evita los warnings de hidratación).
   const navigate = useCallback(
     (updates: Record<string, string | undefined>) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams();
+      if (currentQ) params.set('q', currentQ);
+      if (currentCategoryId) params.set('categoryId', currentCategoryId);
+      if (currentView === 'list') params.set('view', 'list');
+      if (page > 1) params.set('page', String(page));
       for (const [key, value] of Object.entries(updates)) {
         if (value === undefined) {
           params.delete(key);
@@ -72,9 +77,10 @@ export function ProductGrid({
           params.set(key, value);
         }
       }
-      router.push(`/productos?${params.toString()}`);
+      const qs = params.toString();
+      router.push(qs ? `/productos?${qs}` : '/productos');
     },
-    [router, searchParams]
+    [router, currentQ, currentCategoryId, currentView, page]
   );
 
   const catalogCategories = categories.map((c) => ({ label: c.name, value: c._id }));
