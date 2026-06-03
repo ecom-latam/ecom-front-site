@@ -10,6 +10,7 @@ import { orders } from '@/utils/api/orders';
 import type { CreateOrderPayload, PaymentMethod, ShippingMethod } from '@/utils/api/orders';
 import { addresses as addressesApi } from '@/utils/api/addresses';
 import type { Address } from '@/utils/api/addresses';
+import { payment as paymentApi } from '@/utils/api/payment';
 import { Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
@@ -48,7 +49,8 @@ const PROVINCES = [
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, itemCount, clearCart } = useCart();
-  const { currency } = useStoreConfig();
+  const { currency, mp_configured } = useStoreConfig();
+  const mpAvailable = mp_configured === true && currency === 'ARS';
 
   const [ready, setReady] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -142,45 +144,61 @@ export default function CheckoutPage() {
     setError(null);
   }
 
-  async function handleSubmit() {
+  const shippingAddress = {
+    fullName: form.fullName,
+    phone: form.phone,
+    address: form.address,
+    city: form.city,
+    province: form.province,
+    zip: form.zip,
+  };
 
+  async function payWithTransfer() {
+    const { data: order } = await orders.create({
+      shippingAddress,
+      paymentMethod: 'transfer',
+      shippingMethod: form.shippingMethod,
+      notes: form.notes,
+    });
+    await clearCart();
+    router.push(`/pedidos/${order._id}`);
+  }
+
+  async function payWithMercadoPago() {
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const { data } = await paymentApi.createPreference({
+      items: items.map((item) => ({
+        title:      item.name,
+        quantity:   item.quantity,
+        unit_price: item.price,
+        currency_id: 'ARS',
+      })),
+      back_urls: {
+        success: `${origin}/mp/success`,
+        failure: `${origin}/mp/failure`,
+        pending: `${origin}/mp/pending`,
+      },
+    });
+    window.location.href = data.init_point;
+  }
+
+  const paymentHandlers: Record<string, () => Promise<void>> = {
+    transfer:     payWithTransfer,
+    mercadopago:  payWithMercadoPago,
+  };
+
+  async function handleSubmit() {
     if (form.shippingMethod === 'delivery' && (!form.address || !form.city || !form.province)) {
       setError('Completá los datos de envío.');
       return;
     }
 
-    const payload: CreateOrderPayload = {
-      shippingAddress: {
-        fullName: form.fullName,
-        phone: form.phone,
-        address: form.address,
-        city: form.city,
-        province: form.province,
-        zip: form.zip,
-      },
-      paymentMethod: form.paymentMethod,
-      shippingMethod: form.shippingMethod,
-      notes: form.notes,
-    };
-
     setSubmitting(true);
     setError(null);
 
     try {
-      const { data: order } = await orders.create(payload, { _skipModal: true });
-      await clearCart();
-      router.push(`/pedidos/${order._id}`);
-    } catch (err: unknown) {
-      const axiosErr = err as { response?: { data?: { error?: string; name?: string } } };
-      const code = axiosErr?.response?.data?.error;
-      if (code === 'CART_EMPTY') {
-        setError('Tu carrito está vacío.');
-      } else if (code === 'INSUFFICIENT_STOCK') {
-        const name = axiosErr?.response?.data?.name ?? 'un producto';
-        setError(`Stock insuficiente para "${name}". Actualizá tu carrito.`);
-      } else {
-        setError('Ocurrió un error al crear el pedido. Intentá de nuevo.');
-      }
+      const handler = paymentHandlers[form.paymentMethod];
+      if (handler) await handler();
     } finally {
       setSubmitting(false);
     }
@@ -376,33 +394,45 @@ export default function CheckoutPage() {
                 <Text variant="heading-3" as="h2" style={{ marginBottom: '20px' }}>
                   Método de pago
                 </Text>
-                <label
-                  data-testid="checkout-payment-transfer"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    padding: '16px',
-                    border: '2px solid var(--color-brand-500)',
-                    borderRadius: 'var(--radius-md)',
-                    background: 'var(--color-brand-50)',
-                  }}
-                >
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="transfer"
-                    checked
-                    readOnly
-                    style={{ accentColor: 'var(--color-brand-500)' }}
-                  />
-                  <div>
-                    <Text variant="body-sm" weight="semibold" as="span">Transferencia bancaria</Text>
-                    <Text variant="caption" color="muted" as="p">
-                      Recibirás los datos para transferir al confirmar el pedido.
-                    </Text>
-                  </div>
-                </label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <label
+                    data-testid="checkout-payment-transfer"
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '12px', padding: '16px', cursor: 'pointer',
+                      border: `2px solid ${form.paymentMethod === 'transfer' ? 'var(--color-brand-500)' : 'var(--color-border-default)'}`,
+                      borderRadius: 'var(--radius-md)',
+                      background: form.paymentMethod === 'transfer' ? 'var(--color-brand-50)' : 'var(--color-bg-default)',
+                    }}
+                  >
+                    <input type="radio" name="paymentMethod" value="transfer" checked={form.paymentMethod === 'transfer'} onChange={() => set('paymentMethod', 'transfer')} style={{ accentColor: 'var(--color-brand-500)' }} />
+                    <div>
+                      <Text variant="body-sm" weight="semibold" as="span">Transferencia bancaria</Text>
+                      <Text variant="caption" color="muted" as="p">Recibirás los datos para transferir al confirmar el pedido.</Text>
+                    </div>
+                  </label>
+
+                  {mpAvailable && (
+                    <label
+                      data-testid="checkout-payment-mp"
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '12px', padding: '16px', cursor: 'pointer',
+                        border: `2px solid ${form.paymentMethod === 'mercadopago' ? 'var(--color-brand-500)' : 'var(--color-border-default)'}`,
+                        borderRadius: 'var(--radius-md)',
+                        background: form.paymentMethod === 'mercadopago' ? 'var(--color-brand-50)' : 'var(--color-bg-default)',
+                      }}
+                    >
+                      <input type="radio" name="paymentMethod" value="mercadopago" checked={form.paymentMethod === 'mercadopago'} onChange={() => set('paymentMethod', 'mercadopago')} style={{ accentColor: 'var(--color-brand-500)' }} />
+                      <div style={{ flex: 1 }}>
+                        <Text variant="body-sm" weight="semibold" as="span">Mercado Pago</Text>
+                        <Text variant="caption" color="muted" as="p">Tarjeta de crédito, débito o dinero en cuenta. Procesado por MercadoPago.</Text>
+                      </div>
+                      <svg width="32" height="20" viewBox="0 0 32 20" fill="none" style={{ flexShrink: 0 }}>
+                        <circle cx="10" cy="10" r="10" fill="#009EE3" />
+                        <circle cx="22" cy="10" r="10" fill="#009EE3" fillOpacity="0.5" />
+                      </svg>
+                    </label>
+                  )}
+                </div>
               </section>
 
               <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px' }}>
@@ -474,7 +504,11 @@ export default function CheckoutPage() {
                   onClick={handleSubmit}
                   data-testid="checkout-submit-btn"
                 >
-                  {submitting ? 'Procesando...' : 'Confirmar pedido'}
+                  {submitting
+                    ? 'Procesando...'
+                    : form.paymentMethod === 'mercadopago'
+                      ? 'Pagar con Mercado Pago'
+                      : 'Confirmar pedido'}
                 </StoreButton>
               </section>
             </div>
