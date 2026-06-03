@@ -390,6 +390,7 @@ export default function GestionCategoriasPage() {
             ]}
             size="sm"
             fullWidth
+            data-testid="cat-status-filter"
           />
         </div>
       </div>
