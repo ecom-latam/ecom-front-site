@@ -20,6 +20,7 @@ export interface StoreConfig {
   cart_layout?: string;
   search_preset?: string;
   currency?: Currency;
+  mp_configured?: boolean;
 }
 
 export const StoreConfigContext = createContext<StoreConfig>({});
