@@ -25,8 +25,6 @@ export const WORKFLOWS: Record<string, Step[]> = {
   'transfer:pickup': [
     STEPS.NEW, STEPS.NOTIFIED, STEPS.CONFIRMED, STEPS.READY, STEPS.PICKED_UP,
   ],
-  // 'mercadopago:delivery': [STEPS.NEW, STEPS.WEBHOOK_CONFIRMED, STEPS.PROCESSING, STEPS.SHIPPED, STEPS.DELIVERED],
-  // 'mercadopago:pickup': [STEPS.NEW, STEPS.WEBHOOK_CONFIRMED, STEPS.READY, STEPS.PICKED_UP],
 };
 
 export function getWorkflow(paymentMethod: string, shippingMethod: string): Step[] | null {
