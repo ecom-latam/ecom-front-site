@@ -1,15 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import { useCart } from '@/context/CartContext';
 import { getAccessTokenRole } from '@/utils/helpers';
 import { orders } from '@/utils/api/orders';
-import type { CreateOrderPayload, PaymentMethod, ShippingMethod } from '@/utils/api/orders';
+import type { PaymentMethod, ShippingMethod } from '@/utils/api/orders';
 import { addresses as addressesApi } from '@/utils/api/addresses';
 import type { Address } from '@/utils/api/addresses';
+import { payment as paymentApi } from '@/utils/api/payment';
+import type { MpCardData } from '@/components/MercadoPagoForm';
 import { Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
@@ -17,6 +20,9 @@ import { StoreSelect } from '@/components/ui/StoreSelect';
 import { StoreTextarea } from '@/components/ui/StoreTextarea';
 import { useStoreConfig } from '@/context/StoreConfigContext';
 import { formatPrice } from '@/lib/format';
+
+// MP SDK is client-side only — must not SSR
+const MercadoPagoForm = dynamic(() => import('@/components/MercadoPagoForm'), { ssr: false });
 
 const PROVINCES = [
   'Buenos Aires',
@@ -48,7 +54,8 @@ const PROVINCES = [
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, itemCount, clearCart } = useCart();
-  const { currency } = useStoreConfig();
+  const { currency, mp_public_key } = useStoreConfig();
+  const mpAvailable = !!mp_public_key && currency === 'ARS';
 
   const [ready, setReady] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -142,31 +149,63 @@ export default function CheckoutPage() {
     setError(null);
   }
 
+  const shippingAddress = {
+    fullName: form.fullName,
+    phone: form.phone,
+    address: form.address,
+    city: form.city,
+    province: form.province,
+    zip: form.zip,
+  };
+
+  async function payWithTransfer() {
+    const { data: order } = await orders.create({
+      shippingAddress,
+      paymentMethod: 'transfer',
+      shippingMethod: form.shippingMethod,
+      notes: form.notes,
+    });
+    await clearCart();
+    router.push(`/pedidos/${order._id}`);
+  }
+
+  async function handleMpCardSubmit(cardData: MpCardData) {
+    setSubmitting(true);
+    setError(null);
+    try {
+      const { data } = await paymentApi.processMp({
+        ...cardData,
+        amount: subtotal,
+        shippingAddress,
+        shippingMethod: form.shippingMethod,
+      });
+      await clearCart();
+      if (data.status === 'processed') {
+        router.push(`/pedidos/${data.orderId}`);
+      } else if (data.status === 'pending') {
+        router.push(`/pedidos/${data.orderId}?mp=pending`);
+      } else {
+        setError('El pago fue rechazado. Revisá los datos de tu tarjeta e intentá nuevamente.');
+      }
+    } catch {
+      setError('No se pudo procesar el pago. Intentá nuevamente.');
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   async function handleSubmit() {
     if (form.shippingMethod === 'delivery' && (!form.address || !form.city || !form.province)) {
       setError('Completá los datos de envío.');
       return;
     }
+    if (form.paymentMethod === 'mp') return; // MP uses inline form, not this button
 
     setSubmitting(true);
     setError(null);
 
     try {
-      const { data: order } = await orders.create({
-        shippingAddress: {
-          fullName: form.fullName,
-          phone: form.phone,
-          address: form.address,
-          city: form.city,
-          province: form.province,
-          zip: form.zip,
-        },
-        paymentMethod: 'transfer',
-        shippingMethod: form.shippingMethod,
-        notes: form.notes,
-      });
-      await clearCart();
-      router.push(`/pedidos/${order._id}`);
+      await payWithTransfer();
     } finally {
       setSubmitting(false);
     }
@@ -378,6 +417,40 @@ export default function CheckoutPage() {
                       <Text variant="caption" color="muted" as="p">Recibirás los datos para transferir al confirmar el pedido.</Text>
                     </div>
                   </label>
+
+                  {mpAvailable && (
+                    <div>
+                      <label
+                        data-testid="checkout-payment-mp"
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: '12px', padding: '16px', cursor: 'pointer',
+                          border: `2px solid ${form.paymentMethod === 'mp' ? 'var(--color-brand-500)' : 'var(--color-border-default)'}`,
+                          borderRadius: form.paymentMethod === 'mp' ? 'var(--radius-md) var(--radius-md) 0 0' : 'var(--radius-md)',
+                          background: form.paymentMethod === 'mp' ? 'var(--color-brand-50)' : 'var(--color-bg-default)',
+                        }}
+                      >
+                        <input type="radio" name="paymentMethod" value="mp" checked={form.paymentMethod === 'mp'} onChange={() => set('paymentMethod', 'mp')} style={{ accentColor: 'var(--color-brand-500)' }} />
+                        <div style={{ flex: 1 }}>
+                          <Text variant="body-sm" weight="semibold" as="span">Mercado Pago</Text>
+                          <Text variant="caption" color="muted" as="p">Tarjeta de crédito o débito. Los datos de la tarjeta se ingresan directamente en el sitio.</Text>
+                        </div>
+                        <svg width="32" height="20" viewBox="0 0 32 20" fill="none" style={{ flexShrink: 0 }}>
+                          <circle cx="10" cy="10" r="10" fill="#009EE3" />
+                          <circle cx="22" cy="10" r="10" fill="#009EE3" fillOpacity="0.5" />
+                        </svg>
+                      </label>
+                      {form.paymentMethod === 'mp' && mp_public_key && (
+                        <div style={{ border: `2px solid var(--color-brand-500)`, borderTop: 'none', borderRadius: '0 0 var(--radius-md) var(--radius-md)', padding: '20px', background: 'var(--color-bg-default)' }}>
+                          <MercadoPagoForm
+                            publicKey={mp_public_key}
+                            amount={subtotal}
+                            submitting={submitting}
+                            onSubmit={handleMpCardSubmit}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </section>
 
@@ -443,15 +516,17 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
-                <StoreButton
-                  size="md"
-                  disabled={submitting}
-                  style={{ marginTop: '20px', width: '100%', justifyContent: 'center' }}
-                  onClick={handleSubmit}
-                  data-testid="checkout-submit-btn"
-                >
-                  {submitting ? 'Procesando...' : 'Confirmar pedido'}
-                </StoreButton>
+                {form.paymentMethod !== 'mp' && (
+                  <StoreButton
+                    size="md"
+                    disabled={submitting}
+                    style={{ marginTop: '20px', width: '100%', justifyContent: 'center' }}
+                    onClick={handleSubmit}
+                    data-testid="checkout-submit-btn"
+                  >
+                    {submitting ? 'Procesando...' : 'Confirmar pedido'}
+                  </StoreButton>
+                )}
               </section>
             </div>
 
