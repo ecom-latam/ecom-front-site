@@ -1,26 +1,7 @@
 import { apiClient } from './client';
+import type { ShippingMethod } from './orders';
 
-export interface PreferenceItem {
-  title: string;
-  quantity: number;
-  unit_price: number;
-  currency_id?: string;
-}
-
-export interface CreatePreferencePayload {
-  items: PreferenceItem[];
-  back_urls: { success: string; failure: string; pending: string };
-  external_reference?: string;
-}
-
-export interface PreferenceResponse {
-  init_point: string;
-  preference_id: string;
-}
-
-export interface ProcessPaymentPayload {
-  payment_id: string;
-  customerId: string;
+export interface CreateMpPreferencePayload {
   shippingAddress: {
     fullName: string;
     phone: string;
@@ -29,47 +10,21 @@ export interface ProcessPaymentPayload {
     province?: string;
     zip?: string;
   };
-  shippingMethod: string;
+  shippingMethod: ShippingMethod;
   notes?: string;
+  // Origen de la tienda para construir las back_urls del retorno de Checkout Pro.
+  storeOrigin: string;
 }
 
-export interface ProcessPaymentResponse {
-  order_id: string;
-  payment_status: string;
-}
-
-export interface MpProcessPayload {
-  token: string;
-  paymentMethodId: string;
-  issuerId?: string | number;
-  installments: number;
-  paymentType: string;
-  amount: number;
-  payer: {
-    email: string;
-    identification?: { type: string; number: string };
-  };
-  shippingAddress: {
-    fullName: string;
-    phone: string;
-    address?: string;
-    city?: string;
-    province?: string;
-    zip?: string;
-  };
-  shippingMethod: string;
-}
-
-export interface MpProcessResponse {
+export interface CreateMpPreferenceResponse {
   orderId: string;
-  status: 'processed' | 'pending' | 'cancelled' | string;
+  preferenceId: string;
+  initPoint: string;
 }
 
 export const payment = {
-  createPreference: (payload: CreatePreferencePayload) =>
-    apiClient.post<PreferenceResponse>('/api/payment/preference', payload),
-  processPayment: (payload: ProcessPaymentPayload) =>
-    apiClient.post<ProcessPaymentResponse>('/api/payment/process', payload),
-  processMp: (payload: MpProcessPayload) =>
-    apiClient.post<MpProcessResponse>('/api/mp/process', payload),
+  // Checkout Pro: crea la orden + la preferencia de pago y devuelve el init_point
+  // al que se redirige al comprador. El cobro lo confirma el webhook de MP.
+  createMpPreference: (payload: CreateMpPreferencePayload) =>
+    apiClient.post<CreateMpPreferenceResponse>('/api/mp/create-preference', payload),
 };
