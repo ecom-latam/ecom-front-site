@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
@@ -12,7 +11,6 @@ import type { PaymentMethod, ShippingMethod } from '@/utils/api/orders';
 import { addresses as addressesApi } from '@/utils/api/addresses';
 import type { Address } from '@/utils/api/addresses';
 import { payment as paymentApi } from '@/utils/api/payment';
-import type { MpCardData } from '@/components/MercadoPagoForm';
 import { Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
@@ -20,9 +18,6 @@ import { StoreSelect } from '@/components/ui/StoreSelect';
 import { StoreTextarea } from '@/components/ui/StoreTextarea';
 import { useStoreConfig } from '@/context/StoreConfigContext';
 import { formatPrice } from '@/lib/format';
-
-// MP SDK is client-side only — must not SSR
-const MercadoPagoForm = dynamic(() => import('@/components/MercadoPagoForm'), { ssr: false });
 
 const PROVINCES = [
   'Buenos Aires',
@@ -169,29 +164,17 @@ export default function CheckoutPage() {
     router.push(`/pedidos/${order._id}`);
   }
 
-  async function handleMpCardSubmit(cardData: MpCardData) {
-    setSubmitting(true);
-    setError(null);
-    try {
-      const { data } = await paymentApi.processMp({
-        ...cardData,
-        amount: subtotal,
-        shippingAddress,
-        shippingMethod: form.shippingMethod,
-      });
-      await clearCart();
-      if (data.status === 'processed') {
-        router.push(`/pedidos/${data.orderId}`);
-      } else if (data.status === 'pending') {
-        router.push(`/pedidos/${data.orderId}?mp=pending`);
-      } else {
-        setError('El pago fue rechazado. Revisá los datos de tu tarjeta e intentá nuevamente.');
-      }
-    } catch {
-      setError('No se pudo procesar el pago. Intentá nuevamente.');
-    } finally {
-      setSubmitting(false);
-    }
+  // Checkout Pro: crea la preferencia y redirige al comprador a Mercado Pago.
+  // El carrito NO se vacía acá: la orden queda pendiente y el pago lo confirma el
+  // webhook. Si el comprador vuelve sin pagar, su carrito sigue intacto.
+  async function payWithMercadoPago() {
+    const { data } = await paymentApi.createMpPreference({
+      shippingAddress,
+      shippingMethod: form.shippingMethod,
+      notes: form.notes,
+      storeOrigin: window.location.origin,
+    });
+    window.location.href = data.initPoint;
   }
 
   async function handleSubmit() {
@@ -199,14 +182,18 @@ export default function CheckoutPage() {
       setError('Completá los datos de envío.');
       return;
     }
-    if (form.paymentMethod === 'mp') return; // MP uses inline form, not this button
 
     setSubmitting(true);
     setError(null);
 
     try {
-      await payWithTransfer();
-    } finally {
+      if (form.paymentMethod === 'mp') {
+        await payWithMercadoPago();
+      } else {
+        await payWithTransfer();
+      }
+    } catch {
+      setError('No se pudo iniciar el pago. Intentá nuevamente.');
       setSubmitting(false);
     }
   }
@@ -419,37 +406,25 @@ export default function CheckoutPage() {
                   </label>
 
                   {mpAvailable && (
-                    <div>
-                      <label
-                        data-testid="checkout-payment-mp"
-                        style={{
-                          display: 'flex', alignItems: 'center', gap: '12px', padding: '16px', cursor: 'pointer',
-                          border: `2px solid ${form.paymentMethod === 'mp' ? 'var(--color-brand-500)' : 'var(--color-border-default)'}`,
-                          borderRadius: form.paymentMethod === 'mp' ? 'var(--radius-md) var(--radius-md) 0 0' : 'var(--radius-md)',
-                          background: form.paymentMethod === 'mp' ? 'var(--color-brand-50)' : 'var(--color-bg-default)',
-                        }}
-                      >
-                        <input type="radio" name="paymentMethod" value="mp" checked={form.paymentMethod === 'mp'} onChange={() => set('paymentMethod', 'mp')} style={{ accentColor: 'var(--color-brand-500)' }} />
-                        <div style={{ flex: 1 }}>
-                          <Text variant="body-sm" weight="semibold" as="span">Mercado Pago</Text>
-                          <Text variant="caption" color="muted" as="p">Tarjeta de crédito o débito. Los datos de la tarjeta se ingresan directamente en el sitio.</Text>
-                        </div>
-                        <svg width="32" height="20" viewBox="0 0 32 20" fill="none" style={{ flexShrink: 0 }}>
-                          <circle cx="10" cy="10" r="10" fill="#009EE3" />
-                          <circle cx="22" cy="10" r="10" fill="#009EE3" fillOpacity="0.5" />
-                        </svg>
-                      </label>
-                      {form.paymentMethod === 'mp' && mp_public_key && (
-                        <div style={{ border: `2px solid var(--color-brand-500)`, borderTop: 'none', borderRadius: '0 0 var(--radius-md) var(--radius-md)', padding: '20px', background: 'var(--color-bg-default)' }}>
-                          <MercadoPagoForm
-                            publicKey={mp_public_key}
-                            amount={subtotal}
-                            submitting={submitting}
-                            onSubmit={handleMpCardSubmit}
-                          />
-                        </div>
-                      )}
-                    </div>
+                    <label
+                      data-testid="checkout-payment-mp"
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '12px', padding: '16px', cursor: 'pointer',
+                        border: `2px solid ${form.paymentMethod === 'mp' ? 'var(--color-brand-500)' : 'var(--color-border-default)'}`,
+                        borderRadius: 'var(--radius-md)',
+                        background: form.paymentMethod === 'mp' ? 'var(--color-brand-50)' : 'var(--color-bg-default)',
+                      }}
+                    >
+                      <input type="radio" name="paymentMethod" value="mp" checked={form.paymentMethod === 'mp'} onChange={() => set('paymentMethod', 'mp')} style={{ accentColor: 'var(--color-brand-500)' }} />
+                      <div style={{ flex: 1 }}>
+                        <Text variant="body-sm" weight="semibold" as="span">Mercado Pago</Text>
+                        <Text variant="caption" color="muted" as="p">Vas a completar el pago en Mercado Pago (tarjeta, dinero en cuenta y más). Después volvés a la tienda.</Text>
+                      </div>
+                      <svg width="32" height="20" viewBox="0 0 32 20" fill="none" style={{ flexShrink: 0 }}>
+                        <circle cx="10" cy="10" r="10" fill="#009EE3" />
+                        <circle cx="22" cy="10" r="10" fill="#009EE3" fillOpacity="0.5" />
+                      </svg>
+                    </label>
                   )}
                 </div>
               </section>
@@ -516,17 +491,19 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
-                {form.paymentMethod !== 'mp' && (
-                  <StoreButton
-                    size="md"
-                    disabled={submitting}
-                    style={{ marginTop: '20px', width: '100%', justifyContent: 'center' }}
-                    onClick={handleSubmit}
-                    data-testid="checkout-submit-btn"
-                  >
-                    {submitting ? 'Procesando...' : 'Confirmar pedido'}
-                  </StoreButton>
-                )}
+                <StoreButton
+                  size="md"
+                  disabled={submitting}
+                  style={{ marginTop: '20px', width: '100%', justifyContent: 'center' }}
+                  onClick={handleSubmit}
+                  data-testid="checkout-submit-btn"
+                >
+                  {submitting
+                    ? 'Procesando...'
+                    : form.paymentMethod === 'mp'
+                      ? 'Pagar con Mercado Pago'
+                      : 'Confirmar pedido'}
+                </StoreButton>
               </section>
             </div>
 
