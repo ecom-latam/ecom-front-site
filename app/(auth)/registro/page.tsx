@@ -61,7 +61,7 @@ export default function RegistroPage() {
       <Text variant="body-sm" color="muted" style={{ marginBottom: '24px' }}>Registrate para comprar en esta tienda.</Text>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <StoreInput id="email" type="email" autoComplete="email" autoFocus label="Email" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSubmit()} />
+        <StoreInput id="email" type="email" autoComplete="email" autoFocus label="Email" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSubmit()} data-testid="store-register-email" />
         <StoreInput
           id="password"
           type="password"
@@ -72,10 +72,11 @@ export default function RegistroPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+          data-testid="store-register-password"
         />
 
         {error && (
-          <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }}>{error}</Text>
+          <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }} data-testid="store-register-error">{error}</Text>
         )}
 
         <StoreButton loading={loading} disabled={!isValid || loading} size="md" style={{ width: '100%' }} onClick={handleSubmit} data-testid="store-register-submit">
