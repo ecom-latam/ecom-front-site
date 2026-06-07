@@ -27,7 +27,11 @@ function LoginForm() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const isValid = emailValid && password.length > 0;
+
   async function handleSubmit() {
+    if (!isValid) return;
     setError('');
     setLoading(true);
 
@@ -82,7 +86,7 @@ function LoginForm() {
           <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }} data-testid="store-login-error">{error}</Text>
         )}
 
-        <StoreButton loading={loading} size="md" style={{ width: '100%' }} onClick={handleSubmit} data-testid="store-login-submit">
+        <StoreButton loading={loading} disabled={!isValid || loading} size="md" style={{ width: '100%' }} onClick={handleSubmit} data-testid="store-login-submit">
           {loading ? 'Ingresando...' : 'Ingresar'}
         </StoreButton>
       </div>

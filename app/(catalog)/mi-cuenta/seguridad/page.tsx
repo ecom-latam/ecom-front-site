@@ -165,7 +165,7 @@ export default function SeguridadPage() {
           <StoreButton
             size="md"
             onClick={handleSave}
-            disabled={saving}
+            disabled={!isValid || saving}
           >
             {saving ? 'Guardando...' : 'Guardar contraseña'}
           </StoreButton>

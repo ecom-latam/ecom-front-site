@@ -82,7 +82,7 @@ function MfaVerifyForm() {
         />
 
         <StoreButton
-          disabled={loading}
+          disabled={code.length !== 6 || loading}
           size="md"
           style={{ width: '100%', justifyContent: 'center' }}
           onClick={handleSubmit}

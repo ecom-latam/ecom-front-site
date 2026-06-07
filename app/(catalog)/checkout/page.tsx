@@ -178,9 +178,29 @@ export default function CheckoutPage() {
   }
 
   async function handleSubmit() {
-    if (form.shippingMethod === 'delivery' && (!form.address || !form.city || !form.province)) {
-      setError('Completá los datos de envío.');
+    if (!form.fullName.trim()) {
+      setError('El nombre completo es requerido.');
       return;
+    }
+    if (/\d/.test(form.fullName)) {
+      setError('El nombre no puede contener números.');
+      return;
+    }
+    if (!form.phone.trim()) {
+      setError('El teléfono es requerido.');
+      return;
+    }
+    if (form.phone.replace(/\D/g, '').length < 7) {
+      setError('El teléfono debe tener al menos 7 dígitos.');
+      return;
+    }
+    if (form.shippingMethod === 'delivery') {
+      if (!form.address.trim()) { setError('La dirección es requerida.'); return; }
+      if (!form.city.trim()) { setError('La ciudad es requerida.'); return; }
+      if (!form.province) { setError('Seleccioná una provincia.'); return; }
+      if (form.zip && !/^\d{4,8}$/.test(form.zip)) {
+        setError('El código postal debe contener entre 4 y 8 dígitos.'); return;
+      }
     }
 
     setSubmitting(true);

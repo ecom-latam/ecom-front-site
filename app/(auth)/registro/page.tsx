@@ -25,7 +25,11 @@ export default function RegistroPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const isValid = emailValid && password.length >= 8;
+
   async function handleSubmit() {
+    if (!isValid) return;
     setError('');
     setLoading(true);
 
@@ -74,7 +78,7 @@ export default function RegistroPage() {
           <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }}>{error}</Text>
         )}
 
-        <StoreButton loading={loading} size="md" style={{ width: '100%' }} onClick={handleSubmit}>
+        <StoreButton loading={loading} disabled={!isValid || loading} size="md" style={{ width: '100%' }} onClick={handleSubmit} data-testid="store-register-submit">
           {loading ? 'Creando cuenta...' : 'Crear cuenta'}
         </StoreButton>
       </div>

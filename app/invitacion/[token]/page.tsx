@@ -42,6 +42,9 @@ export default function InvitacionPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const formValid = emailValid && password.length >= 8;
+
   useEffect(() => {
     async function validate() {
       try {
@@ -169,7 +172,7 @@ export default function InvitacionPage() {
           {error && <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }}>{error}</Text>}
 
           <StoreButton
-            disabled={submitting}
+            disabled={!formValid || submitting}
             size="md"
             style={{ width: '100%', justifyContent: 'center' }}
             onClick={handleSubmit}
