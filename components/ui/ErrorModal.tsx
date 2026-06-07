@@ -71,7 +71,8 @@ export function ErrorModalProvider({ children }: { children: React.ReactNode }) 
       {children}
       <Modal open={state.open} variant={SEVERITY_VARIANTS[severity]} size="sm" onClose={handleClose}>
         <Modal.Header>
-          <span>{SEVERITY_ICONS[severity]}</span> {error.message}
+          <span>{SEVERITY_ICONS[severity]}</span>{' '}
+          <span data-testid="error-modal-message">{error.message}</span>
         </Modal.Header>
         <Modal.Body>
           {error.detail && (

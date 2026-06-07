@@ -32,8 +32,17 @@ const errors: Record<string, ErrorDefinition> = {
   'MS04-ERR028': { message: 'El pedido ya está cancelado', severity: 'info' },
   'MS04-ERR090': { message: 'Ocurrió un error con tu pedido', detail: 'Si el problema persiste, contactá a la tienda.', severity: 'alert', action: { label: 'Reintentar', retry: true } },
 
-  // ── Stock (MS03) ──────────────────────────────────────────────────────────
+  // ── Catálogo — Stock (MS03) ───────────────────────────────────────────────
   'MS03-ERR001': { message: 'Sin stock disponible', detail: 'Ese producto ya no tiene unidades disponibles.', severity: 'info', action: { label: 'Ver catálogo', href: '/' } },
+
+  // ── Catálogo — Categorías (MS03) ──────────────────────────────────────────
+  'MS03-ERR013': { message: 'Ya existe una categoría con ese nombre', severity: 'info' },
+  'MS03-ERR014': { message: 'No se puede anidar más de 4 niveles', severity: 'info' },
+
+  // ── Catálogo — Productos (MS03) ───────────────────────────────────────────
+  'MS03-ERR011': { message: 'El nombre del producto es requerido', severity: 'info' },
+  'MS03-ERR021': { message: 'El precio ingresado no es válido', severity: 'info' },
+  'MS03-ERR022': { message: 'Ya existe un producto con ese nombre', severity: 'info' },
 
   // ── Config de tienda (MS05) ───────────────────────────────────────────────
   'MS05-ERR010': { message: 'La tienda no está configurada', severity: 'warning', action: { label: 'Reintentar', retry: true } },

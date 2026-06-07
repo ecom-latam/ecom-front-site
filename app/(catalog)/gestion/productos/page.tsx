@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { isAxiosError } from 'axios';
 import { products as productsApi, categories as categoriesApi } from '@/utils/api';
+import { triggerErrorModal } from '@/lib/errorModal';
 import type { Product, ProductPayload, ProductStatus, Category } from '@/utils/api';
 import { Modal, Drawer, Table, Badge, Pagination, Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
@@ -118,14 +118,28 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
       : EMPTY_FORM
   );
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   function set<K extends keyof ProductPayload>(key: K, value: ProductPayload[K]) {
     setForm(f => ({ ...f, [key]: value }));
   }
 
   async function handleSubmit() {
-    setError('');
+    if (!form.name.trim()) {
+      triggerErrorModal({ message: 'El nombre es requerido.', severity: 'info' });
+      return;
+    }
+    if (form.price <= 0) {
+      triggerErrorModal({ message: 'El precio debe ser mayor a 0.', severity: 'info' });
+      return;
+    }
+    if (form.stock < 0) {
+      triggerErrorModal({ message: 'El stock no puede ser negativo.', severity: 'info' });
+      return;
+    }
+    if (form.salePrice !== null && form.salePrice !== undefined && form.salePrice >= form.price) {
+      triggerErrorModal({ message: 'El precio de oferta debe ser menor al precio normal.', severity: 'info' });
+      return;
+    }
     setLoading(true);
     try {
       if (product) {
@@ -134,12 +148,8 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
         await productsApi.create(form);
       }
       onSaved();
-    } catch (err) {
-      if (isAxiosError(err)) {
-        setError(err.response?.data?.error ?? 'Error al guardar el producto.');
-      } else {
-        setError('Error inesperado.');
-      }
+    } catch {
+      // errors shown via modal (axios interceptor)
     } finally {
       setLoading(false);
     }
@@ -181,6 +191,7 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
               onValueChange={v => set('salePrice', v)}
               placeholder="Opcional"
               fullWidth
+              data-testid="prod-sale-price-input"
             />
           </div>
 
@@ -215,9 +226,6 @@ function ProductDrawer({ product, categories, onClose, onSaved }: ProductDrawerP
             fullWidth
           />
 
-          {error && (
-            <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }}>{error}</Text>
-          )}
         </Drawer.Body>
 
         <Drawer.Footer style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>

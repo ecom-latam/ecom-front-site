@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { isAxiosError } from 'axios';
 import { categories as categoriesApi } from '@/utils/api';
+import { triggerErrorModal } from '@/lib/errorModal';
 import type { Category, CategoryPayload } from '@/utils/api';
 import { Modal, Drawer, Table, Badge, Button, Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
@@ -85,14 +85,16 @@ function CategoryDrawer({ category, allCategories, depthMap, onClose, onSaved }:
   const [parentId, setParentId] = useState<string>(category?.parentId ?? '');
   const [status, setStatus] = useState<Category['status']>(category?.status ?? 'active');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const candidates = allCategories.filter(
     c => c._id !== category?._id && c.status === 'active' && (depthMap.get(c._id) ?? 0) < MAX_DEPTH
   );
 
   async function handleSubmit() {
-    setError('');
+    if (!name.trim()) {
+      triggerErrorModal({ message: 'El nombre de la categoría es requerido.', severity: 'info' });
+      return;
+    }
     setLoading(true);
     try {
       const payload: CategoryPayload = {
@@ -106,17 +108,8 @@ function CategoryDrawer({ category, allCategories, depthMap, onClose, onSaved }:
         await categoriesApi.create(payload);
       }
       onSaved();
-    } catch (err) {
-      if (isAxiosError(err)) {
-        const code = err.response?.data?.error;
-        setError(
-          code === 'SLUG_CONFLICT'      ? 'Ya existe una categoría con ese nombre.' :
-          code === 'MAX_DEPTH_EXCEEDED' ? 'No se puede anidar más de 4 niveles.' :
-          (code ?? 'Error al guardar la categoría.')
-        );
-      } else {
-        setError('Error inesperado.');
-      }
+    } catch {
+      // errors shown via modal (axios interceptor)
     } finally {
       setLoading(false);
     }
@@ -161,9 +154,6 @@ function CategoryDrawer({ category, allCategories, depthMap, onClose, onSaved }:
             fullWidth
           />
 
-          {error && (
-            <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }}>{error}</Text>
-          )}
         </Drawer.Body>
 
         <Drawer.Footer style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
