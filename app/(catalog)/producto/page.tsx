@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 
-import { Text, Breadcrumbs } from 'zoui';
+import { Text, Breadcrumbs, Badge } from 'zoui';
 import { AddToCartButton } from '@/components/catalog/AddToCartButton';
 import { Price } from '@/components/catalog/Price';
 import { ShareButton } from '@/components/catalog/ShareButton';
@@ -85,6 +85,21 @@ export default async function ProductoPage({ searchParams }: Props) {
   const shareEnabled = storeInfo?.share_button_enabled ?? false;
   const storeVariant = storeInfo?.components_presets?.button ?? 'outlined';
   const breadcrumbsVariant: BreadcrumbsVariant = BUTTON_TO_BREADCRUMBS[storeVariant] ?? 'outlined';
+
+  const discountPercent = hasDiscount && product.salePrice
+    ? Math.round((1 - product.salePrice / product.price) * 100)
+    : null;
+
+  const freeShipping = storeInfo?.free_shipping_min_amount;
+  const showFreeShipping = freeShipping !== null && freeShipping !== undefined
+    && displayPrice >= freeShipping;
+
+  const installmentsCount = storeInfo?.installments_count;
+  const interestFree = storeInfo?.interest_free ?? false;
+  const showInstallments = installmentsCount !== null && installmentsCount !== undefined && installmentsCount > 1;
+
+  const lowStockThreshold = storeInfo?.low_stock_threshold ?? 0;
+  const showLowStock = lowStockThreshold > 0 && effectiveStock > 0 && effectiveStock <= lowStockThreshold;
 
   const breadcrumbItems = [
     { label: 'Tienda', href: '/productos' },
@@ -167,14 +182,25 @@ export default async function ProductoPage({ searchParams }: Props) {
 
             <Text variant="heading-2" as="h1">{product.name}</Text>
 
-            <div style={{ marginTop: '12px', display: 'flex', alignItems: 'baseline', gap: '12px' }}>
+            <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
               <Text variant="heading-1" as="span"><Price value={displayPrice} /></Text>
               {hasDiscount && (
                 <Text variant="body" color="muted" as="span" style={{ textDecoration: 'line-through' }}>
                   <Price value={product.price} />
                 </Text>
               )}
+              {discountPercent && (
+                <Badge variant="soft" tone="danger" size="sm">-{discountPercent}%</Badge>
+              )}
             </div>
+
+            {showInstallments && (
+              <Text variant="body-sm" color="secondary" as="p" style={{ marginTop: '6px' }}>
+                {interestFree
+                  ? `${installmentsCount} cuotas sin interés`
+                  : `Hasta ${installmentsCount} cuotas`}
+              </Text>
+            )}
 
             {product.description && (
               <Text variant="body-sm" color="secondary" as="p" style={{ marginTop: '16px', whiteSpace: 'pre-line' }}>
@@ -190,15 +216,18 @@ export default async function ProductoPage({ searchParams }: Props) {
               </div>
             )}
 
-            {effectiveStock > 0 ? (
-              <Text variant="body-sm" as="p" style={{ marginTop: '24px', color: 'var(--color-success-700)' }}>
-                Disponible ({effectiveStock} disponibles)
-              </Text>
-            ) : (
-              <Text variant="body-sm" as="p" style={{ marginTop: '24px', color: 'var(--color-error-500)' }}>
-                Sin stock
-              </Text>
-            )}
+            <div style={{ marginTop: '20px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              {effectiveStock > 0 ? (
+                <Badge variant="soft" tone={showLowStock ? 'warning' : 'success'} size="sm">
+                  {showLowStock ? 'Últimas unidades' : 'En stock'}
+                </Badge>
+              ) : (
+                <Badge variant="soft" tone="danger" size="sm">Sin stock</Badge>
+              )}
+              {showFreeShipping && (
+                <Badge variant="soft" tone="info" size="sm">Envío gratis</Badge>
+              )}
+            </div>
 
             <AddToCartButton product={product} hasSession={hasSession} availableStock={effectiveStock} />
 
