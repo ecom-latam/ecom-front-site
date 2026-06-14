@@ -39,7 +39,7 @@ export function AddToCartButton({ product, hasSession, availableStock, quantity 
       <Button
         variant="secondary"
         size="md"
-        style={{ marginTop: '24px', width: '100%' }}
+        style={{ width: '100%' }}
         disabled
       >
         Sin stock
@@ -52,7 +52,7 @@ export function AddToCartButton({ product, hasSession, availableStock, quantity 
       <Button
         variant={btnVariant}
         size="md"
-        style={{ marginTop: '24px', width: '100%', justifyContent: 'center' }}
+        style={{ width: '100%', justifyContent: 'center' }}
         onClick={() => router.push(`/iniciar-sesion?next=/producto?id=${product._id}`)}
       >
         Iniciar sesión para comprar
@@ -66,7 +66,7 @@ export function AddToCartButton({ product, hasSession, availableStock, quantity 
         onClick={() => setModalOpen(true)}
         variant={btnVariant}
         size="md"
-        style={{ marginTop: '24px', width: '100%' }}
+        style={{ width: '100%' }}
       >
         Agregar al carrito
       </Button>
