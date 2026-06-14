@@ -38,6 +38,8 @@ export interface Product {
   hasVariants: boolean;
   linkedOptions: ProductLinkedOption[];
   variants: ProductVariant[];
+  avgRating: number | null;
+  reviewCount: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -171,12 +173,21 @@ export interface ProductReview {
   createdAt: string;
 }
 
+export interface ReviewDistribution {
+  1: number;
+  2: number;
+  3: number;
+  4: number;
+  5: number;
+}
+
 export interface ProductReviewsResponse {
   data: ProductReview[];
   total: number;
   limit: number;
   page: number;
   avgRating: number | null;
+  distribution: ReviewDistribution;
 }
 
 export async function getStoreInfo(): Promise<StoreInfo | null> {

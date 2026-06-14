@@ -60,12 +60,14 @@ export default async function ProductoPage({ searchParams }: Props) {
   const cookieStore = await cookies();
   const hasSession = cookieStore.has('_auth');
 
-  const [product, categories, storeInfo, reviewsData] = await Promise.all([
+  const [product, categories, storeInfo] = await Promise.all([
     getProduct(id),
     getCategories(),
     getStoreInfo(),
-    getProductReviews(id, 3),
   ]);
+
+  const ratingsActive = storeInfo?.ratings_enabled || storeInfo?.reviews_enabled;
+  const reviewsData = ratingsActive ? await getProductReviews(id, 3) : null;
 
   const category = categories.find((c) => c._id === String(product.categoryId));
   const mainImage = product.images.find((img) => img.isMain) ?? product.images[0];
@@ -207,6 +209,7 @@ export default async function ProductoPage({ searchParams }: Props) {
             avgRating={reviewsData?.avgRating ?? null}
             total={reviewsData?.total ?? 0}
             reviews={reviewsData?.data ?? []}
+            distribution={reviewsData?.distribution ?? null}
             ratingsEnabled={storeRatingsEnabled}
             reviewsEnabled={storeReviewsEnabled}
             starVariant={themeVariant as StarRatingVariant}

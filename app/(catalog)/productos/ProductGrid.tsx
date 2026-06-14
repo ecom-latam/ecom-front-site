@@ -10,7 +10,7 @@ import { useCallback } from 'react';
 
 import type { Category, Product } from '@/lib/api/storeClient';
 import { ProductCard, ProductGrid as ProductGridUI, Pagination, EmptyState, Icon, Badge, Text } from 'zoui';
-import type { ProductCardVariant } from 'zoui';
+import type { ProductCardVariant, StarRatingVariant } from 'zoui';
 import { StoreCatalogBar } from '@/components/catalog/StoreCatalogBar';
 import { useStoreConfig } from '@/context/StoreConfigContext';
 import { formatPrice } from '@/lib/format';
@@ -58,8 +58,9 @@ export function ProductGrid({
   currentView,
 }: Props) {
   const router = useRouter();
-  const { components_presets, currency } = useStoreConfig();
+  const { components_presets, currency, ratings_enabled } = useStoreConfig();
   const cardVariant = components_presets?.product_card as ProductCardVariant | undefined;
+  const starVariant = (components_presets?.button ?? 'filled') as StarRatingVariant;
 
   // Reconstruimos los params desde los props (server-passed) en vez de useSearchParams:
   // así esta vista no fuerza el client-render bailout del Suspense (evita los warnings de hidratación).
@@ -131,6 +132,9 @@ export function ProductGrid({
                 image={mainImage ? { url: mainImage.url, alt: p.name } : undefined}
                 href={`/producto?id=${p._id}`}
                 outOfStock={outOfStock}
+                avgRating={ratings_enabled && p.avgRating != null ? p.avgRating : undefined}
+                reviewCount={ratings_enabled && p.reviewCount != null ? p.reviewCount : undefined}
+                starVariant={starVariant}
               />
             );
           })}

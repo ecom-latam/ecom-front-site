@@ -6018,6 +6018,12 @@
   overflow: hidden;
 }
 
+.zoui-product-card__rating {
+  margin-top: var(--space-1);
+  display: flex;
+  align-items: center;
+}
+
 .zoui-product-card__prices {
   display: flex;
   align-items: baseline;
