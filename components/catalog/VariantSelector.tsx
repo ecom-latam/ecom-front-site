@@ -39,7 +39,7 @@ function findVariant(product: Product, selection: Record<string, string>): Produ
 
 function isValueAvailable(product: Product, optionId: string, value: string, currentSelection: Record<string, string>): boolean {
   return product.variants.some(v => {
-    if (!v.enabled) return false;
+    if (v.enabled === false) return false;
     const entry = v.combination.find(c => c.optionId === optionId);
     if (entry?.value !== value) return false;
     return product.linkedOptions
