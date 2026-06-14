@@ -1,21 +1,18 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 
-import { Text, Breadcrumbs, Badge } from 'zoui';
-import { AddToCartButton } from '@/components/catalog/AddToCartButton';
-import { Price } from '@/components/catalog/Price';
-import { ShareButton } from '@/components/catalog/ShareButton';
+import { Breadcrumbs } from 'zoui';
+import { PDPInfoPanel } from '@/components/catalog/PDPInfoPanel';
 import { getCategories, getProduct, getStoreInfo } from '@/lib/api/storeClient';
-import type { BreadcrumbsVariant } from 'zoui';
+import type { BreadcrumbsVariant, ChipGroupVariant } from 'zoui';
 
 interface Props {
   searchParams: { id?: string };
 }
 
-const BUTTON_TO_BREADCRUMBS: Record<string, BreadcrumbsVariant> = {
+const BUTTON_TO_VARIANT: Record<string, BreadcrumbsVariant & ChipGroupVariant> = {
   outlined:  'outlined',
   filled:    'filled',
   soft:      'soft',
@@ -73,7 +70,7 @@ export default async function ProductoPage({ searchParams }: Props) {
   const displayPrice = product.salePrice ?? product.price;
   const hasDiscount = product.salePrice !== null && product.salePrice < product.price;
 
-  const effectiveStock = product.hasVariants
+  const defaultStock = product.hasVariants
     ? Math.max(
         0,
         ...product.variants
@@ -82,24 +79,16 @@ export default async function ProductoPage({ searchParams }: Props) {
       )
     : (product.availableStock ?? product.stock);
 
-  const shareEnabled = storeInfo?.share_button_enabled ?? false;
   const storeVariant = storeInfo?.components_presets?.button ?? 'outlined';
-  const breadcrumbsVariant: BreadcrumbsVariant = BUTTON_TO_BREADCRUMBS[storeVariant] ?? 'outlined';
+  const themeVariant = BUTTON_TO_VARIANT[storeVariant] ?? 'outlined';
 
   const discountPercent = hasDiscount && product.salePrice
     ? Math.round((1 - product.salePrice / product.price) * 100)
     : null;
 
-  const freeShipping = storeInfo?.free_shipping_min_amount;
-  const showFreeShipping = freeShipping !== null && freeShipping !== undefined
-    && displayPrice >= freeShipping;
-
-  const installmentsCount = storeInfo?.installments_count;
+  const installmentsCount = storeInfo?.installments_count ?? null;
   const interestFree = storeInfo?.interest_free ?? false;
-  const showInstallments = installmentsCount !== null && installmentsCount !== undefined && installmentsCount > 1;
-
-  const lowStockThreshold = storeInfo?.low_stock_threshold ?? 0;
-  const showLowStock = lowStockThreshold > 0 && effectiveStock > 0 && effectiveStock <= lowStockThreshold;
+  const showInstallments = installmentsCount !== null && installmentsCount > 1;
 
   const breadcrumbItems = [
     { label: 'Tienda', href: '/productos' },
@@ -112,12 +101,12 @@ export default async function ProductoPage({ searchParams }: Props) {
       <div className="max-w-5xl mx-auto px-4 py-8">
 
         <div style={{ marginBottom: '24px' }}>
-          <Breadcrumbs items={breadcrumbItems} variant={breadcrumbsVariant} />
+          <Breadcrumbs items={breadcrumbItems} variant={themeVariant as BreadcrumbsVariant} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
 
-          {/* Gallery — left col, scrolls naturally */}
+          {/* Gallery — left col */}
           <div className="flex flex-col gap-3">
             <div
               className="rounded-lg overflow-hidden"
@@ -169,73 +158,28 @@ export default async function ProductoPage({ searchParams }: Props) {
             )}
           </div>
 
-          {/* Info — right col, sticky */}
+          {/* Info — right col, sticky, client component */}
           <div
             className="flex flex-col"
             style={{ position: 'sticky', top: '80px', alignSelf: 'start' }}
           >
-            {category && (
-              <Link href={`/productos?categoryId=${category._id}`} style={{ textDecoration: 'none', marginBottom: '8px', display: 'block' }}>
-                <Text variant="overline" color="muted">{category.name}</Text>
-              </Link>
-            )}
-
-            <Text variant="heading-2" as="h1">{product.name}</Text>
-
-            <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-              <Text variant="heading-1" as="span"><Price value={displayPrice} /></Text>
-              {hasDiscount && (
-                <Text variant="body" color="muted" as="span" style={{ textDecoration: 'line-through' }}>
-                  <Price value={product.price} />
-                </Text>
-              )}
-              {discountPercent && (
-                <Badge variant="soft" tone="danger" size="sm">-{discountPercent}%</Badge>
-              )}
-            </div>
-
-            {showInstallments && (
-              <Text variant="body-sm" color="secondary" as="p" style={{ marginTop: '6px' }}>
-                {interestFree
-                  ? `${installmentsCount} cuotas sin interés`
-                  : `Hasta ${installmentsCount} cuotas`}
-              </Text>
-            )}
-
-            {product.description && (
-              <Text variant="body-sm" color="secondary" as="p" style={{ marginTop: '16px', whiteSpace: 'pre-line' }}>
-                {product.description}
-              </Text>
-            )}
-
-            {product.hasVariants && product.linkedOptions.length > 0 && (
-              <div style={{ marginTop: '24px' }}>
-                <Text variant="body-sm" color="muted" as="p">
-                  {product.linkedOptions.map((o) => o.storeOptionName).join(', ')}
-                </Text>
-              </div>
-            )}
-
-            <div style={{ marginTop: '20px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              {effectiveStock > 0 ? (
-                <Badge variant="soft" tone={showLowStock ? 'warning' : 'success'} size="sm">
-                  {showLowStock ? 'Últimas unidades' : 'En stock'}
-                </Badge>
-              ) : (
-                <Badge variant="soft" tone="danger" size="sm">Sin stock</Badge>
-              )}
-              {showFreeShipping && (
-                <Badge variant="soft" tone="info" size="sm">Envío gratis</Badge>
-              )}
-            </div>
-
-            <AddToCartButton product={product} hasSession={hasSession} availableStock={effectiveStock} />
-
-            {shareEnabled && (
-              <div style={{ marginTop: '16px' }}>
-                <ShareButton title={product.name} />
-              </div>
-            )}
+            <PDPInfoPanel
+              product={product}
+              hasSession={hasSession}
+              defaultPrice={displayPrice}
+              defaultStock={defaultStock}
+              hasDiscount={hasDiscount}
+              discountPercent={discountPercent}
+              showInstallments={showInstallments}
+              installmentsCount={installmentsCount}
+              interestFree={interestFree}
+              freeShippingMin={storeInfo?.free_shipping_min_amount}
+              lowStockThreshold={storeInfo?.low_stock_threshold ?? 0}
+              shareEnabled={storeInfo?.share_button_enabled ?? false}
+              chipVariant={themeVariant as ChipGroupVariant}
+              categoryName={category?.name}
+              categoryId={category?._id}
+            />
           </div>
         </div>
       </div>
