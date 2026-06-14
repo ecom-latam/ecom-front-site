@@ -176,6 +176,7 @@ export default async function ProductoPage({ searchParams }: Props) {
               freeShippingMin={storeInfo?.free_shipping_min_amount}
               lowStockThreshold={storeInfo?.low_stock_threshold ?? 0}
               shareEnabled={storeInfo?.share_button_enabled ?? false}
+              buyNowEnabled={storeInfo?.buy_now_enabled ?? false}
               chipVariant={themeVariant as ChipGroupVariant}
               categoryName={category?.name}
               categoryId={category?._id}

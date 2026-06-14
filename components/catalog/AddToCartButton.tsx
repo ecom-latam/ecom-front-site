@@ -14,9 +14,10 @@ interface Props {
   product: Product;
   hasSession: boolean;
   availableStock?: number;
+  quantity?: number;
 }
 
-export function AddToCartButton({ product, hasSession, availableStock }: Props) {
+export function AddToCartButton({ product, hasSession, availableStock, quantity = 1 }: Props) {
   const router = useRouter();
   const { components_presets } = useStoreConfig();
   const btnVariant = (components_presets?.button ?? 'primary') as ButtonVariant;
@@ -38,7 +39,7 @@ export function AddToCartButton({ product, hasSession, availableStock }: Props) 
       <Button
         variant="secondary"
         size="md"
-        style={{ marginTop: '24px', width: '100%' }}
+        style={{ width: '100%' }}
         disabled
       >
         Sin stock
@@ -51,7 +52,7 @@ export function AddToCartButton({ product, hasSession, availableStock }: Props) 
       <Button
         variant={btnVariant}
         size="md"
-        style={{ marginTop: '24px', width: '100%', justifyContent: 'center' }}
+        style={{ width: '100%', justifyContent: 'center' }}
         onClick={() => router.push(`/iniciar-sesion?next=/producto?id=${product._id}`)}
       >
         Iniciar sesión para comprar
@@ -65,12 +66,12 @@ export function AddToCartButton({ product, hasSession, availableStock }: Props) 
         onClick={() => setModalOpen(true)}
         variant={btnVariant}
         size="md"
-        style={{ marginTop: '24px', width: '100%' }}
+        style={{ width: '100%' }}
       >
         Agregar al carrito
       </Button>
 
-      <AddToCartModal product={product} open={modalOpen} onClose={() => setModalOpen(false)} />
+      <AddToCartModal product={product} open={modalOpen} onClose={() => setModalOpen(false)} initialQuantity={quantity} />
     </>
   );
 }
