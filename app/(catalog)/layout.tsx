@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { CatalogNavbar } from '@/components/catalog/CatalogNavbar';
 import { CartDrawer } from '@/components/catalog/CartDrawer';
+import { PromoBar } from '@/components/catalog/PromoBar';
 import { getStoreInfo } from '@/lib/api/storeClient';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,6 +28,7 @@ export default function CatalogLayout({
 }) {
   return (
     <>
+      <PromoBar />
       <CatalogNavbar />
       <CartDrawer />
       {children}
