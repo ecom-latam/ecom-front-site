@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 
 import { Breadcrumbs } from 'zoui';
 import { PDPInfoPanel } from '@/components/catalog/PDPInfoPanel';
+import { RelatedProducts } from '@/components/catalog/RelatedProducts';
 import { getCategories, getProduct, getStoreInfo } from '@/lib/api/storeClient';
 import type { BreadcrumbsVariant, ChipGroupVariant } from 'zoui';
 
@@ -187,6 +188,14 @@ export default async function ProductoPage({ searchParams }: Props) {
             />
           </div>
         </div>
+
+        {storeInfo?.related_products_enabled && category && (
+          <RelatedProducts
+            categoryId={String(category._id)}
+            excludeId={id}
+            cardVariant={storeInfo.components_presets?.product_card}
+          />
+        )}
       </div>
     </main>
   );

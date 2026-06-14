@@ -61,6 +61,7 @@ export interface ProductListParams {
   limit?: number;
   categoryId?: string;
   q?: string;
+  exclude?: string;
 }
 
 async function getSlug(): Promise<string> {
@@ -86,6 +87,7 @@ export async function getProducts(params: ProductListParams = {}): Promise<Produ
     limit: params.limit,
     categoryId: params.categoryId,
     q: params.q,
+    exclude: params.exclude,
   });
   return client.get<ProductListResponse>(`/api/product/products${query}`, {
     headers: { 'X-Tenant-Slug': slug },
