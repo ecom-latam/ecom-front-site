@@ -157,7 +157,26 @@ export interface StoreInfo {
   buy_now_enabled?: boolean;
   related_products_enabled?: boolean;
   low_stock_threshold?: number;
+  ratings_enabled?: boolean;
+  reviews_enabled?: boolean;
   store_policies?: StorePolicies;
+}
+
+export interface ProductReview {
+  _id: string;
+  buyerId: string;
+  rating: number;
+  title?: string;
+  body?: string;
+  createdAt: string;
+}
+
+export interface ProductReviewsResponse {
+  data: ProductReview[];
+  total: number;
+  limit: number;
+  page: number;
+  avgRating: number | null;
 }
 
 export async function getStoreInfo(): Promise<StoreInfo | null> {
@@ -169,6 +188,26 @@ export async function getStoreInfo(): Promise<StoreInfo | null> {
     });
     if (!res.ok) return null;
     return (await res.json()) as StoreInfo;
+  } catch {
+    return null;
+  }
+}
+
+export async function getProductReviews(
+  productId: string,
+  limit = 3,
+): Promise<ProductReviewsResponse | null> {
+  const slug = await getSlug();
+  try {
+    const res = await fetch(
+      `${BFF_BASE_URL}/api/product/products/${productId}/reviews?limit=${limit}&page=1`,
+      {
+        headers: { 'X-Tenant-Slug': slug },
+        next: { revalidate: 30 },
+      },
+    );
+    if (!res.ok) return null;
+    return (await res.json()) as ProductReviewsResponse;
   } catch {
     return null;
   }

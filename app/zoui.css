@@ -5699,6 +5699,220 @@
   box-shadow: 1px 1px 0 var(--color-brand-300), 2px 2px 0 var(--color-brand-200);
 }
 
+.zoui-star-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.zoui-star-rating__stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.zoui-star-rating__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: default;
+  line-height: 1;
+}
+.zoui-star-rating[data-interactive] .zoui-star-rating__btn {
+  cursor: pointer;
+  transition: transform 80ms;
+}
+.zoui-star-rating[data-interactive] .zoui-star-rating__btn:hover {
+  transform: scale(1.15);
+}
+.zoui-star-rating[data-interactive] .zoui-star-rating__btn:active {
+  transform: scale(0.95);
+}
+.zoui-star-rating__btn:disabled {
+  pointer-events: none;
+}
+
+.zoui-star-rating__star-icon {
+  display: block;
+  fill: none;
+}
+
+.zoui-star-rating__fill {
+  stroke: var(--color-fg-disabled);
+  stroke-width: 1.5;
+  fill: transparent;
+  transition: fill 120ms, stroke 120ms;
+}
+.zoui-star-rating__fill--full {
+  fill: var(--zsr-color, var(--color-brand-400));
+  stroke: var(--zsr-color, var(--color-brand-400));
+}
+.zoui-star-rating__fill--empty {
+  fill: transparent;
+  stroke: var(--color-border-default);
+}
+
+.zoui-star-rating[data-size=sm] .zoui-star-rating__star-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.zoui-star-rating[data-size=md] .zoui-star-rating__star-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.zoui-star-rating[data-size=lg] .zoui-star-rating__star-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.zoui-star-rating:not([data-size]) .zoui-star-rating__star-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.zoui-star-rating__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.zoui-star-rating__value {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-fg-primary);
+  line-height: 1;
+}
+
+.zoui-star-rating__count {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--color-fg-secondary);
+  line-height: 1;
+}
+
+.zoui-star-rating[data-variant=filled] {
+  --zsr-color: var(--color-brand-500);
+}
+
+.zoui-star-rating[data-variant=soft] {
+  --zsr-color: var(--color-brand-300);
+}
+
+.zoui-star-rating[data-variant=ghost] .zoui-star-rating__fill--empty {
+  stroke: transparent;
+}
+
+.zoui-star-rating[data-variant=pill] {
+  --zsr-color: var(--color-brand-400);
+}
+
+.zoui-star-rating[data-variant=editorial] {
+  --zsr-color: var(--color-brand-700);
+}
+.zoui-star-rating[data-variant=editorial] .zoui-star-rating__value {
+  font-style: italic;
+  font-size: 13px;
+}
+
+.zoui-star-rating[data-variant=terminal] {
+  --zsr-color: #4caf50;
+}
+.zoui-star-rating[data-variant=terminal] .zoui-star-rating__fill--empty {
+  stroke: #2e7d32;
+}
+.zoui-star-rating[data-variant=terminal] .zoui-star-rating__value,
+.zoui-star-rating[data-variant=terminal] .zoui-star-rating__count {
+  font-family: "Courier New", monospace;
+  color: #4caf50;
+}
+
+.zoui-star-rating[data-variant=boutique] {
+  --zsr-color: #d97706;
+}
+.zoui-star-rating[data-variant=boutique] .zoui-star-rating__fill--empty {
+  stroke: #d97706;
+}
+
+.zoui-star-rating[data-variant=frame] {
+  --zsr-color: var(--color-brand-500);
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--color-border-default);
+}
+
+.zoui-star-rating[data-variant=capsule] {
+  --zsr-color: var(--color-brand-500);
+  background: var(--color-brand-50);
+  border-radius: 9999px;
+  padding: 4px 10px;
+}
+
+.zoui-star-rating[data-variant=brutalist] {
+  --zsr-color: var(--color-fg-primary);
+}
+.zoui-star-rating[data-variant=brutalist] .zoui-star-rating__fill--full {
+  stroke-width: 2.5;
+}
+.zoui-star-rating[data-variant=brutalist] .zoui-star-rating__fill--empty {
+  stroke: var(--color-fg-primary);
+  stroke-width: 2.5;
+}
+
+.zoui-star-rating[data-variant=glass] {
+  --zsr-color: color-mix(in srgb, var(--color-brand-400) 80%, transparent);
+}
+.zoui-star-rating[data-variant=glass] .zoui-star-rating__fill--empty {
+  stroke: color-mix(in srgb, var(--color-border-default) 60%, transparent);
+}
+
+.zoui-star-rating[data-variant=retro] {
+  --zsr-color: #92400e;
+}
+.zoui-star-rating[data-variant=retro] .zoui-star-rating__fill--empty {
+  stroke: #d97706;
+}
+.zoui-star-rating[data-variant=retro] .zoui-star-rating__value,
+.zoui-star-rating[data-variant=retro] .zoui-star-rating__count {
+  color: #78350f;
+}
+
+.zoui-star-rating[data-variant=glow] {
+  --zsr-color: var(--color-brand-400);
+}
+.zoui-star-rating[data-variant=glow] .zoui-star-rating__fill--full {
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--color-brand-500) 70%, transparent));
+}
+
+.zoui-star-rating[data-variant=gradient] {
+  --zsr-color: var(--color-brand-400);
+}
+
+.zoui-star-rating[data-variant=neon] {
+  --zsr-color: var(--color-brand-300);
+}
+.zoui-star-rating[data-variant=neon] .zoui-star-rating__fill--full {
+  filter: drop-shadow(0 0 3px var(--color-brand-400));
+}
+.zoui-star-rating[data-variant=neon] .zoui-star-rating__fill--empty {
+  stroke: var(--color-brand-700);
+}
+.zoui-star-rating[data-variant=neon] .zoui-star-rating__value,
+.zoui-star-rating[data-variant=neon] .zoui-star-rating__count {
+  color: var(--color-brand-300);
+}
+
+.zoui-star-rating[data-variant="3d"] {
+  --zsr-color: var(--color-brand-500);
+}
+.zoui-star-rating[data-variant="3d"] .zoui-star-rating__fill--full {
+  filter: drop-shadow(2px 2px 0 var(--color-brand-300));
+}
+
 .zoui-product-card {
   --_bg: var(--color-bg-surface);
   --_border: var(--color-border-default);

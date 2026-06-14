@@ -6,8 +6,9 @@ import { notFound } from 'next/navigation';
 import { Breadcrumbs } from 'zoui';
 import { PDPInfoPanel } from '@/components/catalog/PDPInfoPanel';
 import { RelatedProducts } from '@/components/catalog/RelatedProducts';
-import { getCategories, getProduct, getStoreInfo } from '@/lib/api/storeClient';
-import type { BreadcrumbsVariant, ChipGroupVariant } from 'zoui';
+import { RatingsBlock } from '@/components/catalog/RatingsBlock';
+import { getCategories, getProduct, getProductReviews, getStoreInfo } from '@/lib/api/storeClient';
+import type { BreadcrumbsVariant, ChipGroupVariant, StarRatingVariant } from 'zoui';
 
 interface Props {
   searchParams: { id?: string };
@@ -59,10 +60,11 @@ export default async function ProductoPage({ searchParams }: Props) {
   const cookieStore = await cookies();
   const hasSession = cookieStore.has('_auth');
 
-  const [product, categories, storeInfo] = await Promise.all([
+  const [product, categories, storeInfo, reviewsData] = await Promise.all([
     getProduct(id),
     getCategories(),
     getStoreInfo(),
+    getProductReviews(id, 3),
   ]);
 
   const category = categories.find((c) => c._id === String(product.categoryId));
@@ -79,6 +81,9 @@ export default async function ProductoPage({ searchParams }: Props) {
           .map((v) => v.availableStock ?? v.stock)
       )
     : (product.availableStock ?? product.stock);
+
+  const storeRatingsEnabled = storeInfo?.ratings_enabled ?? false;
+  const storeReviewsEnabled = storeInfo?.reviews_enabled ?? false;
 
   const storeVariant = storeInfo?.components_presets?.button ?? 'outlined';
   const themeVariant = BUTTON_TO_VARIANT[storeVariant] ?? 'outlined';
@@ -194,6 +199,17 @@ export default async function ProductoPage({ searchParams }: Props) {
             categoryId={String(category._id)}
             excludeId={id}
             cardVariant={storeInfo.components_presets?.product_card}
+          />
+        )}
+
+        {(storeRatingsEnabled || storeReviewsEnabled) && (
+          <RatingsBlock
+            avgRating={reviewsData?.avgRating ?? null}
+            total={reviewsData?.total ?? 0}
+            reviews={reviewsData?.data ?? []}
+            ratingsEnabled={storeRatingsEnabled}
+            reviewsEnabled={storeReviewsEnabled}
+            starVariant={themeVariant as StarRatingVariant}
           />
         )}
       </div>

@@ -26,6 +26,8 @@ export interface StoreConfig {
   free_shipping_min_amount?: number | null;
   installments_count?: number | null;
   interest_free?: boolean;
+  ratings_enabled?: boolean;
+  reviews_enabled?: boolean;
 }
 
 export const StoreConfigContext = createContext<StoreConfig>({});
