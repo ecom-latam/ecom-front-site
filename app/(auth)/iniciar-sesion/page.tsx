@@ -8,6 +8,7 @@ import { auth, startSession } from '@/utils/api';
 import { Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
+import { StorePasswordInput } from '@/components/ui/StorePasswordInput';
 
 const ERRORS: Record<string, string> = {
   INVALID_CREDENTIALS: 'Email o contraseña incorrectos.',
@@ -80,7 +81,7 @@ function LoginForm() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <StoreInput id="email" type="email" autoComplete="email" autoFocus label="Email" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSubmit()} data-testid="store-login-email" />
-        <StoreInput id="password" type="password" autoComplete="current-password" label="Contraseña" fullWidth value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSubmit()} data-testid="store-login-password" />
+        <StorePasswordInput id="password" autoComplete="current-password" label="Contraseña" fullWidth value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSubmit()} data-testid="store-login-password" />
 
         {error && (
           <Text variant="body-sm" as="p" style={{ color: 'var(--color-error-500)' }} data-testid="store-login-error">{error}</Text>

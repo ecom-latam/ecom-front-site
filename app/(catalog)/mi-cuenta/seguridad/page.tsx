@@ -3,23 +3,8 @@
 import { useState } from 'react';
 import { Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
-import { StoreInput } from '@/components/ui/StoreInput';
+import { StorePasswordInput } from '@/components/ui/StorePasswordInput';
 import { security } from '@/utils/api/security';
-
-const EyeIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-    <circle cx="12" cy="12" r="3" />
-  </svg>
-);
-
-const EyeOffIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
-    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
-    <line x1="1" y1="1" x2="23" y2="23" />
-  </svg>
-);
 
 const ShieldIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -37,7 +22,6 @@ const PhoneIcon = () => (
 const EMPTY = { current: '', next: '', confirm: '' };
 
 export default function SeguridadPage() {
-  const [show, setShow] = useState({ current: false, next: false, confirm: false });
   const [form, setForm] = useState(EMPTY);
   const [touched, setTouched] = useState<Partial<Record<keyof typeof EMPTY, boolean>>>({});
   const [saving, setSaving] = useState(false);
@@ -89,21 +73,6 @@ export default function SeguridadPage() {
     }
   }
 
-  const toggleShow = (field: keyof typeof show) =>
-    setShow((prev) => ({ ...prev, [field]: !prev[field] }));
-
-  const eyeAction = (field: keyof typeof show) => (
-    <button
-      type="button"
-      onClick={() => toggleShow(field)}
-      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-fg-muted)', display: 'flex', alignItems: 'center', padding: '0 2px' }}
-      tabIndex={-1}
-      aria-label={show[field] ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-    >
-      {show[field] ? <EyeOffIcon /> : <EyeIcon />}
-    </button>
-  );
-
   return (
     <main style={{ padding: '32px 24px', maxWidth: 560 }}>
       <Text variant="heading-2" as="h1" style={{ marginBottom: '32px' }}>Seguridad</Text>
@@ -116,35 +85,32 @@ export default function SeguridadPage() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <StoreInput
+          <StorePasswordInput
             label="Contraseña actual"
-            type={show.current ? 'text' : 'password'}
             value={form.current}
             onChange={(e) => set('current', e.target.value)}
             onBlur={() => touch('current')}
             error={touched.current ? errors.current : undefined}
-            labelAction={eyeAction('current')}            size="md"
+            size="md"
             autoComplete="current-password"
           />
-          <StoreInput
+          <StorePasswordInput
             label="Nueva contraseña"
-            type={show.next ? 'text' : 'password'}
             value={form.next}
             onChange={(e) => set('next', e.target.value)}
             onBlur={() => touch('next')}
             error={touched.next ? errors.next : undefined}
             hint={!touched.next || !errors.next ? 'Mínimo 8 caracteres.' : undefined}
-            labelAction={eyeAction('next')}            size="md"
+            size="md"
             autoComplete="new-password"
           />
-          <StoreInput
+          <StorePasswordInput
             label="Confirmar nueva contraseña"
-            type={show.confirm ? 'text' : 'password'}
             value={form.confirm}
             onChange={(e) => set('confirm', e.target.value)}
             onBlur={() => touch('confirm')}
             error={touched.confirm ? errors.confirm : undefined}
-            labelAction={eyeAction('confirm')}            size="md"
+            size="md"
             autoComplete="new-password"
           />
         </div>

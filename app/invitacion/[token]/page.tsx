@@ -7,6 +7,7 @@ import { apiClient, startSession } from '@/utils/api';
 import { Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
+import { StorePasswordInput } from '@/components/ui/StorePasswordInput';
 
 const ROLE_LABELS: Record<string, string> = {
   Manager: 'Manager',
@@ -157,9 +158,8 @@ export default function InvitacionPage() {
             onChange={(e) => setEmail(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
           />
-          <StoreInput
+          <StorePasswordInput
             label="Contraseña"
-            type="password"
             minLength={8}
             autoComplete="new-password"
             hint="Mínimo 8 caracteres."

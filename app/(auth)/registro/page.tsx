@@ -8,6 +8,7 @@ import { auth, startSession } from '@/utils/api';
 import { Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
+import { StorePasswordInput } from '@/components/ui/StorePasswordInput';
 
 const ERRORS: Record<string, string> = {
   INVALID_EMAIL: 'El email no es válido.',
@@ -62,9 +63,8 @@ export default function RegistroPage() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <StoreInput id="email" type="email" autoComplete="email" autoFocus label="Email" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSubmit()} data-testid="store-register-email" />
-        <StoreInput
+        <StorePasswordInput
           id="password"
-          type="password"
           autoComplete="new-password"
           label="Contraseña"
           hint="Mínimo 8 caracteres"
