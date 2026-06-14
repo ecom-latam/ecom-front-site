@@ -14,9 +14,10 @@ interface Props {
   product: Product;
   hasSession: boolean;
   availableStock?: number;
+  quantity?: number;
 }
 
-export function AddToCartButton({ product, hasSession, availableStock }: Props) {
+export function AddToCartButton({ product, hasSession, availableStock, quantity = 1 }: Props) {
   const router = useRouter();
   const { components_presets } = useStoreConfig();
   const btnVariant = (components_presets?.button ?? 'primary') as ButtonVariant;
@@ -70,7 +71,7 @@ export function AddToCartButton({ product, hasSession, availableStock }: Props) 
         Agregar al carrito
       </Button>
 
-      <AddToCartModal product={product} open={modalOpen} onClose={() => setModalOpen(false)} />
+      <AddToCartModal product={product} open={modalOpen} onClose={() => setModalOpen(false)} initialQuantity={quantity} />
     </>
   );
 }
