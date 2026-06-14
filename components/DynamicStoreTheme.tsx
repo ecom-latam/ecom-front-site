@@ -82,6 +82,8 @@ function toStoreConfig(raw: Record<string, unknown>): StoreConfig {
     free_shipping_min_amount: typeof raw.free_shipping_min_amount === 'number' ? raw.free_shipping_min_amount : null,
     installments_count:    typeof raw.installments_count === 'number' ? raw.installments_count : null,
     interest_free:         raw.interest_free === true,
+    ratings_enabled:       raw.ratings_enabled === true,
+    reviews_enabled:       raw.reviews_enabled === true,
   };
 }
 

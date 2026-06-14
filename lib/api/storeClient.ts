@@ -195,7 +195,7 @@ export async function getStoreInfo(): Promise<StoreInfo | null> {
   try {
     const res = await fetch(`${BFF_BASE_URL}/api/store/public?_store=${slug}`, {
       headers: { 'X-Tenant-Slug': slug },
-      next: { revalidate: 60 },
+      cache: 'no-store',
     });
     if (!res.ok) return null;
     return (await res.json()) as StoreInfo;
