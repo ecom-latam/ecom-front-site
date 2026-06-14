@@ -78,6 +78,10 @@ function toStoreConfig(raw: Record<string, unknown>): StoreConfig {
     search_preset:         raw.search_preset         as string | undefined,
     currency:              raw.currency === 'USD' ? 'USD' : 'ARS',
     mp_public_key:         (raw.mp_public_key as string | null | undefined) ?? null,
+    promo_bar_enabled:     raw.promo_bar_enabled === true,
+    free_shipping_min_amount: typeof raw.free_shipping_min_amount === 'number' ? raw.free_shipping_min_amount : null,
+    installments_count:    typeof raw.installments_count === 'number' ? raw.installments_count : null,
+    interest_free:         raw.interest_free === true,
   };
 }
 

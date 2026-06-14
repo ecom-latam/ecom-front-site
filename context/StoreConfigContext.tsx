@@ -22,6 +22,10 @@ export interface StoreConfig {
   search_preset?: string;
   currency?: Currency;
   mp_public_key?: string | null;
+  promo_bar_enabled?: boolean;
+  free_shipping_min_amount?: number | null;
+  installments_count?: number | null;
+  interest_free?: boolean;
 }
 
 export const StoreConfigContext = createContext<StoreConfig>({});
