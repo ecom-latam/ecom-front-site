@@ -20,6 +20,13 @@ function formatDate(iso: string): string {
   });
 }
 
+function getBuyerDisplay(email?: string): { initial: string; name: string } {
+  if (!email) return { initial: 'C', name: 'Comprador verificado' };
+  const prefix = email.split('@')[0] ?? '';
+  const display = prefix.replace(/[._-]/g, ' ').trim();
+  return { initial: display[0]?.toUpperCase() ?? 'C', name: display || 'Comprador verificado' };
+}
+
 function DistributionBars({
   distribution,
   total,
@@ -96,48 +103,56 @@ function ReviewCard({
     >
       {/* Author row */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <div
-          style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            background: 'var(--color-brand-100)',
-            color: 'var(--color-brand-700)',
-            fontFamily: 'var(--font-ui)',
-            fontWeight: 600,
-            fontSize: '14px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}
-        >
-          C
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-          <span
-            style={{
-              fontFamily: 'var(--font-ui)',
-              fontSize: '13px',
-              fontWeight: 600,
-              color: 'var(--color-fg-primary)',
-            }}
-          >
-            Comprador verificado
-          </span>
-          <span
-            style={{
-              fontFamily: 'var(--font-ui)',
-              fontSize: '12px',
-              color: 'var(--color-fg-disabled)',
-            }}
-          >
-            {formatDate(review.createdAt)}
-          </span>
-        </div>
-        <div style={{ marginLeft: 'auto' }}>
-          <StarRating value={review.rating} readonly size="sm" variant={starVariant} />
-        </div>
+        {(() => {
+          const { initial, name } = getBuyerDisplay(review.buyerEmail);
+          return (
+            <>
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  background: 'var(--color-brand-100)',
+                  color: 'var(--color-brand-700)',
+                  fontFamily: 'var(--font-ui)',
+                  fontWeight: 600,
+                  fontSize: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                {initial}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-ui)',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: 'var(--color-fg-primary)',
+                    textTransform: 'capitalize',
+                  }}
+                >
+                  {name}
+                </span>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-ui)',
+                    fontSize: '12px',
+                    color: 'var(--color-fg-disabled)',
+                  }}
+                >
+                  {formatDate(review.createdAt)}
+                </span>
+              </div>
+              <div style={{ marginLeft: 'auto' }}>
+                <StarRating value={review.rating} readonly size="sm" variant={starVariant} />
+              </div>
+            </>
+          );
+        })()}
       </div>
 
       {review.title && (
