@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
 
@@ -15,69 +15,101 @@ import { StoreButton } from '@/components/ui/StoreButton';
 import type { BadgeTone } from 'zoui';
 
 const STATUS_LABEL: Record<string, string> = {
-  new: 'Nuevo',
-  notified: 'Transferencia enviada',
-  confirmed: 'Confirmado',
+  new:        'Nuevo',
+  notified:   'Transferencia enviada',
+  confirmed:  'Confirmado',
   processing: 'En preparación',
-  shipped: 'Enviado',
-  ready: 'Listo para retirar',
-  delivered: 'Entregado',
-  cancelled: 'Cancelado',
+  shipped:    'Enviado',
+  ready:      'Listo para retirar',
+  delivered:  'Entregado',
+  cancelled:  'Cancelado',
 };
 
 const STATUS_TONE: Record<string, BadgeTone> = {
-  new: 'neutral',
-  notified: 'warning',
-  confirmed: 'info',
+  new:        'neutral',
+  notified:   'warning',
+  confirmed:  'info',
   processing: 'warning',
-  shipped: 'info',
-  ready: 'info',
-  delivered: 'success',
-  cancelled: 'danger',
+  shipped:    'info',
+  ready:      'info',
+  delivered:  'success',
+  cancelled:  'danger',
 };
 
 const PAYMENT_NOTE: Record<string, string | null> = {
-  pending: null,
+  pending:     null,
   in_progress: 'Transferencia notificada — el vendedor verificará el pago.',
-  paid: null,
-  failed: null,
+  paid:        null,
+  failed:      null,
 };
 
 interface StorePublic {
   transfer_info?: string;
+  transfer_cbu?: string;
+  transfer_alias?: string;
+  transfer_bank?: string;
+  transfer_owner?: string;
+  transfer_cuit?: string;
+}
+
+function TransferInfo({ store }: { store: StorePublic }) {
+  const fields = [
+    { label: 'CBU',     value: store.transfer_cbu },
+    { label: 'Alias',   value: store.transfer_alias },
+    { label: 'Banco',   value: store.transfer_bank },
+    { label: 'Titular', value: store.transfer_owner },
+    { label: 'CUIT',    value: store.transfer_cuit },
+  ].filter((f) => f.value);
+
+  if (fields.length > 0) {
+    return (
+      <div style={{ marginTop: '16px', padding: '16px', background: 'var(--color-brand-50)', border: '1px solid var(--color-brand-200)', borderRadius: 'var(--radius-md)' }}>
+        <Text variant="body-sm" weight="semibold" as="p" style={{ marginBottom: '12px' }}>
+          Datos para transferir:
+        </Text>
+        <dl style={{ margin: 0, display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '6px 16px' }}>
+          {fields.map((f) => (
+            <>
+              <dt key={`dt-${f.label}`} style={{ fontWeight: 600, fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-muted)' }}>{f.label}</dt>
+              <dd key={`dd-${f.label}`} style={{ margin: 0, fontSize: 'var(--font-size-sm)', fontFamily: 'monospace', wordBreak: 'break-all' }}>{f.value}</dd>
+            </>
+          ))}
+        </dl>
+      </div>
+    );
+  }
+
+  if (store.transfer_info) {
+    return (
+      <div style={{ marginTop: '16px', padding: '16px', background: 'var(--color-brand-50)', border: '1px solid var(--color-brand-200)', borderRadius: 'var(--radius-md)' }}>
+        <Text variant="body-sm" weight="semibold" as="p" style={{ marginBottom: '8px' }}>Datos para transferir:</Text>
+        <Text variant="body-sm" as="p" style={{ whiteSpace: 'pre-wrap' }}>{store.transfer_info}</Text>
+      </div>
+    );
+  }
+
+  return null;
 }
 
 export default function OrderDetailPage() {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
   const { currency } = useStoreConfig();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [order, setOrder] = useState<Order | null>(null);
-  const [storeInfo, setStoreInfo] = useState<StorePublic | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [order, setOrder]           = useState<Order | null>(null);
+  const [storeInfo, setStoreInfo]   = useState<StorePublic | null>(null);
+  const [loading, setLoading]       = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
-  const [confirmModal, setConfirmModal] = useState<'notify' | 'cancel' | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchOrder = useCallback(async () => {
-    try {
-      const { data } = await orders.getById(id);
-      setOrder(data);
-    } catch {
-      setOrder(null);
-    }
-  }, [id]);
+  const [confirmModal, setConfirmModal]   = useState<'notify' | 'cancel' | null>(null);
+  const [error, setError]           = useState<string | null>(null);
+  const [voucher, setVoucher]       = useState<File | null>(null);
+  const [voucherPreview, setVoucherPreview] = useState<string | null>(null);
 
   useEffect(() => {
     const role = getAccessTokenRole();
-    if (!role) {
-      router.replace('/iniciar-sesion');
-      return;
-    }
-    if (role !== 'Customer') {
-      router.replace('/productos');
-      return;
-    }
+    if (!role) { router.replace('/iniciar-sesion'); return; }
+    if (role !== 'Customer') { router.replace('/productos'); return; }
 
     async function load() {
       setLoading(true);
@@ -94,17 +126,31 @@ export default function OrderDetailPage() {
         setLoading(false);
       }
     }
-
     load();
   }, [id, router]);
+
+  function handleVoucherChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null;
+    setVoucher(file);
+    if (voucherPreview) URL.revokeObjectURL(voucherPreview);
+    setVoucherPreview(file ? URL.createObjectURL(file) : null);
+  }
+
+  function openNotifyModal() {
+    setVoucher(null);
+    setVoucherPreview(null);
+    setConfirmModal('notify');
+  }
 
   async function handleNotifyPayment() {
     setActionLoading(true);
     setError(null);
     try {
-      const { data } = await orders.notifyPayment(id);
+      const { data } = await orders.notifyPayment(id, voucher);
       setOrder(data);
       setConfirmModal(null);
+      setVoucher(null);
+      setVoucherPreview(null);
     } catch {
       setError('No se pudo notificar el pago. Intentá de nuevo.');
     } finally {
@@ -119,7 +165,6 @@ export default function OrderDetailPage() {
       const { data } = await orders.cancel(id);
       setOrder(data);
       setConfirmModal(null);
-      void fetchOrder();
     } catch {
       setError('No se pudo cancelar el pedido. Intentá de nuevo.');
     } finally {
@@ -154,9 +199,13 @@ export default function OrderDetailPage() {
     );
   }
 
-  const canNotify = order.paymentStatus === 'pending' && order.status === 'new';
-  const canCancel = order.paymentStatus !== 'paid' && !['cancelled', 'delivered'].includes(order.status);
+  const canNotify   = order.paymentStatus === 'pending' && order.status === 'new';
+  const canCancel   = order.paymentStatus !== 'paid' && !['cancelled', 'delivered'].includes(order.status);
   const paymentNote = PAYMENT_NOTE[order.paymentStatus];
+  const hasTransferData = storeInfo && (
+    storeInfo.transfer_cbu || storeInfo.transfer_alias || storeInfo.transfer_bank ||
+    storeInfo.transfer_owner || storeInfo.transfer_cuit || storeInfo.transfer_info
+  );
 
   return (
     <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
@@ -230,13 +279,17 @@ export default function OrderDetailPage() {
               <Text variant="body-sm" color="muted" as="p" style={{ marginTop: '8px' }}>{paymentNote}</Text>
             )}
 
-            {order.paymentStatus === 'pending' && storeInfo?.transfer_info && (
-              <div style={{ marginTop: '16px', padding: '16px', background: 'var(--color-brand-50)', border: '1px solid var(--color-brand-200)', borderRadius: 'var(--radius-md)' }}>
-                <Text variant="body-sm" weight="semibold" as="p" style={{ marginBottom: '8px' }}>
-                  Datos para transferir:
-                </Text>
-                <Text variant="body-sm" as="p" style={{ whiteSpace: 'pre-wrap' }}>{storeInfo.transfer_info}</Text>
+            {order.paymentProofUrl && order.paymentStatus !== 'pending' && (
+              <div style={{ marginTop: '12px' }}>
+                <Text variant="body-sm" color="muted" as="p" style={{ marginBottom: '6px' }}>Comprobante adjunto:</Text>
+                <a href={order.paymentProofUrl} target="_blank" rel="noopener noreferrer">
+                  <Image src={order.paymentProofUrl} alt="Comprobante de transferencia" width={120} height={80} style={{ objectFit: 'cover', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border-default)' }} />
+                </a>
               </div>
+            )}
+
+            {order.paymentStatus === 'pending' && hasTransferData && (
+              <TransferInfo store={storeInfo!} />
             )}
           </section>
 
@@ -252,11 +305,7 @@ export default function OrderDetailPage() {
           {(canNotify || canCancel) && (
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
               {canNotify && (
-                <StoreButton
-                  size="md"
-                  onClick={() => setConfirmModal('notify')}
-                  disabled={actionLoading}
-                >
+                <StoreButton size="md" onClick={openNotifyModal} disabled={actionLoading}>
                   Ya transferí
                 </StoreButton>
               )}
@@ -277,13 +326,43 @@ export default function OrderDetailPage() {
         </div>
       </div>
 
-      {/* Confirm notify payment modal */}
-      <Modal open={confirmModal === 'notify'} size="sm" onClose={() => setConfirmModal(null)}>
+      {/* Notify payment modal */}
+      <Modal open={confirmModal === 'notify'} size="sm" onClose={() => !actionLoading && setConfirmModal(null)}>
         <Modal.Header>Confirmar pago</Modal.Header>
         <Modal.Body>
-          <Text variant="body-sm" as="p">
+          <Text variant="body-sm" as="p" style={{ marginBottom: '16px' }}>
             ¿Confirmás que ya realizaste la transferencia? El vendedor la verificará y confirmará tu pedido.
           </Text>
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={handleVoucherChange}
+          />
+
+          {voucherPreview ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Image src={voucherPreview} alt="Comprobante" width={72} height={72} style={{ objectFit: 'cover', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border-default)', flexShrink: 0 }} />
+              <div>
+                <Text variant="caption" color="muted" as="p">{voucher?.name}</Text>
+                <button
+                  onClick={() => { setVoucher(null); setVoucherPreview(null); if (fileInputRef.current) fileInputRef.current.value = ''; }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-error-600)', fontSize: 'var(--font-size-sm)', padding: 0 }}
+                >
+                  Quitar
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              style={{ width: '100%', padding: '10px', border: '1px dashed var(--color-border-default)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-subtle)', cursor: 'pointer', color: 'var(--color-fg-muted)', fontSize: 'var(--font-size-sm)' }}
+            >
+              + Adjuntar comprobante (opcional)
+            </button>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <StoreButton variant="ghost" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>
@@ -295,27 +374,27 @@ export default function OrderDetailPage() {
         </Modal.Footer>
       </Modal>
 
-      {/* Confirm cancel modal */}
+      {/* Cancel modal */}
       <Modal open={confirmModal === 'cancel'} size="sm" onClose={() => setConfirmModal(null)}>
-          <Modal.Header>Cancelar pedido</Modal.Header>
-          <Modal.Body>
-            <Text variant="body-sm" as="p">
-              ¿Estás seguro de que querés cancelar este pedido? Esta acción no se puede deshacer.
-            </Text>
-          </Modal.Body>
-          <Modal.Footer>
-            <StoreButton variant="ghost" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>
-              Volver
-            </StoreButton>
-            <StoreButton
-              size="md"
-              onClick={handleCancel}
-              disabled={actionLoading}
-              style={{ background: 'var(--color-error-600)', borderColor: 'var(--color-error-600)' }}
-            >
-              {actionLoading ? 'Cancelando...' : 'Cancelar pedido'}
-            </StoreButton>
-          </Modal.Footer>
+        <Modal.Header>Cancelar pedido</Modal.Header>
+        <Modal.Body>
+          <Text variant="body-sm" as="p">
+            ¿Estás seguro de que querés cancelar este pedido? Esta acción no se puede deshacer.
+          </Text>
+        </Modal.Body>
+        <Modal.Footer>
+          <StoreButton variant="ghost" size="md" onClick={() => setConfirmModal(null)} disabled={actionLoading}>
+            Volver
+          </StoreButton>
+          <StoreButton
+            size="md"
+            onClick={handleCancel}
+            disabled={actionLoading}
+            style={{ background: 'var(--color-error-600)', borderColor: 'var(--color-error-600)' }}
+          >
+            {actionLoading ? 'Cancelando...' : 'Cancelar pedido'}
+          </StoreButton>
+        </Modal.Footer>
       </Modal>
     </main>
   );

@@ -40,6 +40,7 @@ export interface Order {
   paymentStatus: PaymentStatus;
   status: OrderStatus;
   notes: string;
+  paymentProofUrl: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -80,8 +81,16 @@ export const orders = {
   getById: (id: string) =>
     apiClient.get<Order>(`${BASE}/${id}`),
 
-  notifyPayment: (id: string) =>
-    apiClient.patch<Order>(`${BASE}/${id}/notify-payment`, {}),
+  notifyPayment: (id: string, voucher?: File | null) => {
+    if (voucher) {
+      const form = new FormData();
+      form.append('voucher', voucher);
+      return apiClient.patch<Order>(`${BASE}/${id}/notify-payment`, form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+    }
+    return apiClient.patch<Order>(`${BASE}/${id}/notify-payment`, {});
+  },
 
   cancel: (id: string) =>
     apiClient.patch<Order>(`${BASE}/${id}/cancel`, {}),
