@@ -63,7 +63,7 @@ export function useCheckoutForm() {
         setForm((prev) => ({ ...prev, ...splitAddress(def) }));
       }
     }).catch(() => {});
-  }, [router]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps — router is stable in practice but not guaranteed; auth check runs once on mount
 
   function set(field: keyof CheckoutForm, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));

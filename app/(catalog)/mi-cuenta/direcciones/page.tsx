@@ -7,11 +7,11 @@ import { StoreInput }        from '@/components/ui/StoreInput';
 import { StoreSelect }       from '@/components/ui/StoreSelect';
 import { AddressCard }            from '@/components/direcciones/AddressCard';
 import { AddressSlotsIndicator }  from '@/components/direcciones/AddressSlotsIndicator';
-import { PROVINCES }              from '@/lib/constants';
+import { PROVINCES, ADDRESS_MAX } from '@/lib/constants';
 import { addresses } from '@/utils/api/addresses';
 import type { Address, AddressPayload } from '@/utils/api/addresses';
 
-const MAX = 5;
+const MAX = ADDRESS_MAX;
 
 const Req = () => (
   <span style={{ color: 'var(--color-error-500)', marginLeft: '2px' }} aria-hidden="true">*</span>

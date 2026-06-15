@@ -1,6 +1,7 @@
 import { Text } from 'zoui';
+import { ADDRESS_MAX } from '@/lib/constants';
 
-const MAX = 5;
+const MAX = ADDRESS_MAX;
 
 interface AddressSlotsIndicatorProps {
   count: number;

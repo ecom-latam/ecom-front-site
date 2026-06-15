@@ -1,3 +1,5 @@
+export const ADDRESS_MAX = 5;
+
 export const PROVINCES = [
   'Buenos Aires',
   'Catamarca',
