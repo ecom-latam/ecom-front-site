@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
 
@@ -106,15 +106,6 @@ export default function OrderDetailPage() {
   const [voucher, setVoucher]       = useState<File | null>(null);
   const [voucherPreview, setVoucherPreview] = useState<string | null>(null);
 
-  const fetchOrder = useCallback(async () => {
-    try {
-      const { data } = await orders.getById(id);
-      setOrder(data);
-    } catch {
-      setOrder(null);
-    }
-  }, [id]);
-
   useEffect(() => {
     const role = getAccessTokenRole();
     if (!role) { router.replace('/iniciar-sesion'); return; }
@@ -174,7 +165,6 @@ export default function OrderDetailPage() {
       const { data } = await orders.cancel(id);
       setOrder(data);
       setConfirmModal(null);
-      void fetchOrder();
     } catch {
       setError('No se pudo cancelar el pedido. Intentá de nuevo.');
     } finally {
