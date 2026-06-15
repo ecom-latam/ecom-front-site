@@ -89,6 +89,7 @@ function ReviewCard({
   review: ProductReview;
   starVariant: StarRatingVariant;
 }) {
+  const { initial, name } = getBuyerDisplay(review.buyerEmail);
   return (
     <div
       style={{
@@ -103,56 +104,49 @@ function ReviewCard({
     >
       {/* Author row */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        {(() => {
-          const { initial, name } = getBuyerDisplay(review.buyerEmail);
-          return (
-            <>
-              <div
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  background: 'var(--color-brand-100)',
-                  color: 'var(--color-brand-700)',
-                  fontFamily: 'var(--font-ui)',
-                  fontWeight: 600,
-                  fontSize: '14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}
-              >
-                {initial}
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-ui)',
-                    fontSize: '13px',
-                    fontWeight: 600,
-                    color: 'var(--color-fg-primary)',
-                    textTransform: 'capitalize',
-                  }}
-                >
-                  {name}
-                </span>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-ui)',
-                    fontSize: '12px',
-                    color: 'var(--color-fg-disabled)',
-                  }}
-                >
-                  {formatDate(review.createdAt)}
-                </span>
-              </div>
-              <div style={{ marginLeft: 'auto' }}>
-                <StarRating value={review.rating} readonly size="sm" variant={starVariant} />
-              </div>
-            </>
-          );
-        })()}
+        <div
+          style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            background: 'var(--color-brand-100)',
+            color: 'var(--color-brand-700)',
+            fontFamily: 'var(--font-ui)',
+            fontWeight: 600,
+            fontSize: '14px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+          }}
+        >
+          {initial}
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+          <span
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '13px',
+              fontWeight: 600,
+              color: 'var(--color-fg-primary)',
+              textTransform: 'capitalize',
+            }}
+          >
+            {name}
+          </span>
+          <span
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '12px',
+              color: 'var(--color-fg-disabled)',
+            }}
+          >
+            {formatDate(review.createdAt)}
+          </span>
+        </div>
+        <div style={{ marginLeft: 'auto' }}>
+          <StarRating value={review.rating} readonly size="sm" variant={starVariant} />
+        </div>
       </div>
 
       {review.title && (
