@@ -1,5 +1,4 @@
 import { Text, OptionCard } from 'zoui';
-import type { OptionCardVariant } from 'zoui';
 import type { Address } from '@/utils/api/addresses';
 import type { CheckoutForm } from '@/hooks/useCheckoutForm';
 import { StoreInput }       from '@/components/ui/StoreInput';
@@ -15,10 +14,9 @@ interface ShippingDataSectionProps {
   savedAddresses:     Address[];
   selectedAddressId:  string | 'new';
   onApplyAddress:     (id: string) => void;
-  variant:            OptionCardVariant;
 }
 
-export function ShippingDataSection({ form, set, shippingMethod, savedAddresses, selectedAddressId, onApplyAddress, variant }: ShippingDataSectionProps) {
+export function ShippingDataSection({ form, set, shippingMethod, savedAddresses, selectedAddressId, onApplyAddress }: ShippingDataSectionProps) {
   return (
     <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px' }}>
       <Text variant="heading-3" as="h2" style={{ marginBottom: '20px' }}>
@@ -30,7 +28,6 @@ export function ShippingDataSection({ form, set, shippingMethod, savedAddresses,
           {savedAddresses.map((addr) => (
             <OptionCard
               key={addr._id}
-              variant={variant}
               name="savedAddress"
               value={addr._id}
               label={addr.label + (addr.isDefault ? ' · Predeterminada' : '')}
@@ -40,7 +37,6 @@ export function ShippingDataSection({ form, set, shippingMethod, savedAddresses,
             />
           ))}
           <OptionCard
-            variant={variant}
             name="savedAddress"
             value="new"
             label="Ingresar nueva dirección"

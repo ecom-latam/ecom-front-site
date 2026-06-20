@@ -10,7 +10,6 @@ import type { PaymentMethod, ShippingMethod } from '@/utils/api/orders';
 import { addresses as addressesApi } from '@/utils/api/addresses';
 import type { Address } from '@/utils/api/addresses';
 import { payment as paymentApi } from '@/utils/api/payment';
-import type { OptionCardVariant } from 'zoui';
 import { splitAddress } from '@/lib/checkout';
 
 export interface CheckoutForm {
@@ -37,11 +36,10 @@ const INITIAL_FORM: CheckoutForm = {
 export function useCheckoutForm() {
   const router = useRouter();
   const { items, itemCount, clearCart } = useCart();
-  const { currency, mp_public_key, theme } = useStoreConfig();
+  const { currency, mp_public_key } = useStoreConfig();
 
-  const mpAvailable       = !!mp_public_key && currency === 'ARS';
-  const optionCardVariant = (theme ?? 'outlined') as OptionCardVariant;
-  const subtotal          = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const mpAvailable = !!mp_public_key && currency === 'ARS';
+  const subtotal     = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const [ready,             setReady]             = useState(false);
   const [submitting,        setSubmitting]        = useState(false);
@@ -150,7 +148,7 @@ export function useCheckoutForm() {
     ready, submitting, error,
     savedAddresses, selectedAddressId,
     form, set, applyAddress, handleSubmit,
-    mpAvailable, optionCardVariant,
+    mpAvailable,
     subtotal, items, itemCount, currency,
   };
 }

@@ -1,22 +1,19 @@
 import { Text, OptionCard } from 'zoui';
-import type { OptionCardVariant } from 'zoui';
 import type { PaymentMethod } from '@/utils/api/orders';
 import { MercadoPagoLogo } from './MercadoPagoLogo';
 
 interface PaymentMethodSectionProps {
   value:        PaymentMethod;
-  variant:      OptionCardVariant;
   mpAvailable:  boolean;
   onChange:     (method: PaymentMethod) => void;
 }
 
-export function PaymentMethodSection({ value, variant, mpAvailable, onChange }: PaymentMethodSectionProps) {
+export function PaymentMethodSection({ value, mpAvailable, onChange }: PaymentMethodSectionProps) {
   return (
     <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px' }}>
       <Text variant="heading-3" as="h2" style={{ marginBottom: '20px' }}>Método de pago</Text>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <OptionCard
-          variant={variant}
           name="paymentMethod"
           value="transfer"
           label="Transferencia bancaria"
@@ -27,7 +24,6 @@ export function PaymentMethodSection({ value, variant, mpAvailable, onChange }: 
         />
         {mpAvailable && (
           <OptionCard
-            variant={variant}
             name="paymentMethod"
             value="mp"
             label="Mercado Pago"
