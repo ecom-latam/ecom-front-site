@@ -6,15 +6,13 @@ import { useRouter } from 'next/navigation';
 
 import { useCart } from '@/context/CartContext';
 import { Drawer, Button, Text, Modal } from 'zoui';
-import type { ButtonVariant } from 'zoui';
 import { useStoreConfig } from '@/context/StoreConfigContext';
 import { formatPrice } from '@/lib/format';
 
 export function CartDrawer() {
   const router = useRouter();
   const { items, isLoading, drawerOpen, closeDrawer, updateItem, removeItem } = useCart();
-  const { theme, currency } = useStoreConfig();
-  const btnVariant = (theme ?? 'outlined') as ButtonVariant;
+  const { currency } = useStoreConfig();
   const [itemToRemove, setItemToRemove] = useState<string | null>(null);
   const [stockLimits, setStockLimits] = useState<Record<string, number>>({});
 
@@ -118,7 +116,6 @@ export function CartDrawer() {
               Ver carrito completo
             </Button>
             <Button
-              variant={btnVariant}
               size="md"
               style={{ justifyContent: 'center' }}
               onClick={() => { closeDrawer(); router.push('/checkout'); }}
@@ -139,7 +136,7 @@ export function CartDrawer() {
         <Button emphasis="ghost" size="md" onClick={() => setItemToRemove(null)}>
           Cancelar
         </Button>
-        <Button variant={btnVariant} size="md" onClick={() => { removeItem(itemToRemove!); setItemToRemove(null); }}>
+        <Button size="md" onClick={() => { removeItem(itemToRemove!); setItemToRemove(null); }}>
           Eliminar
         </Button>
       </Modal.Footer>

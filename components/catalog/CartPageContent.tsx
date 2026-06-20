@@ -6,15 +6,13 @@ import { useRouter } from 'next/navigation';
 
 import { useCart } from '@/context/CartContext';
 import { Button, Text, Modal } from 'zoui';
-import type { ButtonVariant } from 'zoui';
 import { useStoreConfig } from '@/context/StoreConfigContext';
 import { formatPrice } from '@/lib/format';
 
 export function CartPageContent() {
   const router = useRouter();
   const { items, isLoading, updateItem, removeItem, clearCart } = useCart();
-  const { theme, currency } = useStoreConfig();
-  const btnVariant = (theme ?? 'outlined') as ButtonVariant;
+  const { currency } = useStoreConfig();
   const [itemToRemove, setItemToRemove] = useState<string | null>(null);
   const [stockLimits, setStockLimits] = useState<Record<string, number>>({});
 
@@ -39,7 +37,7 @@ export function CartPageContent() {
       <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
           <Text variant="body" color="muted" style={{ marginBottom: '16px' }}>Tu carrito está vacío.</Text>
-          <Button variant={btnVariant} size="md" onClick={() => router.push('/productos')}>
+          <Button size="md" onClick={() => router.push('/productos')}>
             Ver productos
           </Button>
         </div>
@@ -157,7 +155,6 @@ export function CartPageContent() {
               </div>
 
               <Button
-                variant={btnVariant}
                 size="md"
                 onClick={() => router.push('/checkout')}
                 style={{ width: '100%', justifyContent: 'center' }}
@@ -183,7 +180,7 @@ export function CartPageContent() {
         <Button emphasis="ghost" size="md" onClick={() => setItemToRemove(null)}>
           Cancelar
         </Button>
-        <Button variant={btnVariant} size="md" onClick={() => { removeItem(itemToRemove!); setItemToRemove(null); }}>
+        <Button size="md" onClick={() => { removeItem(itemToRemove!); setItemToRemove(null); }}>
           Eliminar
         </Button>
       </Modal.Footer>
