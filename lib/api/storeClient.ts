@@ -137,6 +137,9 @@ export interface StoreInfo {
   brand_hue?: number;
   brand_saturation?: number;
   brand_lightness?: number;
+  brand2_hue?: number | null;
+  brand2_saturation?: number | null;
+  brand2_lightness?: number | null;
   font_family?: string;
   currency?: 'ARS' | 'USD';
   theme?: string;
