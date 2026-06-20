@@ -16,7 +16,7 @@ export default function CheckoutPage() {
     ready, submitting, error,
     savedAddresses, selectedAddressId,
     form, set, applyAddress, handleSubmit,
-    mpAvailable, optionCardVariant,
+    mpAvailable,
     subtotal, items, itemCount, currency,
   } = useCheckoutForm();
 
@@ -46,7 +46,6 @@ export default function CheckoutPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <ShippingMethodSection
               value={form.shippingMethod}
-              variant={optionCardVariant}
               onChange={(method) => set('shippingMethod', method)}
             />
             <ShippingDataSection
@@ -56,11 +55,9 @@ export default function CheckoutPage() {
               savedAddresses={savedAddresses}
               selectedAddressId={selectedAddressId}
               onApplyAddress={applyAddress}
-              variant={optionCardVariant}
             />
             <PaymentMethodSection
               value={form.paymentMethod}
-              variant={optionCardVariant}
               mpAvailable={mpAvailable}
               onChange={(method) => set('paymentMethod', method)}
             />

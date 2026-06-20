@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { brandScale, BRAND_STEPS } from 'zoui';
+import { brandScale, BRAND_STEPS, ZouiThemeProvider } from 'zoui';
 import type { SurfaceVariant } from 'zoui';
 import { StoreConfigContext } from '@/context/StoreConfigContext';
 import type { StoreConfig } from '@/context/StoreConfigContext';
@@ -116,9 +116,11 @@ export function DynamicStoreTheme({
 
   return (
     <StoreConfigContext.Provider value={config}>
-      <div className="zoui-surface" data-variant={backgroundVariant}>
-        {children}
-      </div>
+      <ZouiThemeProvider variant={config.theme}>
+        <div className="zoui-surface" data-variant={backgroundVariant}>
+          {children}
+        </div>
+      </ZouiThemeProvider>
     </StoreConfigContext.Provider>
   );
 }

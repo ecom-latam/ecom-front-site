@@ -5,11 +5,10 @@ import { useStoreConfig } from '@/context/StoreConfigContext';
 
 type Props = ComponentProps<typeof MoneyInput>;
 
-export function StoreMoneyInput({ variant, currency, ...props }: Props) {
-  const { theme, currency: storeCurrency } = useStoreConfig();
+export function StoreMoneyInput({ currency, ...props }: Props) {
+  const { currency: storeCurrency } = useStoreConfig();
   return (
     <MoneyInput
-      variant={(variant ?? theme ?? 'outlined') as Props['variant']}
       currency={currency ?? storeCurrency ?? 'ARS'}
       {...props}
     />

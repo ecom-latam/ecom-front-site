@@ -5,7 +5,6 @@ import { useMemo, useState } from 'react';
 import { useCart } from '@/context/CartContext';
 import type { Product, ProductVariant } from '@/lib/api/storeClient';
 import { Modal, Button, Text } from 'zoui';
-import type { ButtonVariant } from 'zoui';
 import { useStoreConfig } from '@/context/StoreConfigContext';
 import { formatPrice } from '@/lib/format';
 
@@ -49,8 +48,7 @@ function isValueAvailable(
 
 export function AddToCartModal({ product, open, onClose, initialQuantity = 1 }: Props) {
   const { addItem, openDrawer } = useCart();
-  const { theme, currency } = useStoreConfig();
-  const btnVariant = (theme ?? 'outlined') as ButtonVariant;
+  const { currency } = useStoreConfig();
 
   const optionNames = useMemo(
     () => product.linkedOptions.map((o) => o.storeOptionName),
@@ -163,7 +161,6 @@ export function AddToCartModal({ product, open, onClose, initialQuantity = 1 }: 
                       <Button
                         key={value}
                         size="md"
-                        variant={btnVariant}
                         emphasis={isSelected ? 'filled' : 'outlined'}
                         onClick={() => available && selectValue(name, value)}
                         disabled={!available}
@@ -193,7 +190,6 @@ export function AddToCartModal({ product, open, onClose, initialQuantity = 1 }: 
       </Modal.Body>
       <Modal.Footer>
         <Button
-          variant={btnVariant}
           size="md"
           onClick={handleConfirm}
           disabled={!canAddToCart || isSubmitting}
