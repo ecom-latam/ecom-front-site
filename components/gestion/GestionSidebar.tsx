@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { Sidebar } from 'zoui';
+import { useStoreConfig } from '@/context/StoreConfigContext';
 import type React from 'react';
 
 const ELEVATED_ROLES = ['Admin', 'Manager'];
@@ -12,6 +13,9 @@ interface NavItem {
   elevated: boolean;
   disabled?: boolean;
   icon: React.ReactNode;
+  // EC-560: si se setea, el item solo se muestra cuando el modulo
+  // correspondiente esta activo para el tipo de tienda (EC-558).
+  requires?: 'catalog' | 'purchases';
 }
 
 interface NavGroup {
@@ -72,15 +76,15 @@ const NAV_GROUPS: NavGroup[] = [
     { label: 'Resumen', href: '/gestion', elevated: false, icon: ICON.resumen },
   ] },
   { label: 'Ventas', items: [
-    { label: 'Pedidos',  href: '/gestion/pedidos',  elevated: false, icon: ICON.pedidos },
-    { label: 'Clientes', href: '/gestion/clientes', elevated: false, disabled: true, icon: ICON.clientes },
+    { label: 'Pedidos',  href: '/gestion/pedidos',  elevated: false, icon: ICON.pedidos, requires: 'purchases' },
+    { label: 'Clientes', href: '/gestion/clientes', elevated: false, disabled: true, icon: ICON.clientes, requires: 'purchases' },
   ] },
   { label: 'Catálogo', items: [
-    { label: 'Productos',  href: '/gestion/productos',  elevated: true, icon: ICON.productos },
-    { label: 'Categorías', href: '/gestion/categorias', elevated: true, icon: ICON.categorias },
+    { label: 'Productos',  href: '/gestion/productos',  elevated: true, icon: ICON.productos, requires: 'catalog' },
+    { label: 'Categorías', href: '/gestion/categorias', elevated: true, icon: ICON.categorias, requires: 'catalog' },
   ] },
   { label: 'Análisis', items: [
-    { label: 'Reportes', href: '/gestion/reportes', elevated: true, disabled: true, icon: ICON.reportes },
+    { label: 'Reportes', href: '/gestion/reportes', elevated: true, disabled: true, icon: ICON.reportes, requires: 'purchases' },
   ] },
   { label: 'Configuración', items: [
     { label: 'Configuración', href: '/gestion/configuracion', elevated: true, icon: ICON.configuracion },
@@ -94,6 +98,13 @@ interface Props {
 export function GestionSidebar({ role }: Props) {
   const pathname = usePathname();
   const isElevated = ELEVATED_ROLES.includes(role);
+  const { hasCatalog, hasPurchases } = useStoreConfig();
+
+  function itemVisible(item: NavItem): boolean {
+    if (item.requires === 'catalog') return hasCatalog !== false;
+    if (item.requires === 'purchases') return hasPurchases !== false;
+    return true;
+  }
 
   function renderItem(item: NavItem) {
     const isActive = item.href === '/gestion'
@@ -121,7 +132,7 @@ export function GestionSidebar({ role }: Props) {
   }
 
   const visibleGroups = NAV_GROUPS
-    .map((group) => ({ ...group, items: group.items.filter((i) => !i.elevated || isElevated) }))
+    .map((group) => ({ ...group, items: group.items.filter((i) => (!i.elevated || isElevated) && itemVisible(i)) }))
     .filter((group) => group.items.length > 0);
 
   return (
