@@ -176,8 +176,8 @@ function ProductDrawer({ product, categories, onClose, onSaved, onCreated }: Pro
     <Drawer open side="right" size="lg" onClose={onClose} label={savedProduct ? 'Editar producto' : 'Nuevo producto'}>
       <Drawer.Header>{savedProduct ? 'Editar producto' : 'Nuevo producto'}</Drawer.Header>
       <>
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <Drawer.Body style={{ paddingBottom: 0 }}>
+        <Drawer.Body>
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
             <Tabs.List>
               <Tabs.Trigger value="datos">Datos básicos</Tabs.Trigger>
               {hasProductId
@@ -187,90 +187,86 @@ function ProductDrawer({ product, categories, onClose, onSaved, onCreated }: Pro
                 ? <Tabs.Trigger value="variantes">Variantes</Tabs.Trigger>
                 : <LockedTrigger value="variantes">Variantes</LockedTrigger>}
             </Tabs.List>
-          </Drawer.Body>
 
-          <Tabs.Content value="datos">
-            <Drawer.Body style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <StoreInput
-                label="Nombre *"
-                value={form.name}
-                onChange={e => set('name', e.target.value)}
-                placeholder="Ej: Remera de algodón"
-                fullWidth
-                data-testid="prod-name-input"
-              />
-
-              <StoreTextarea
-                label="Descripción"
-                value={form.description ?? ''}
-                onChange={e => set('description', e.target.value)}
-                placeholder="Descripción del producto"
-                fullWidth
-              />
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <StoreMoneyInput
-                  label="Precio *"
-                  value={form.price}
-                  onValueChange={v => set('price', v ?? 0)}
+            <Tabs.Content value="datos">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <StoreInput
+                  label="Nombre *"
+                  value={form.name}
+                  onChange={e => set('name', e.target.value)}
+                  placeholder="Ej: Remera de algodón"
                   fullWidth
-                  data-testid="prod-price-input"
+                  data-testid="prod-name-input"
                 />
-                <StoreMoneyInput
-                  label="Precio de oferta"
-                  value={form.salePrice ?? null}
-                  onValueChange={v => set('salePrice', v)}
-                  placeholder="Opcional"
-                  fullWidth
-                  data-testid="prod-sale-price-input"
-                />
-              </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <StoreNumberInput
-                  label="Stock"
-                  value={form.stock ? String(form.stock) : ''}
-                  onChange={e => set('stock', parseInt(e.target.value, 10) || 0)}
+                <StoreTextarea
+                  label="Descripción"
+                  value={form.description ?? ''}
+                  onChange={e => set('description', e.target.value)}
+                  placeholder="Descripción del producto"
                   fullWidth
-                  data-testid="prod-stock-input"
                 />
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <StoreMoneyInput
+                    label="Precio *"
+                    value={form.price}
+                    onValueChange={v => set('price', v ?? 0)}
+                    fullWidth
+                    data-testid="prod-price-input"
+                  />
+                  <StoreMoneyInput
+                    label="Precio de oferta"
+                    value={form.salePrice ?? null}
+                    onValueChange={v => set('salePrice', v)}
+                    placeholder="Opcional"
+                    fullWidth
+                    data-testid="prod-sale-price-input"
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <StoreNumberInput
+                    label="Stock"
+                    value={form.stock ? String(form.stock) : ''}
+                    onChange={e => set('stock', parseInt(e.target.value, 10) || 0)}
+                    fullWidth
+                    data-testid="prod-stock-input"
+                  />
+                  <StoreSelect
+                    label="Categoría"
+                    value={form.categoryId || '__none__'}
+                    onValueChange={val => set('categoryId', val === '__none__' ? null : val)}
+                    options={[
+                      { value: '__none__', label: 'Sin categoría' },
+                      ...categories.map(c => ({ value: c._id, label: c.name })),
+                    ]}
+                    fullWidth
+                    data-testid="prod-category-select"
+                  />
+                </div>
+
                 <StoreSelect
-                  label="Categoría"
-                  value={form.categoryId || '__none__'}
-                  onValueChange={val => set('categoryId', val === '__none__' ? null : val)}
-                  options={[
-                    { value: '__none__', label: 'Sin categoría' },
-                    ...categories.map(c => ({ value: c._id, label: c.name })),
-                  ]}
+                  label="Estado"
+                  value={form.status}
+                  onValueChange={val => set('status', val as ProductStatus)}
+                  options={(Object.keys(STATUS_LABELS) as ProductStatus[])
+                    .filter(s => s !== 'archived')
+                    .map(s => ({ value: s, label: STATUS_LABELS[s] }))}
                   fullWidth
-                  data-testid="prod-category-select"
                 />
               </div>
+            </Tabs.Content>
 
-              <StoreSelect
-                label="Estado"
-                value={form.status}
-                onValueChange={val => set('status', val as ProductStatus)}
-                options={(Object.keys(STATUS_LABELS) as ProductStatus[])
-                  .filter(s => s !== 'archived')
-                  .map(s => ({ value: s, label: STATUS_LABELS[s] }))}
-                fullWidth
-              />
-            </Drawer.Body>
-          </Tabs.Content>
-
-          <Tabs.Content value="imagenes">
-            <Drawer.Body>
+            <Tabs.Content value="imagenes">
               <Text variant="body" color="secondary" tag="p">Próximamente: gestión de imágenes del producto.</Text>
-            </Drawer.Body>
-          </Tabs.Content>
+            </Tabs.Content>
 
-          <Tabs.Content value="variantes">
-            <Drawer.Body>
+            <Tabs.Content value="variantes">
               <Text variant="body" color="secondary" tag="p">Próximamente: gestión de variantes del producto.</Text>
-            </Drawer.Body>
-          </Tabs.Content>
-        </Tabs>
+            </Tabs.Content>
+          </Tabs>
+        </Drawer.Body>
 
         <Drawer.Footer style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           <StoreButton type="button" emphasis="outlined" size="md" onClick={onClose}>Cancelar</StoreButton>
