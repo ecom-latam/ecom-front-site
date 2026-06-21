@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -12,9 +12,14 @@ import { formatPrice } from '@/lib/format';
 export function CartPageContent() {
   const router = useRouter();
   const { items, isLoading, updateItem, removeItem, clearCart } = useCart();
-  const { currency } = useStoreConfig();
+  const { currency, hasPurchases } = useStoreConfig();
   const [itemToRemove, setItemToRemove] = useState<string | null>(null);
   const [stockLimits, setStockLimits] = useState<Record<string, number>>({});
+
+  // EC-559: tiendas sin el modulo de compras no tienen carrito.
+  useEffect(() => {
+    if (hasPurchases === false) router.replace('/productos');
+  }, [hasPurchases, router]);
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 

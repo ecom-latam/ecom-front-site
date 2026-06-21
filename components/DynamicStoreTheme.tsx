@@ -84,6 +84,10 @@ function toStoreConfig(raw: Record<string, unknown>): StoreConfig {
     interest_free:         raw.interest_free === true,
     ratings_enabled:       raw.ratings_enabled === true,
     reviews_enabled:       raw.reviews_enabled === true,
+    // EC-559: default true (tienda completa) si todavia no llego la
+    // respuesta fresca de ecom-page -- mismo default que aplica el backend.
+    hasCatalog:            raw.hasCatalog !== false,
+    hasPurchases:          raw.hasPurchases !== false,
   };
 }
 

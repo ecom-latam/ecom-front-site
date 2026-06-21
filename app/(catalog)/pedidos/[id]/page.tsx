@@ -94,7 +94,7 @@ function TransferInfo({ store }: { store: StorePublic }) {
 export default function OrderDetailPage() {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
-  const { currency } = useStoreConfig();
+  const { currency, hasPurchases } = useStoreConfig();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [order, setOrder]           = useState<Order | null>(null);
@@ -110,6 +110,8 @@ export default function OrderDetailPage() {
     const role = getAccessTokenRole();
     if (!role) { router.replace('/iniciar-sesion'); return; }
     if (role !== 'Customer') { router.replace('/productos'); return; }
+    // EC-559: tiendas sin el modulo de compras no tienen pedidos.
+    if (hasPurchases === false) { router.replace('/productos'); return; }
 
     async function load() {
       setLoading(true);
@@ -127,7 +129,7 @@ export default function OrderDetailPage() {
       }
     }
     load();
-  }, [id, router]);
+  }, [id, router, hasPurchases]);
 
   function handleVoucherChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] ?? null;
