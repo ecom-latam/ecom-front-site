@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { redirect } from 'next/navigation';
 
 import { getCategories, getProducts, getStoreInfo } from '@/lib/api/storeClient';
 import { Text } from 'zoui';
@@ -16,6 +17,11 @@ export default async function ProductosPage({ searchParams }: Props) {
     getStoreInfo(),
     getCategories(),
   ]);
+
+  // EC-559: tiendas tipo "informativa" no tienen catalogo.
+  if (storeInfo?.hasCatalog === false) {
+    redirect('/');
+  }
 
   const productsRes = await getProducts({
     page,

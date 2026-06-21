@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { cookies } from 'next/headers';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 import { Breadcrumbs } from 'zoui';
 import { PDPInfoPanel } from '@/components/catalog/PDPInfoPanel';
@@ -46,6 +46,11 @@ export default async function ProductoPage({ searchParams }: Props) {
     getCategories(),
     getStoreInfo(),
   ]);
+
+  // EC-559: tiendas tipo "informativa" no tienen catalogo.
+  if (storeInfo?.hasCatalog === false) {
+    redirect('/');
+  }
 
   const ratingsActive = storeInfo?.ratings_enabled || storeInfo?.reviews_enabled;
   const reviewsData = ratingsActive ? await getProductReviews(id, 3) : null;

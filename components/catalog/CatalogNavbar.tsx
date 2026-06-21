@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useCart } from '@/context/CartContext';
+import { useStoreConfig } from '@/context/StoreConfigContext';
 import { getAccessTokenRole } from '@/utils/helpers';
 import { Navbar } from 'zoui';
 
@@ -12,6 +13,7 @@ const MANAGEMENT_ROLES = ['Admin', 'Manager', 'Seller'];
 export function CatalogNavbar() {
   const router = useRouter();
   const { itemCount, openDrawer } = useCart();
+  const { hasCatalog, hasPurchases } = useStoreConfig();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [canManage,  setCanManage]  = useState(false);
@@ -33,8 +35,10 @@ export function CatalogNavbar() {
     document.cookie = `ui-theme=${next}; path=/; max-age=31536000`;
   }, [isDark]);
 
+  // EC-559: "Inicio" solo tiene sentido como link separado en tiendas con
+  // catalogo (la home es informativa por default y el logo ya apunta ahi).
   const links = [
-    { label: 'Inicio', onClick: () => router.push('/') },
+    ...(hasCatalog !== false ? [{ label: 'Inicio', onClick: () => router.push('/') }] : []),
     ...(canManage ? [{ label: 'Gestión', onClick: () => router.push('/gestion') }] : []),
   ];
 
@@ -42,9 +46,9 @@ export function CatalogNavbar() {
     <Navbar
       storeName="Tienda"
       links={links}
-      onLogoClick={() => router.push('/productos')}
+      onLogoClick={() => router.push(hasCatalog !== false ? '/productos' : '/')}
       cartCount={Math.min(itemCount, 99)}
-      onCartClick={isCustomer ? openDrawer : undefined}
+      onCartClick={isCustomer && hasPurchases !== false ? openDrawer : undefined}
       isLoggedIn={isLoggedIn}
       isDark={isDark}
       onThemeToggle={toggleTheme}

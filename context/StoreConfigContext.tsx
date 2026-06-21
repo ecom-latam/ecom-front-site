@@ -19,6 +19,8 @@ export interface StoreConfig {
   interest_free?: boolean;
   ratings_enabled?: boolean;
   reviews_enabled?: boolean;
+  hasCatalog?: boolean;
+  hasPurchases?: boolean;
 }
 
 export const StoreConfigContext = createContext<StoreConfig>({});

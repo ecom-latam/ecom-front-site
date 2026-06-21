@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Text } from 'zoui';
 import { StoreButton }            from '@/components/ui/StoreButton';
@@ -9,9 +10,11 @@ import { PaymentMethodSection }   from '@/components/checkout/PaymentMethodSecti
 import { NotesSection }           from '@/components/checkout/NotesSection';
 import { OrderSummary }           from '@/components/checkout/OrderSummary';
 import { useCheckoutForm }        from '@/hooks/useCheckoutForm';
+import { useStoreConfig }         from '@/context/StoreConfigContext';
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const { hasPurchases } = useStoreConfig();
   const {
     ready, submitting, error,
     savedAddresses, selectedAddressId,
@@ -19,6 +22,11 @@ export default function CheckoutPage() {
     mpAvailable,
     subtotal, items, itemCount, currency,
   } = useCheckoutForm();
+
+  // EC-559: tiendas sin el modulo de compras no tienen checkout.
+  useEffect(() => {
+    if (hasPurchases === false) router.replace('/productos');
+  }, [hasPurchases, router]);
 
   if (!ready) return null;
 

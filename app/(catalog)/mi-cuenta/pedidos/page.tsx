@@ -31,11 +31,14 @@ const STATUS_TONE: Record<string, BadgeTone> = {
 
 export default function MiCuentaPedidosPage() {
   const router = useRouter();
-  const { currency } = useStoreConfig();
+  const { currency, hasPurchases } = useStoreConfig();
   const [orderList, setOrderList] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // EC-559: tiendas sin el modulo de compras no tienen pedidos.
+    if (hasPurchases === false) { router.replace('/productos'); return; }
+
     orders.getMy().then(({ data }) => {
       setOrderList(data.data ?? []);
     }).catch(() => {
@@ -43,7 +46,7 @@ export default function MiCuentaPedidosPage() {
     }).finally(() => {
       setLoading(false);
     });
-  }, []);
+  }, [hasPurchases, router]);
 
   if (loading) {
     return (
