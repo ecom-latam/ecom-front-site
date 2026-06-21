@@ -108,7 +108,7 @@ const SECTION_LOCKED_MESSAGE = 'Guardá los datos básicos primero para habilita
 
 function LockedTrigger({ value, children }: { value: string; children: string }) {
   return (
-    <Tooltip content={SECTION_LOCKED_MESSAGE}>
+    <Tooltip content={SECTION_LOCKED_MESSAGE} side="bottom">
       <Tabs.Trigger value={value} disabled>{children}</Tabs.Trigger>
     </Tooltip>
   );
