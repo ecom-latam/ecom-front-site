@@ -9,7 +9,7 @@ import { useStoreConfig } from '@/context/StoreConfigContext';
 const MANAGEMENT_ROLES = ['Admin', 'Manager', 'Seller'];
 
 // EC-560: secciones de /gestion que solo aplican a tiendas con el modulo activo.
-const CATALOG_PATHS = ['/gestion/productos', '/gestion/categorias'];
+const CATALOG_PATHS = ['/gestion/productos', '/gestion/categorias', '/gestion/opciones'];
 const PURCHASES_PATHS = ['/gestion/pedidos', '/gestion/clientes', '/gestion/reportes'];
 
 export default function GestionLayout({ children }: { children: React.ReactNode }) {
