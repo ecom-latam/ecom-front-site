@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { cookies } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 
 import { Breadcrumbs } from 'zoui';
-import { PDPInfoPanel } from '@/components/catalog/PDPInfoPanel';
+import { ProductDetailSection } from '@/components/catalog/ProductDetailSection';
 import { RelatedProducts } from '@/components/catalog/RelatedProducts';
 import { RatingsBlock } from '@/components/catalog/RatingsBlock';
 import { getCategories, getProduct, getProductReviews, getStoreInfo } from '@/lib/api/storeClient';
@@ -56,8 +55,6 @@ export default async function ProductoPage({ searchParams }: Props) {
   const reviewsData = ratingsActive ? await getProductReviews(id, 3) : null;
 
   const category = categories.find((c) => c._id === String(product.categoryId));
-  const mainImage = product.images.find((img) => img.isMain) ?? product.images[0];
-  const secondaryImages = product.images.filter((img) => img !== mainImage);
   const displayPrice = product.salePrice ?? product.price;
   const hasDiscount = product.salePrice !== null && product.salePrice < product.price;
 
@@ -95,88 +92,27 @@ export default async function ProductoPage({ searchParams }: Props) {
           <Breadcrumbs items={breadcrumbItems} />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-
-          {/* Gallery — left col */}
-          <div className="flex flex-col gap-3">
-            <div
-              className="rounded-lg overflow-hidden"
-              style={{
-                background: 'var(--color-bg-subtle)',
-                aspectRatio: '4 / 5',
-                position: 'relative',
-              }}
-            >
-              {mainImage ? (
-                <Image
-                  src={mainImage.url}
-                  alt={product.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
-                  priority
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-6xl" style={{ color: 'var(--color-fg-disabled)' }}>
-                  □
-                </div>
-              )}
-            </div>
-
-            {secondaryImages.length > 0 && (
-              <div className="flex gap-2 overflow-x-auto">
-                {secondaryImages.map((img, i) => (
-                  <div
-                    key={i}
-                    className="flex-shrink-0 rounded-md overflow-hidden"
-                    style={{
-                      width: '72px',
-                      height: '90px',
-                      background: 'var(--color-bg-subtle)',
-                      position: 'relative',
-                    }}
-                  >
-                    <Image
-                      src={img.url}
-                      alt={`${product.name} ${i + 2}`}
-                      fill
-                      sizes="72px"
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Info — right col, sticky, client component */}
-          <div
-            className="flex flex-col"
-            style={{ position: 'sticky', top: '80px', alignSelf: 'start' }}
-          >
-            <PDPInfoPanel
-              product={product}
-              hasSession={hasSession}
-              defaultPrice={displayPrice}
-              defaultStock={defaultStock}
-              hasDiscount={hasDiscount}
-              discountPercent={discountPercent}
-              showInstallments={showInstallments}
-              installmentsCount={installmentsCount}
-              interestFree={interestFree}
-              freeShippingMin={storeInfo?.free_shipping_min_amount}
-              lowStockThreshold={storeInfo?.low_stock_threshold ?? 0}
-              shareEnabled={storeInfo?.share_button_enabled ?? false}
-              buyNowEnabled={storeInfo?.buy_now_enabled ?? false}
-              returnsEnabled={storeInfo?.store_policies?.returns_enabled}
-              returnDays={storeInfo?.store_policies?.return_days}
-              warrantyEnabled={storeInfo?.store_policies?.warranty_enabled}
-              warrantyMonths={storeInfo?.store_policies?.warranty_months}
-              categoryName={category?.name}
-              categoryId={category?._id}
-            />
-          </div>
-        </div>
+        <ProductDetailSection
+          product={product}
+          hasSession={hasSession}
+          defaultPrice={displayPrice}
+          defaultStock={defaultStock}
+          hasDiscount={hasDiscount}
+          discountPercent={discountPercent}
+          showInstallments={showInstallments}
+          installmentsCount={installmentsCount}
+          interestFree={interestFree}
+          freeShippingMin={storeInfo?.free_shipping_min_amount}
+          lowStockThreshold={storeInfo?.low_stock_threshold ?? 0}
+          shareEnabled={storeInfo?.share_button_enabled ?? false}
+          buyNowEnabled={storeInfo?.buy_now_enabled ?? false}
+          returnsEnabled={storeInfo?.store_policies?.returns_enabled}
+          returnDays={storeInfo?.store_policies?.return_days}
+          warrantyEnabled={storeInfo?.store_policies?.warranty_enabled}
+          warrantyMonths={storeInfo?.store_policies?.warranty_months}
+          categoryName={category?.name}
+          categoryId={category?._id}
+        />
 
         {storeInfo?.related_products_enabled && category && (
           <RelatedProducts

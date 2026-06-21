@@ -32,6 +32,7 @@ interface PDPInfoPanelProps {
   warrantyMonths?: number;
   categoryName?: string;
   categoryId?: string;
+  onVariantSelected?: (variant: ProductVariant | null) => void;
 }
 
 export function PDPInfoPanel({
@@ -54,6 +55,7 @@ export function PDPInfoPanel({
   warrantyMonths,
   categoryName,
   categoryId,
+  onVariantSelected,
 }: PDPInfoPanelProps) {
   const [displayPrice, setDisplayPrice] = useState(defaultPrice);
   const [displayStock, setDisplayStock] = useState(defaultStock);
@@ -66,8 +68,9 @@ export function PDPInfoPanel({
       setDisplayPrice(price);
       setDisplayStock(stock);
       setQuantity(1);
+      onVariantSelected?.(variant);
     },
-    []
+    [onVariantSelected]
   );
 
   const showFreeShipping = freeShippingMin !== null && freeShippingMin !== undefined
