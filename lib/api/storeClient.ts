@@ -186,6 +186,17 @@ export interface PageInfo {
   // EC-632/633: config comercial de ecom-store, embebida por ecom-page --
   // ausente del todo en tiendas sin catalogo.
   store?: StoreCommerceConfig;
+  // EC-588: paginas visibles del page builder, sin 'home' (ya tiene su
+  // propio link de "Inicio") -- el navbar arma sus links desde esto.
+  pages?: { slug: string; title: string }[];
+}
+
+// EC-587: una pagina puntual del page builder, servida por
+// app/(catalog)/[pageSlug]/page.tsx.
+export interface PageContent {
+  slug: string;
+  title: string;
+  rows: PageRowData[];
 }
 
 export interface ProductReview {
@@ -232,7 +243,23 @@ export const getPageInfo = cache(async (): Promise<PageInfo | null> => {
       cache: 'no-store',
     });
     if (!res.ok) return null;
-    return (await res.json().catch(() => null)) as PageInfo | null;
+    return await res.json().catch(() => null);
+  } catch {
+    return null;
+  }
+});
+
+// EC-587: pagina puntual del page builder (no 'home'). null si no existe o
+// esta oculta -- el caller llama notFound().
+export const getPageBySlug = cache(async (pageSlug: string): Promise<PageContent | null> => {
+  const slug = await getSlug();
+  try {
+    const res = await fetch(`${BFF_BASE_URL}/api/page/public/${pageSlug}?_store=${slug}`, {
+      headers: { 'X-Tenant-Slug': slug },
+      cache: 'no-store',
+    });
+    if (!res.ok) return null;
+    return await res.json().catch(() => null);
   } catch {
     return null;
   }

@@ -13,7 +13,7 @@ const MANAGEMENT_ROLES = ['Admin', 'Manager', 'Seller'];
 export function CatalogNavbar() {
   const router = useRouter();
   const { itemCount, openDrawer } = useCart();
-  const { hasCatalog, hasPurchases } = usePageConfig();
+  const { hasCatalog, hasPurchases, pages } = usePageConfig();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [canManage,  setCanManage]  = useState(false);
@@ -37,8 +37,11 @@ export function CatalogNavbar() {
 
   // EC-559: "Inicio" solo tiene sentido como link separado en tiendas con
   // catalogo (la home es informativa por default y el logo ya apunta ahi).
+  // EC-588: las paginas del page builder (sin 'home', que ya tiene su link
+  // de "Inicio" arriba) van despues, en el orden en que se crearon.
   const links = [
     ...(hasCatalog !== false ? [{ label: 'Inicio', onClick: () => router.push('/') }] : []),
+    ...(pages ?? []).map((p) => ({ label: p.title || p.slug, onClick: () => router.push(`/${p.slug}`) })),
     ...(canManage ? [{ label: 'Gestión', onClick: () => router.push('/gestion') }] : []),
   ];
 

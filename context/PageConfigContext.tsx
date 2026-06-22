@@ -22,6 +22,11 @@ export interface PageStoreConfig {
   reviews_enabled?: boolean;
 }
 
+export interface PageConfigPage {
+  slug:  string;
+  title: string;
+}
+
 export interface PageConfig {
   theme?: string;
   hasCatalog?: boolean;
@@ -30,6 +35,9 @@ export interface PageConfig {
   // todavia, nada lee este campo en el storefront.
   hasMetrics?: boolean;
   store?: PageStoreConfig;
+  // EC-588: paginas visibles del page builder (sin 'home') -- el navbar
+  // arma sus links desde esto.
+  pages?: PageConfigPage[];
 }
 
 export const PageConfigContext = createContext<PageConfig>({});
