@@ -84,6 +84,11 @@ function toPageConfig(raw: Record<string, unknown>): PageConfig {
       ratings_enabled:       store.ratings_enabled === true,
       reviews_enabled:       store.reviews_enabled === true,
     },
+    pages: Array.isArray(raw.pages)
+      ? raw.pages
+          .filter((p): p is { slug: string; title: string } => typeof p?.slug === 'string')
+          .map((p) => ({ slug: p.slug, title: typeof p.title === 'string' ? p.title : '' }))
+      : undefined,
   };
 }
 
