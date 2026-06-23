@@ -6,7 +6,6 @@ import type { SurfaceVariant } from 'zoui';
 import { PageConfigContext } from '@/context/PageConfigContext';
 import type { PageConfig } from '@/context/PageConfigContext';
 
-const SESSION_KEY = 'store-theme-config';
 const BFF_URL = process.env.NEXT_PUBLIC_BFF_URL ?? 'http://localhost:4000';
 
 function applyBrandColor(hue: number, sat: number, lit: number) {
@@ -31,24 +30,12 @@ function getSlug(): string {
   return window.location.hostname.split('.')[0];
 }
 
-function readSession(): Record<string, unknown> | null {
-  try {
-    const raw = sessionStorage.getItem(SESSION_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-function writeSession(config: Record<string, unknown>): void {
-  try {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(config));
-  } catch {}
-}
-
 // EC-632/633: un solo fetch a /api/page/public -- ecom-page ya embebe la
 // config comercial de ecom-store bajo `store` cuando la tienda tiene
 // catalogo, asi que el front no pide mas los dos servicios por separado.
+// EC-643: esto ya NO corre siempre -- app/layout.tsx hace el mismo fetch en
+// el servidor (cache: 'no-store') y pinta el theme inicial sin flash. Esta
+// funcion solo se usa como fallback si ese fetch SSR fallo.
 async function fetchPageInfo(): Promise<Record<string, unknown> | null> {
   try {
     const slug = getSlug();
@@ -101,26 +88,23 @@ export function DynamicStoreTheme({
 }) {
   const [config, setConfig] = useState<PageConfig>(() => toPageConfig(initialConfig));
 
-  function apply(raw: Record<string, unknown>) {
-    if (typeof raw.brand_hue === 'number') {
-      const sat = typeof raw.brand_saturation === 'number' ? raw.brand_saturation : 72;
-      const lit = typeof raw.brand_lightness === 'number' ? raw.brand_lightness : 50;
-      applyBrandColor(raw.brand_hue, sat, lit);
-    }
-    if (typeof raw.font_family === 'string') applyFont(raw.font_family);
-    if (typeof raw.theme === 'string') applyStoreTheme(raw.theme);
-    setConfig(toPageConfig(raw));
-  }
-
+  // EC-643: si initialConfig vino de la SSR (caso normal), el theme y la
+  // config ya estan aplicados -- ver el <style> + data-store-theme que
+  // arma app/layout.tsx. Solo se reintenta del lado del cliente si la SSR
+  // no trajo nada (fallo el fetch en el servidor).
   useEffect(() => {
-    const cached = readSession();
-    if (cached) apply(cached);
+    if (Object.keys(initialConfig).length > 0) return;
 
     fetchPageInfo().then((fresh) => {
-      if (fresh) {
-        writeSession(fresh);
-        apply(fresh);
+      if (!fresh) return;
+      if (typeof fresh.brand_hue === 'number') {
+        const sat = typeof fresh.brand_saturation === 'number' ? fresh.brand_saturation : 72;
+        const lit = typeof fresh.brand_lightness === 'number' ? fresh.brand_lightness : 50;
+        applyBrandColor(fresh.brand_hue, sat, lit);
       }
+      if (typeof fresh.font_family === 'string') applyFont(fresh.font_family);
+      if (typeof fresh.theme === 'string') applyStoreTheme(fresh.theme);
+      setConfig(toPageConfig(fresh));
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
