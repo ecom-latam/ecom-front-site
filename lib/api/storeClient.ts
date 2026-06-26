@@ -185,7 +185,7 @@ export interface PageInfo {
   // ausente del todo en tiendas sin catalogo.
   store?: StoreCommerceConfig;
   // EC-645: listado unico de paginas visibles, 'home' siempre primera --
-  // cada una con sus rows. Ya no hay un campo `rows` suelto a nivel raiz.
+  // EC-695: cada una con sus blocks (grilla plana, reemplaza rows[]).
   pages?: { slug: string; title: string; isHome: boolean; blocks: PageBlock[] }[];
 }
 
