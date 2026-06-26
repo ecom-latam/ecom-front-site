@@ -12,6 +12,20 @@ export function InformationalHome({ storeInfo }: { storeInfo: PageInfo }) {
   // EC-658: la home se identifica por isHome: true, no por slug === 'home'.
   const blocks = storeInfo.pages?.find((p) => p.isHome)?.blocks ?? [];
 
+  // Si hay bloques, el page builder controla 100% del home — sin branding
+  // hardcodeado arriba (nombre/logo/descripción ya están en la navbar y el
+  // vendedor los incluye en la grilla si quiere). Sin bloques, muestra el
+  // fallback de branding para que la home no quede vacía.
+  if (blocks.length > 0) {
+    return (
+      <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
+        <div className="p-4">
+          <DynamicPageRenderer blocks={blocks} />
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
       <div className="p-4">
@@ -20,20 +34,13 @@ export function InformationalHome({ storeInfo }: { storeInfo: PageInfo }) {
             <Image src={storeInfo.logo_url} alt={storeInfo.name} fill sizes="96px" className="object-cover" />
           </div>
         )}
-
         <Text variant="heading-1" tag="h1" style={{ marginBottom: '12px' }}>{storeInfo.name}</Text>
-
         {storeInfo.description && (
           <Text variant="body" color="secondary" tag="p" style={{ marginBottom: '24px' }}>{storeInfo.description}</Text>
         )}
-
-        {blocks.length === 0 ? (
-          <Text variant="body-sm" color="muted" tag="p">
-            Esta tienda todavía no agregó contenido a su página.
-          </Text>
-        ) : (
-          <DynamicPageRenderer blocks={blocks} style={{ marginTop: 24 }} />
-        )}
+        <Text variant="body-sm" color="muted" tag="p">
+          Esta tienda todavía no agregó contenido a su página.
+        </Text>
       </div>
     </main>
   );
