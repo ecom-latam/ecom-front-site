@@ -1,7 +1,7 @@
 import { cache } from 'react';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import type { PageRowData } from 'zoui';
+import type { PageBlock } from 'zoui';
 
 import { BFF_BASE_URL, client } from './client';
 
@@ -185,16 +185,16 @@ export interface PageInfo {
   // ausente del todo en tiendas sin catalogo.
   store?: StoreCommerceConfig;
   // EC-645: listado unico de paginas visibles, 'home' siempre primera --
-  // cada una con sus rows. Ya no hay un campo `rows` suelto a nivel raiz.
-  pages?: { slug: string; title: string; isHome: boolean; rows: PageRowData[] }[];
+  // EC-695: cada una con sus blocks (grilla plana, reemplaza rows[]).
+  pages?: { slug: string; title: string; isHome: boolean; blocks: PageBlock[] }[];
 }
 
 // EC-587: una pagina puntual del page builder, servida por
 // app/(catalog)/[pageSlug]/page.tsx.
 export interface PageContent {
-  slug: string;
-  title: string;
-  rows: PageRowData[];
+  slug:   string;
+  title:  string;
+  blocks: PageBlock[];
 }
 
 export interface ProductReview {

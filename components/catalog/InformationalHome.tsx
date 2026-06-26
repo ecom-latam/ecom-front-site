@@ -1,18 +1,16 @@
 'use client';
 
 import Image from 'next/image';
-import { Text, PageRow, PageBlockRenderer } from 'zoui';
+import { Text, DynamicPageRenderer } from 'zoui';
 import type { PageInfo } from '@/lib/api/storeClient';
 
 // EC-559/EC-589: home de tiendas tipo "informativa" (sin catalogo) --
-// renderiza el branding + las rows de contenido generico de ecom-page
-// (EC-582/583, DynamicPageRenderer de zoui). 'use client' es necesario --
-// PageRow recibe `renderBlock`, una funcion, y los Server Components no
-// pueden pasar funciones como prop a un Client Component (PageRow es
-// 'use client' en zoui).
+// renderiza el branding + los bloques de contenido generico de ecom-page.
+// EC-695: migrado a DynamicPageRenderer (grilla plana, reemplaza PageRow).
+// 'use client' necesario porque DynamicPageRenderer es Client Component.
 export function InformationalHome({ storeInfo }: { storeInfo: PageInfo }) {
   // EC-658: la home se identifica por isHome: true, no por slug === 'home'.
-  const rows = storeInfo.pages?.find((p) => p.isHome)?.rows ?? [];
+  const blocks = storeInfo.pages?.find((p) => p.isHome)?.blocks ?? [];
 
   return (
     <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
@@ -29,16 +27,12 @@ export function InformationalHome({ storeInfo }: { storeInfo: PageInfo }) {
           <Text variant="body" color="secondary" tag="p" style={{ marginBottom: '24px' }}>{storeInfo.description}</Text>
         )}
 
-        {rows.length === 0 ? (
+        {blocks.length === 0 ? (
           <Text variant="body-sm" color="muted" tag="p">
             Esta tienda todavía no agregó contenido a su página.
           </Text>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginTop: 24 }}>
-            {rows.map((row, i) => (
-              <PageRow key={i} blocks={row.blocks} renderBlock={(block) => <PageBlockRenderer block={block} />} />
-            ))}
-          </div>
+          <DynamicPageRenderer blocks={blocks} style={{ marginTop: 24 }} />
         )}
       </div>
     </main>
