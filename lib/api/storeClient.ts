@@ -3,7 +3,7 @@ import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import type { PageBlock } from 'zoui';
 
-import { BFF_BASE_URL, client } from './client';
+import { BFF_BASE_URL, BffError, client } from './client';
 
 export interface ProductVariantCombinationEntry {
   optionId: string;
@@ -103,21 +103,14 @@ export async function getProducts(params: ProductListParams = {}): Promise<Produ
 
 export async function getProduct(id: string): Promise<Product> {
   const slug = await getSlug();
-  const res = await fetch(
-    `${BFF_BASE_URL}/api/product/products/${id}`,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Tenant-Slug': slug,
-      },
-    }
-  );
-  if (res.status === 404) notFound();
-  if (!res.ok) {
-    const data = await res.json().catch(() => ({}));
-    throw new Error(data?.error?.code ?? 'INTERNAL_ERROR');
+  try {
+    return await client.get<Product>(`/api/product/products/${id}`, {
+      headers: { 'X-Tenant-Slug': slug },
+    });
+  } catch (err) {
+    if (err instanceof BffError) notFound();
+    throw err;
   }
-  return (await res.json()) as Product;
 }
 
 export async function getCategories(): Promise<Category[]> {
@@ -135,8 +128,8 @@ export interface StorePolicies {
   warranty_months?: number;
 }
 
-// EC-633: config comercial de ecom-store -- solo existe cuando la tienda
-// tiene catalogo (ver ecom-page EC-632, que es quien la embebe acá adentro).
+// Config comercial de ecom-store -- solo existe cuando la tienda
+// tiene catalogo (ecom-page es quien la embebe acá adentro).
 export interface StoreCommerceConfig {
   currency?: 'ARS' | 'USD';
   mp_public_key?: string | null;
@@ -178,18 +171,18 @@ export interface PageInfo {
   theme?: string;
   hasCatalog?: boolean;
   hasPurchases?: boolean;
-  // EC-568: solo tipado por consistencia -- EC-14 (analiticas) no existe
+  // Solo tipado por consistencia -- el modulo de analiticas no existe
   // todavia, nada lee este campo en el storefront.
   hasMetrics?: boolean;
-  // EC-632/633: config comercial de ecom-store, embebida por ecom-page --
+  // Config comercial de ecom-store, embebida por ecom-page --
   // ausente del todo en tiendas sin catalogo.
   store?: StoreCommerceConfig;
-  // EC-645: listado unico de paginas visibles, 'home' siempre primera --
-  // EC-695: cada una con sus blocks (grilla plana, reemplaza rows[]).
+  // Listado unico de paginas visibles, 'home' siempre primera --
+  // cada una con sus blocks (grilla plana, reemplaza rows[]).
   pages?: { slug: string; title: string; isHome: boolean; workInProgress: boolean; blocks: PageBlock[] }[];
 }
 
-// EC-587: una pagina puntual del page builder, servida por
+// Pagina puntual del page builder, servida por
 // app/(catalog)/[pageSlug]/page.tsx.
 export interface PageContent {
   slug:           string;
@@ -225,7 +218,7 @@ export interface ProductReviewsResponse {
   distribution: ReviewDistribution;
 }
 
-// EC-632/633: page es el concepto principal -- ecom-page embebe la config
+// Page es el concepto principal -- ecom-page embebe la config
 // comercial de ecom-store bajo `store` cuando la tienda tiene catalogo, asi
 // que el front pide un solo endpoint en vez de combinar dos por su cuenta.
 //
@@ -237,28 +230,22 @@ export interface ProductReviewsResponse {
 export const getPageInfo = cache(async (): Promise<PageInfo | null> => {
   const slug = await getSlug();
   try {
-    const res = await fetch(`${BFF_BASE_URL}/api/page/public?_store=${slug}`, {
+    return await client.get<PageInfo>(`/api/page/public?_store=${slug}`, {
       headers: { 'X-Tenant-Slug': slug },
-      cache: 'no-store',
     });
-    if (!res.ok) return null;
-    return await res.json().catch(() => null);
   } catch {
     return null;
   }
 });
 
-// EC-587: pagina puntual del page builder (no 'home'). null si no existe o
+// Pagina puntual del page builder (no 'home'). null si no existe o
 // esta oculta -- el caller llama notFound().
 export const getPageBySlug = cache(async (pageSlug: string): Promise<PageContent | null> => {
   const slug = await getSlug();
   try {
-    const res = await fetch(`${BFF_BASE_URL}/api/page/public/${pageSlug}?_store=${slug}`, {
+    return await client.get<PageContent>(`/api/page/public/${pageSlug}?_store=${slug}`, {
       headers: { 'X-Tenant-Slug': slug },
-      cache: 'no-store',
     });
-    if (!res.ok) return null;
-    return await res.json().catch(() => null);
   } catch {
     return null;
   }

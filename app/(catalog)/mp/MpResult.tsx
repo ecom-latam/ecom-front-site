@@ -40,7 +40,7 @@ function MpResultInner({ variant }: { variant: Variant }) {
   // En fallo se conserva para que el comprador reintente.
   useEffect(() => {
     if (variant === 'success' || variant === 'pending') {
-      clearCart().catch(() => {});
+      clearCart().catch((err) => console.error('[MpResult]', err));
     }
   }, [variant, clearCart]);
 

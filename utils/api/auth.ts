@@ -1,6 +1,11 @@
 import { apiClient } from './client';
 import type { AxiosRequestConfig } from 'axios';
 
+export interface InviteInfo {
+  storeId: string;
+  role: string;
+}
+
 export const auth = {
   login: (email: string, password: string, config?: AxiosRequestConfig) =>
     apiClient.post('/api/auth/login', { email, password }, config),
@@ -13,4 +18,10 @@ export const auth = {
 
   logout: () =>
     apiClient.post('/api/auth/logout', {}),
+
+  getInvitation: (token: string) =>
+    apiClient.get<InviteInfo>(`/api/auth/invitations/${token}`),
+
+  acceptInvitation: (token: string, body: { email: string; password: string }) =>
+    apiClient.post<{ accessToken?: string }>(`/api/auth/invitations/${token}`, body),
 };
