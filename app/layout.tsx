@@ -9,6 +9,7 @@ import { CartProvider } from "@/context/CartContext";
 import { DynamicStoreTheme } from "@/components/DynamicStoreTheme";
 import { getPageInfo } from "@/lib/api/storeClient";
 import { ErrorModalProvider } from "@/components/ui/ErrorModal";
+import { StoreProvider } from "@/store/StoreProvider";
 
 export const metadata: Metadata = {
   title: "ecom store",
@@ -65,17 +66,19 @@ export default async function RootLayout({
     <html lang="es" data-theme={theme} data-store-theme={storeTheme}>
       <body className="antialiased flex flex-col min-h-screen">
         <style dangerouslySetInnerHTML={{ __html: brandStyles }} />
-        <DynamicStoreTheme initialConfig={(storeInfo ?? {}) as Record<string, unknown>}>
-          <ZouiProvider linkComponent={NextLink} imageComponent={NextImage}>
-            <ToastProvider>
-              <ErrorModalProvider>
-                <CartProvider hasSession={hasSession}>
-                  {children}
-                </CartProvider>
-              </ErrorModalProvider>
-            </ToastProvider>
-          </ZouiProvider>
-        </DynamicStoreTheme>
+        <StoreProvider>
+          <DynamicStoreTheme initialConfig={(storeInfo ?? {}) as Record<string, unknown>}>
+            <ZouiProvider linkComponent={NextLink} imageComponent={NextImage}>
+              <ToastProvider>
+                <ErrorModalProvider>
+                  <CartProvider hasSession={hasSession}>
+                    {children}
+                  </CartProvider>
+                </ErrorModalProvider>
+              </ToastProvider>
+            </ZouiProvider>
+          </DynamicStoreTheme>
+        </StoreProvider>
       </body>
     </html>
   );
