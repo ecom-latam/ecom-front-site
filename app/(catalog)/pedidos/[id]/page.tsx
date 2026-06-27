@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { getAccessTokenRole } from '@/utils/helpers';
 import { orders } from '@/utils/api/orders';
 import type { Order } from '@/utils/api/orders';
-import { apiClient } from '@/utils/api';
+import { pageInfo } from '@/utils/api/pageInfo';
 import { Button, Badge, Text, Modal } from 'zoui';
 import { usePageConfig } from '@/context/PageConfigContext';
 import { formatPrice } from '@/lib/format';
@@ -119,7 +119,7 @@ export default function OrderDetailPage() {
       try {
         const [orderRes, pageRes] = await Promise.all([
           orders.getById(id),
-          apiClient.get<{ store?: TransferData }>('/api/page/public').catch(() => ({ data: null })),
+          pageInfo.getPublic<{ store?: TransferData }>().catch(() => ({ data: null })),
         ]);
         setOrder(orderRes.data);
         setStoreInfo(pageRes.data?.store ?? null);

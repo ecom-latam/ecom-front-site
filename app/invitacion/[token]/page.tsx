@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { isAxiosError } from 'axios';
-import { apiClient, startSession } from '@/utils/api';
+import { auth, startSession } from '@/utils/api';
+import type { InviteInfo } from '@/utils/api/auth';
 import { Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
@@ -12,11 +13,6 @@ import { StorePasswordInput } from '@/components/ui/StorePasswordInput';
 const ROLE_LABELS: Record<string, string> = {
   Manager: 'Manager',
   Seller: 'Vendedor',
-};
-
-type InviteInfo = {
-  storeId: string;
-  role: string;
 };
 
 const ERRORS: Record<string, string> = {
@@ -49,8 +45,8 @@ export default function InvitacionPage() {
   useEffect(() => {
     async function validate() {
       try {
-        const { data } = await apiClient.get(`/api/auth/invitations/${token}`);
-        setInfo(data as InviteInfo);
+        const { data } = await auth.getInvitation(token);
+        setInfo(data);
       } catch (err) {
         if (isAxiosError(err)) {
           const code = err.response?.data?.error as string | undefined;
@@ -70,9 +66,8 @@ export default function InvitacionPage() {
     setSubmitting(true);
 
     try {
-      const { data } = await apiClient.post(`/api/auth/invitations/${token}`, { email, password });
-      const accessToken = (data as { accessToken?: string }).accessToken;
-      if (accessToken) startSession(accessToken);
+      const { data } = await auth.acceptInvitation(token, { email, password });
+      if (data.accessToken) startSession(data.accessToken);
       setSuccess(true);
     } catch (err) {
       if (isAxiosError(err)) {

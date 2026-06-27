@@ -44,7 +44,7 @@ export default function DireccionesPage() {
   useEffect(() => {
     addresses.list()
       .then((r) => setList(r.data))
-      .catch(() => {})
+      .catch((err) => console.error('[DireccionesPage]', err))
       .finally(() => setLoading(false));
   }, []);
 

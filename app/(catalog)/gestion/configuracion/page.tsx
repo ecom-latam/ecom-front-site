@@ -5,6 +5,7 @@ import { Text, ColorPicker, useToast } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreTextarea } from '@/components/ui/StoreTextarea';
 import { apiClient } from '@/utils/api/client';
+import { storeConfig } from '@/utils/api/storeConfig';
 
 function getInitialHue(): number {
   if (typeof document === 'undefined') return 262;
@@ -14,6 +15,11 @@ function getInitialHue(): number {
   return match ? parseInt(match[1]) : 262;
 }
 
+// La paleta se escribe como CSS variables en documentElement para que el
+// cambio de color sea instantaneo en toda la UI sin re-renderizar el arbol de
+// React. Este componente es quien tiene el picker, asi que es el lugar natural
+// para actualizar las vars mientras el vendedor arrastra, antes de confirmar
+// el guardado via API.
 function applyHueLive(hue: number) {
   const root = document.documentElement;
   const contrast = hue >= 45 && hue <= 75 ? '#000000' : '#ffffff';
@@ -38,11 +44,11 @@ export default function ConfiguracionPage() {
   const [loadingTransfer, setLoadingTransfer] = useState(true);
 
   useEffect(() => {
-    apiClient.get<{ transfer_info?: string }>('/api/store/store/config')
+    storeConfig.get()
       .then(({ data }) => {
         setTransferInfo(data.transfer_info ?? '');
       })
-      .catch(() => {})
+      .catch((err) => console.error('[ConfiguracionPage]', err))
       .finally(() => setLoadingTransfer(false));
   }, []);
 
@@ -67,7 +73,7 @@ export default function ConfiguracionPage() {
   async function handleSaveTransfer() {
     setSavingTransfer(true);
     try {
-      await apiClient.patch('/api/store/store/config/transfer-info', { transfer_info: transferInfo });
+      await storeConfig.updateTransferInfo(transferInfo);
       toast({ message: 'Datos de transferencia guardados', type: 'success' });
     } catch {
       toast({ message: 'No se pudo guardar', type: 'error' });

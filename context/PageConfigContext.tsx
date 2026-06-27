@@ -4,9 +4,9 @@ import { createContext, useContext } from 'react';
 
 export type Currency = 'ARS' | 'USD';
 
-// EC-633: la config comercial (currency, mp_public_key, promo_bar, etc.) solo
-// existe cuando la tienda tiene catalogo -- ecom-page la embebe bajo `store`
-// (ver EC-632). El resto de los campos son siempre de la pagina en si.
+// La config comercial (currency, mp_public_key, promo_bar, etc.) solo
+// existe cuando la tienda tiene catalogo -- ecom-page la embebe bajo `store`.
+// El resto de los campos son siempre de la pagina en si.
 export interface PageStoreConfig {
   currency?: Currency;
   mp_public_key?: string | null;
@@ -32,11 +32,11 @@ export interface PageConfig {
   theme?: string;
   hasCatalog?: boolean;
   hasPurchases?: boolean;
-  // EC-568: solo tipado por consistencia -- EC-14 (analiticas) no existe
+  // Solo tipado por consistencia -- el modulo de analiticas no existe
   // todavia, nada lee este campo en el storefront.
   hasMetrics?: boolean;
   store?: PageStoreConfig;
-  // EC-588: paginas visibles del page builder (sin 'home') -- el navbar
+  // Paginas visibles del page builder (sin 'home') -- el navbar
   // arma sus links desde esto.
   pages?: PageConfigPage[];
 }

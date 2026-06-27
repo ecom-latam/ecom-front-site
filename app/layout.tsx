@@ -27,7 +27,7 @@ export default async function RootLayout({
   const hue = Math.round(Math.max(0, Math.min(360, storeInfo?.brand_hue ?? 262)));
   const sat = Math.round(Math.max(0, Math.min(100, storeInfo?.brand_saturation ?? 72)));
   const lit = Math.round(Math.max(0, Math.min(100, storeInfo?.brand_lightness ?? 50)));
-  // EC-513: color secundario para themes de 2 colores (ej. gradient). Si la tienda
+  // Color secundario para themes de 2 colores (ej. gradient). Si la tienda
   // todavía no lo configuró, se deriva del color principal en vez de caer en un
   // default fijo que ignoraría el brand real del vendedor.
   const hue2 = Math.round(Math.max(0, Math.min(360, storeInfo?.brand2_hue ?? (hue + 60) % 360)));

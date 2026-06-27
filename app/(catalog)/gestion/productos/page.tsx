@@ -385,7 +385,7 @@ function VariantsTab({ productId, product, onChange }: VariantsTabProps) {
   const [generating, setGenerating] = useState(false);
 
   useEffect(() => {
-    storeOptionsApi.list().then(({ data }) => setAllOptions(data)).catch(() => {});
+    storeOptionsApi.list().then(({ data }) => setAllOptions(data)).catch((err) => console.error('[VariantsTab]', err));
   }, []);
 
   function toggleOption(id: string) {
@@ -735,7 +735,7 @@ export default function GestionProductosPage() {
     categoriesApi.list().then(({ data }) => {
       setCategoryList(data);
       setCategoryMap(Object.fromEntries(data.map(c => [c._id, c.name])));
-    }).catch(() => {});
+    }).catch((err) => console.error('[GestionProductosPage]', err));
     loadCounts();
   }, [loadCounts]);
 

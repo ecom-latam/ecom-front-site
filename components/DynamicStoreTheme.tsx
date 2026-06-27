@@ -30,10 +30,10 @@ function getSlug(): string {
   return window.location.hostname.split('.')[0];
 }
 
-// EC-632/633: un solo fetch a /api/page/public -- ecom-page ya embebe la
+// Un solo fetch a /api/page/public -- ecom-page ya embebe la
 // config comercial de ecom-store bajo `store` cuando la tienda tiene
 // catalogo, asi que el front no pide mas los dos servicios por separado.
-// EC-643: esto ya NO corre siempre -- app/layout.tsx hace el mismo fetch en
+// Esto ya NO corre siempre -- app/layout.tsx hace el mismo fetch en
 // el servidor (cache: 'no-store') y pinta el theme inicial sin flash. Esta
 // funcion solo se usa como fallback si ese fetch SSR fallo.
 async function fetchPageInfo(): Promise<Record<string, unknown> | null> {
@@ -71,7 +71,7 @@ function toPageConfig(raw: Record<string, unknown>): PageConfig {
       ratings_enabled:       store.ratings_enabled === true,
       reviews_enabled:       store.reviews_enabled === true,
     },
-    // EC-645/646: `pages` del backend incluye 'home' (siempre primera, con
+    // `pages` del backend incluye 'home' (siempre primera, con
     // rows) -- se expone tal cual por context, sin filtrar. El navbar
     // (CatalogNavbar) decide si home necesita su propio link aparte segun
     // hasCatalog. El context no necesita las rows de ninguna pagina -- las
@@ -94,7 +94,7 @@ export function DynamicStoreTheme({
 }) {
   const [config, setConfig] = useState<PageConfig>(() => toPageConfig(initialConfig));
 
-  // EC-643: si initialConfig vino de la SSR (caso normal), el theme y la
+  // Si initialConfig vino de la SSR (caso normal), el theme y la
   // config ya estan aplicados -- ver el <style> + data-store-theme que
   // arma app/layout.tsx. Solo se reintenta del lado del cliente si la SSR
   // no trajo nada (fallo el fetch en el servidor).
@@ -115,8 +115,8 @@ export function DynamicStoreTheme({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // EC-628: el fondo de la tienda publica es siempre el del theme elegido --
-  // ya no es una seleccion independiente (background eliminado, ver EC-627/630).
+  // El fondo de la tienda publica es siempre el del theme elegido --
+  // ya no es una seleccion independiente (background eliminado).
   const backgroundVariant = (config.theme ?? 'outlined') as SurfaceVariant;
 
   return (
