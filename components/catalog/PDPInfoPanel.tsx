@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Text, Badge, QuantityStepper } from 'zoui';
+import { usePageConfig } from '@/context/PageConfigContext';
 import { Price } from './Price';
 import { AddToCartButton } from './AddToCartButton';
 import { BenefitsRow } from './BenefitsRow';
@@ -57,6 +58,7 @@ export function PDPInfoPanel({
   categoryId,
   onVariantSelected,
 }: PDPInfoPanelProps) {
+  const { catalog_slug } = usePageConfig();
   const [displayPrice, setDisplayPrice] = useState(defaultPrice);
   const [displayStock, setDisplayStock] = useState(defaultStock);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
@@ -87,7 +89,7 @@ export function PDPInfoPanel({
   return (
     <>
       {categoryName && categoryId && (
-        <Link href={`/productos?categoryId=${categoryId}`} style={{ textDecoration: 'none', marginBottom: '8px', display: 'block' }}>
+        <Link href={`/${catalog_slug ?? 'productos'}?categoryId=${categoryId}`} style={{ textDecoration: 'none', marginBottom: '8px', display: 'block' }}>
           <Text variant="overline" color="muted">{categoryName}</Text>
         </Link>
       )}

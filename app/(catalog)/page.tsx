@@ -11,5 +11,5 @@ export default async function CatalogIndex() {
     return <InformationalHome storeInfo={storeInfo} />;
   }
 
-  redirect('/productos');
+  redirect(`/${storeInfo?.catalog_slug ?? 'productos'}`);
 }

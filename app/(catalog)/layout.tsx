@@ -21,11 +21,24 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function CatalogLayout({
+export default async function CatalogLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const info = await getPageInfo();
+
+  // Si la tienda no tiene ninguna sección activa ni páginas con contenido,
+  // omitir navbar y chrome completo — el hijo renderiza la pantalla "en construcción".
+  const hasNavItems =
+    info?.hasCatalog === true ||
+    info?.hasPurchases === true ||
+    (info?.pages ?? []).some((p) => p.blocks.length > 0);
+
+  if (!hasNavItems) {
+    return <>{children}</>;
+  }
+
   return (
     <>
       <PromoBar position="above-navbar" />

@@ -56,6 +56,7 @@ function toPageConfig(raw: Record<string, unknown>): PageConfig {
     theme:       raw.theme       as string | undefined,
     hasCatalog:    raw.hasCatalog !== false,
     catalog_label: typeof raw.catalog_label === 'string' && raw.catalog_label ? raw.catalog_label : 'Productos',
+    catalog_slug:  typeof raw.catalog_slug === 'string' && raw.catalog_slug ? raw.catalog_slug : 'productos',
     hasPurchases:  raw.hasPurchases !== false,
     hasMetrics:    raw.hasMetrics === true,
     store: store && {

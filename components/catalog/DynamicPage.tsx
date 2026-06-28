@@ -1,7 +1,8 @@
 'use client';
 
-import { Text, DynamicPageRenderer } from 'zoui';
+import { DynamicPageRenderer } from 'zoui';
 import type { PageContent } from '@/lib/api/storeClient';
+import { PageUnderConstruction } from './PageUnderConstruction';
 
 // EC-587: pagina generica del page builder (cualquier slug que no sea
 // 'home'). EC-695: migrado a DynamicPageRenderer (grilla plana).
@@ -9,17 +10,10 @@ export function DynamicPage({ page }: { page: PageContent }) {
   return (
     <main className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
       <div className="p-4">
-        {page.title && (
-          <Text variant="heading-1" tag="h1" style={{ marginBottom: '24px' }}>{page.title}</Text>
-        )}
-
-        {page.blocks.length === 0 ? (
-          <Text variant="body-sm" color="muted" tag="p">
-            Esta página todavía no tiene contenido.
-          </Text>
-        ) : (
-          <DynamicPageRenderer blocks={page.blocks} showGrid={page.workInProgress} />
-        )}
+        {page.blocks.length === 0
+          ? <PageUnderConstruction />
+          : <DynamicPageRenderer blocks={page.blocks} showGrid={page.workInProgress} />
+        }
       </div>
     </main>
   );
