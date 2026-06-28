@@ -52,9 +52,10 @@ export function ProductGrid({
   currentView,
 }: Props) {
   const router = useRouter();
-  const { store } = usePageConfig();
+  const { store, catalog_slug } = usePageConfig();
   const currency = store?.currency;
   const ratings_enabled = store?.ratings_enabled;
+  const catalogPath = `/${catalog_slug ?? 'productos'}`;
 
   // Reconstruimos los params desde los props (server-passed) en vez de useSearchParams:
   // así esta vista no fuerza el client-render bailout del Suspense (evita los warnings de hidratación).
@@ -73,7 +74,7 @@ export function ProductGrid({
         }
       }
       const qs = params.toString();
-      router.push(qs ? `/productos?${qs}` : '/productos');
+      router.push(qs ? `${catalogPath}?${qs}` : catalogPath);
     },
     [router, currentQ, currentCategoryId, currentView, page]
   );
@@ -98,7 +99,24 @@ export function ProductGrid({
         </Text>
       )}
 
-      {products.length === 0 ? (
+      {products.length === 0 && !currentQ && !currentCategoryId ? (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', padding: '48px 24px', textAlign: 'center', gap: 24 }}>
+          <img
+            src="/illustrations/products-loading.webp"
+            alt=""
+            aria-hidden="true"
+            style={{ width: '50vw', height: 'auto', maxWidth: 560, objectFit: 'contain' }}
+          />
+          <div style={{ maxWidth: 320 }}>
+            <p style={{ fontSize: 20, fontWeight: 700, color: 'var(--color-fg-primary)', margin: '0 0 8px', lineHeight: 1.3 }}>
+              Estamos cargando los productos
+            </p>
+            <p style={{ fontSize: 14, color: 'var(--color-fg-muted)', margin: 0, lineHeight: 1.5 }}>
+              Volvé pronto, viene algo bueno.
+            </p>
+          </div>
+        </div>
+      ) : products.length === 0 ? (
         <EmptyState
           icon={<Icon name="search" />}
           title="Sin resultados"

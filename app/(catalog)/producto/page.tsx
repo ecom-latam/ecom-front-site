@@ -80,9 +80,10 @@ export default async function ProductoPage({ searchParams }: Props) {
   const interestFree = store?.interest_free ?? false;
   const showInstallments = installmentsCount !== null && installmentsCount > 1;
 
+  const catalogSlug = storeInfo?.catalog_slug ?? 'productos';
   const breadcrumbItems = [
-    { label: 'Tienda', href: '/productos' },
-    ...(category ? [{ label: category.name, href: `/productos?categoryId=${category._id}` }] : []),
+    { label: 'Tienda', href: `/${catalogSlug}` },
+    ...(category ? [{ label: category.name, href: `/${catalogSlug}?categoryId=${category._id}` }] : []),
     { label: product.name },
   ];
 
@@ -121,6 +122,7 @@ export default async function ProductoPage({ searchParams }: Props) {
             categoryId={String(category._id)}
             excludeId={id}
             currency={store.currency ?? 'ARS'}
+            catalogSlug={catalogSlug}
           />
         )}
 

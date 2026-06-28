@@ -15,7 +15,8 @@ const MANAGEMENT_ROLES = ['Admin', 'Manager', 'Seller'];
 export function CatalogNavbar() {
   const router = useRouter();
   const { itemCount, openDrawer } = useCart();
-  const { hasCatalog, catalog_label, hasPurchases, pages } = usePageConfig();
+  const { hasCatalog, catalog_label, catalog_slug, hasPurchases, pages } = usePageConfig();
+  const catalogPath = `/${catalog_slug ?? 'productos'}`;
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [canManage,  setCanManage]  = useState(false);
@@ -49,7 +50,7 @@ export function CatalogNavbar() {
   // que se crearon.
   const links = [
     ...(hasCatalog !== false
-      ? [{ label: catalog_label ?? 'Productos', onClick: () => router.push('/productos') }]
+      ? [{ label: catalog_label ?? 'Productos', onClick: () => router.push(catalogPath) }]
       : homePage ? [{ label: homePage.title || 'Inicio', onClick: () => router.push('/') }] : []),
     ...otherPages.map((p) => ({ label: p.title || p.slug, onClick: () => router.push(`/${p.slug}`) })),
     ...(canManage ? [{ label: 'Gestión', onClick: () => router.push('/gestion') }] : []),
@@ -59,7 +60,7 @@ export function CatalogNavbar() {
     <Navbar
       storeName="Tienda"
       links={links}
-      onLogoClick={() => router.push(hasCatalog !== false ? '/productos' : '/')}
+      onLogoClick={() => router.push(hasCatalog !== false ? catalogPath : '/')}
       cartCount={Math.min(itemCount, 99)}
       onCartClick={isCustomer && hasPurchases !== false ? openDrawer : undefined}
       isLoggedIn={isLoggedIn}
@@ -74,7 +75,7 @@ export function CatalogNavbar() {
       onLogout={async () => {
         await auth.logout().catch((err) => console.error('[CatalogNavbar]', err));
         endSession();
-        window.location.href = '/productos';
+        window.location.href = catalogPath;
       }}
       onRegister={() => router.push('/registro')}
       onMyAccount={isCustomer ? () => router.push('/mi-cuenta') : undefined}

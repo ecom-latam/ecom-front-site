@@ -12,8 +12,9 @@ import { formatPrice } from '@/lib/format';
 export function CartDrawer() {
   const router = useRouter();
   const { items, isLoading, drawerOpen, closeDrawer, updateItem, removeItem } = useCart();
-  const { store } = usePageConfig();
+  const { store, catalog_slug } = usePageConfig();
   const currency = store?.currency;
+  const catalogPath = `/${catalog_slug ?? 'productos'}`;
   const [itemToRemove, setItemToRemove] = useState<string | null>(null);
   const [stockLimits, setStockLimits] = useState<Record<string, number>>({});
 
@@ -27,7 +28,7 @@ export function CartDrawer() {
       {items.length === 0 ? (
         <Drawer.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
           <Text variant="body-sm" color="muted">Tu carrito está vacío.</Text>
-          <Button emphasis="ghost" size="md" onClick={() => { closeDrawer(); router.push('/productos'); }} style={{ marginTop: '16px', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+          <Button emphasis="ghost" size="md" onClick={() => { closeDrawer(); router.push(catalogPath); }} style={{ marginTop: '16px', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
             Ver productos
           </Button>
         </Drawer.Body>

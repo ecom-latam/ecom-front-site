@@ -18,6 +18,12 @@ export default async function ProductosPage({ searchParams }: Props) {
     getCategories(),
   ]);
 
+  // EC-714: si el catalog_slug cambió, redirigir al slug configurado
+  const catalogSlug = storeInfo?.catalog_slug ?? 'productos';
+  if (catalogSlug !== 'productos') {
+    redirect(`/${catalogSlug}`);
+  }
+
   // EC-559: tiendas tipo "informativa" no tienen catalogo.
   if (storeInfo?.hasCatalog === false) {
     redirect('/');

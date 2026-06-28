@@ -9,6 +9,7 @@ interface RelatedProductsProps {
   categoryId: string;
   excludeId: string;
   currency?: Currency;
+  catalogSlug?: string;
 }
 
 function getMainImage(p: Product) {
@@ -38,6 +39,7 @@ export async function RelatedProducts({
   categoryId,
   excludeId,
   currency = 'ARS',
+  catalogSlug = 'productos',
 }: RelatedProductsProps) {
   let products: Product[];
   try {
@@ -71,7 +73,7 @@ export async function RelatedProducts({
           También te puede interesar
         </h2>
         <Link
-          href={`/productos?categoryId=${categoryId}`}
+          href={`/${catalogSlug}?categoryId=${categoryId}`}
           style={{
             fontFamily:     'var(--font-ui)',
             fontSize:       '13px',
