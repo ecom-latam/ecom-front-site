@@ -38,21 +38,14 @@ export function CatalogNavbar() {
     document.cookie = `ui-theme=${next}; path=/; max-age=31536000`;
   }, [isDark]);
 
-  const homePage = pages?.find((p) => p.isHome);
-  const otherPages = pages?.filter((p) => !p.isHome) ?? [];
-
-  // En tiendas con catalogo, "Inicio" -> '/' siempre redirige a
-  // /productos (el logo ya apunta ahi, pero se deja el link explicito como
-  // siempre). En tiendas sin catalogo, '/' es justo donde se renderiza el
-  // contenido real de 'home' -- ahi el link sale de esa misma pagina (su
-  // titulo, o "Inicio" si no le pusieron uno) en vez de omitirse.
-  // Las demas paginas del page builder van despues, en el orden en
-  // que se crearon.
   const links = [
     ...(hasCatalog !== false
       ? [{ label: catalog_label ?? 'Productos', onClick: () => router.push(catalogPath) }]
-      : homePage ? [{ label: homePage.title || 'Inicio', onClick: () => router.push('/') }] : []),
-    ...otherPages.map((p) => ({ label: p.title || p.slug, onClick: () => router.push(`/${p.slug}`) })),
+      : []),
+    ...(pages ?? []).map((p) => ({
+      label:   p.title || p.slug,
+      onClick: () => router.push(p.isHome ? '/' : `/${p.slug}`),
+    })),
     ...(canManage ? [{ label: 'Gestión', onClick: () => router.push('/gestion') }] : []),
   ];
 
