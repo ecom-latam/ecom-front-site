@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
+import { IllustrationMessage } from 'zoui';
 import { CatalogNavbar } from '@/components/catalog/CatalogNavbar';
 import { CartDrawer } from '@/components/catalog/CartDrawer';
 import { PromoBar } from '@/components/catalog/PromoBar';
 import { getPageInfo } from '@/lib/api/storeClient';
+import { ILLUSTRATION_MESSAGES } from '@/lib/illustrationMessages';
 
 export async function generateMetadata(): Promise<Metadata> {
   const info = await getPageInfo();
@@ -27,6 +29,14 @@ export default async function CatalogLayout({
   children: React.ReactNode;
 }) {
   const info = await getPageInfo();
+
+  if (info?.maintenanceMode) {
+    return (
+      <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <IllustrationMessage {...ILLUSTRATION_MESSAGES['under-construction']} />
+      </div>
+    );
+  }
 
   // Si la tienda no tiene ninguna sección activa ni páginas con contenido,
   // omitir navbar y chrome completo — el hijo renderiza la pantalla "en construcción".

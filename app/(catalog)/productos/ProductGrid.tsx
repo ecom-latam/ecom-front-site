@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 
 import type { Category, Product } from '@/lib/api/storeClient';
-import { ProductCard, ProductGrid as ProductGridUI, Pagination, EmptyState, Icon, Badge, Text } from 'zoui';
+import { ProductCard, ProductGrid as ProductGridUI, Pagination, EmptyState, Icon, Badge, Text, IllustrationMessage } from 'zoui';
+import { ILLUSTRATION_MESSAGES } from '@/lib/illustrationMessages';
 import { StoreCatalogBar } from '@/components/catalog/StoreCatalogBar';
 import { usePageConfig } from '@/context/PageConfigContext';
 import { formatPrice } from '@/lib/format';
@@ -102,18 +103,7 @@ export function ProductGrid({
       )}
 
       {products.length === 0 && !currentQ && !currentCategoryId ? (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', padding: '48px 24px', textAlign: 'center', gap: 24 }}>
-          <img
-            src="/illustrations/products-loading.webp"
-            alt=""
-            aria-hidden="true"
-            style={{ width: '50vw', height: 'auto', maxWidth: 560, objectFit: 'contain' }}
-          />
-          <div style={{ maxWidth: 320 }}>
-            <Text variant="heading-3" style={{ margin: '0 0 8px' }}>Estamos cargando los productos</Text>
-            <Text variant="body-sm" color="muted" style={{ margin: 0 }}>Volvé pronto, viene algo bueno.</Text>
-          </div>
-        </div>
+        <IllustrationMessage {...ILLUSTRATION_MESSAGES['no-products']} />
       ) : products.length === 0 ? (
         <EmptyState
           icon={<Icon name="search" />}
