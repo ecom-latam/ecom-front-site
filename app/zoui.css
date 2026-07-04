@@ -383,6 +383,41 @@
   color: var(--color-brand-700);
 }
 
+.zoui-illustration-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: var(--space-12) var(--space-6);
+  text-align: center;
+  gap: var(--space-8);
+}
+
+.zoui-illustration-message__image {
+  width: 50vw;
+  max-width: 560px;
+  height: auto;
+  object-fit: contain;
+}
+
+.zoui-illustration-message__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 560px;
+}
+
+.zoui-illustration-message__text {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.zoui-back-link {
+  display: block;
+  cursor: pointer;
+}
+
 .zoui-badge[data-variant=filled] {
   background: var(--_accent);
   border-color: var(--_accent);
@@ -1254,6 +1289,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.zoui-text[data-pointer] {
+  cursor: pointer;
 }
 
 .zoui-field[data-field=textarea] .zoui-field__control {
