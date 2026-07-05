@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
-import { IllustrationMessage } from 'zoui';
 import { CatalogNavbar } from '@/components/catalog/CatalogNavbar';
 import { CartDrawer } from '@/components/catalog/CartDrawer';
 import { PromoBar } from '@/components/catalog/PromoBar';
+import { PageUnderConstruction } from '@/components/catalog/PageUnderConstruction';
 import { getPageInfo } from '@/lib/api/storeClient';
-import { ILLUSTRATION_MESSAGES } from '@/lib/illustrationMessages';
 
 export async function generateMetadata(): Promise<Metadata> {
   const info = await getPageInfo();
@@ -31,11 +30,7 @@ export default async function CatalogLayout({
   const info = await getPageInfo();
 
   if (info?.maintenanceMode) {
-    return (
-      <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <IllustrationMessage {...ILLUSTRATION_MESSAGES['under-construction']} />
-      </div>
-    );
+    return <PageUnderConstruction />;
   }
 
   // Si la tienda no tiene ninguna sección activa ni páginas con contenido,
