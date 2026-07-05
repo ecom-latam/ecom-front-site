@@ -10,7 +10,7 @@ import type { Order, OrderStatus } from '@/utils/api/orders';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchAdminOrderRequest, clearCurrentOrder } from '@/store/orders/ordersSlice';
 import { getNextAdminStatuses, getStepLabel } from '@/utils/workflows';
-import { Badge, Button, Text, Modal } from 'zoui';
+import { Badge, Text, Modal } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { usePageConfig } from '@/context/PageConfigContext';
 import { formatPrice } from '@/lib/format';
@@ -311,7 +311,7 @@ export default function AdminPedidoDetailPage() {
         <Modal.Header>Confirmar pago</Modal.Header>
         <Modal.Body>
           <Text variant="body-sm">
-            ¿Confirmás que recibiste el pago? El pedido pasará a estado "Confirmado".
+            ¿Confirmás que recibiste el pago? El pedido pasará a estado &quot;Confirmado&quot;.
           </Text>
         </Modal.Body>
         <Modal.Footer>

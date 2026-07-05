@@ -6,7 +6,7 @@ interface SaveButtonProps {
   productId: string;
 }
 
-export function SaveButton({ productId: _productId }: SaveButtonProps) {
+export function SaveButton({}: SaveButtonProps) {
   const [saved, setSaved] = useState(false);
 
   const toggle = useCallback(() => setSaved(s => !s), []);

@@ -11,7 +11,7 @@ import type { Order } from '@/utils/api/orders';
 import { pageInfo } from '@/utils/api/pageInfo';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchCurrentOrderRequest, clearCurrentOrder } from '@/store/orders/ordersSlice';
-import { Button, Badge, Text, Modal } from 'zoui';
+import { Badge, Text, Modal } from 'zoui';
 import { usePageConfig } from '@/context/PageConfigContext';
 import { formatPrice } from '@/lib/format';
 import { StoreButton } from '@/components/ui/StoreButton';

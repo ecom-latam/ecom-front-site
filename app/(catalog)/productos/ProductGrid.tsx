@@ -79,7 +79,7 @@ export function ProductGrid({
       const qs = params.toString();
       router.push(qs ? `${catalogPath}?${qs}` : catalogPath);
     },
-    [router, currentQ, currentCategoryId, currentView, page]
+    [router, currentQ, currentCategoryId, currentView, page, catalogPath]
   );
 
   const catalogCategories = categories.map((c) => ({ label: c.name, value: c._id }));
