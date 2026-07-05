@@ -14,13 +14,14 @@ export function InformationalHome({ storeInfo }: { storeInfo: PageInfo }) {
   const homePage = storeInfo.pages?.find((p) => p.isHome);
   const blocks = homePage?.blocks ?? [];
 
+  if (blocks.length === 0) {
+    return <PageUnderConstruction />;
+  }
+
   return (
     <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
       <div className={styles.content}>
-        {blocks.length > 0
-          ? <DynamicPageRenderer blocks={blocks} showGrid={homePage?.workInProgress} />
-          : <PageUnderConstruction />
-        }
+        <DynamicPageRenderer blocks={blocks} showGrid={homePage?.workInProgress} />
       </div>
     </main>
   );
