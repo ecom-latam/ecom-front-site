@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import styles from './page.module.scss';
 import { useRouter } from 'next/navigation';
-import type { Order, OrderStatus, PaymentStatus, PaymentMethod } from '@/utils/api/orders';
+import type { OrderStatus, PaymentStatus, PaymentMethod } from '@/utils/api/orders';
 import { Badge, Table, Text, Pagination } from 'zoui';
 import { StoreSelect } from '@/components/ui/StoreSelect';
 import { StoreButton } from '@/components/ui/StoreButton';

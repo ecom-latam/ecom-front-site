@@ -188,7 +188,7 @@ export default function DireccionesPage() {
           </div>
           <Text variant="body" color="muted">Todavía no tenés direcciones guardadas.</Text>
           <Text variant="body-sm" color="muted" style={{ marginTop: '6px' }}>
-            Usá el botón "Agregar" para guardar tu primera dirección de envío.
+            Usá el botón &quot;Agregar&quot; para guardar tu primera dirección de envío.
           </Text>
         </div>
       ) : (

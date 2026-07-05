@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { products as productsApi, categories as categoriesApi, storeOptions as storeOptionsApi } from '@/utils/api';
+import { products as productsApi } from '@/utils/api';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchProductsRequest } from '@/store/products/productsSlice';
 import { fetchCategoriesRequest } from '@/store/categories/categoriesSlice';
@@ -716,6 +716,8 @@ export default function GestionProductosPage() {
   const [confirmModal, setConfirmModal] = useState<{ title: string; message: string; confirmLabel: string; danger?: boolean; onConfirm: () => void } | null>(null);
 
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const searchRef = useRef(search);
+  useEffect(() => { searchRef.current = search; }, [search]);
   const totalPages = Math.ceil(total / LIMIT);
 
   const load = useCallback((p: number, q: string, status: ProductStatus | '') => {
@@ -739,7 +741,9 @@ export default function GestionProductosPage() {
     }
   }, []);
 
-  useEffect(() => { load(page, search, statusFilter); }, [load, page, statusFilter]);
+  // Lee el search vigente via ref (no via closure) para no re-disparar este efecto
+  // en cada tecla -- ese caso ya lo maneja handleSearch con su propio debounce.
+  useEffect(() => { load(page, searchRef.current, statusFilter); }, [load, page, statusFilter]);
 
   useEffect(() => {
     if (!reduxLoading && !prodInitialized.current) {

@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchCategoriesRequest } from '@/store/categories/categoriesSlice';
 import { triggerErrorModal } from '@/lib/errorModal';
 import type { Category, CategoryPayload } from '@/utils/api';
-import { Modal, Drawer, Table, Badge, Button, Text } from 'zoui';
+import { Modal, Drawer, Table, Badge, Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
 import { StoreSelect } from '@/components/ui/StoreSelect';
@@ -209,20 +209,6 @@ export default function GestionCategoriasPage() {
     setLoading(false);
   }, [reduxCategories, reduxLoading]);
 
-  async function load() {
-    setLoading(true);
-    try {
-      const { data } = await categoriesApi.list();
-      setCategoryList(data);
-      const parentIds = new Set(data.map(c => c.parentId).filter(Boolean) as string[]);
-      setCollapsed(parentIds);
-    } catch {
-      // silent
-    } finally {
-      setLoading(false);
-    }
-  }
-
   async function refresh() {
     try {
       const { data } = await categoriesApi.list();
@@ -266,7 +252,11 @@ export default function GestionCategoriasPage() {
   function toggleCollapse(id: string) {
     setCollapsed(prev => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
   }
