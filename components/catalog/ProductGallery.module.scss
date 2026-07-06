@@ -28,4 +28,48 @@
   flex-shrink: 0;
   border-radius: var(--radius-md);
   overflow: hidden;
+  border: 2px solid transparent;
+
+  &[aria-current='true'] {
+    border-color: var(--color-brand);
+  }
+}
+
+// El lightbox necesita ser bien más ancho que la escala sm/md/lg del Modal
+// (pensada para diálogos de texto, no para una imagen grande) — !important
+// es la única forma de ganarle en especificidad a `.zoui-modal[data-size]`
+// sin acoplarse al orden de carga de los stylesheets.
+.lightboxModal {
+  max-width: min(90vw, 960px) !important;
+  padding: var(--space-4) !important;
+  gap: var(--space-3);
+  position: relative;
+}
+
+.lightboxClose {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-surface);
+  color: var(--color-fg-muted);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+
+  &:hover { background: var(--color-bg-subtle); color: var(--color-fg-primary); }
+}
+
+.lightboxImage {
+  position: relative;
+  width: 100%;
+  height: min(70vh, 720px);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
