@@ -1,0 +1,17 @@
+.root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: zoom-in;
+  overflow: hidden;
+  background: var(--color-bg-subtle);
+}
+
+.lens {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid var(--color-border-default);
+  box-shadow: var(--shadow-lg);
+  pointer-events: none;
+  background-repeat: no-repeat;
+}
