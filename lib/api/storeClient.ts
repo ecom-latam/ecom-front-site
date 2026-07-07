@@ -68,6 +68,7 @@ export interface ProductListParams {
   q?: string;
   exclude?: string;
   hideOutOfStock?: boolean;
+  ids?: string[];
 }
 
 async function getSlug(): Promise<string> {
@@ -95,6 +96,7 @@ export async function getProducts(params: ProductListParams = {}): Promise<Produ
     q: params.q,
     exclude: params.exclude,
     hideOutOfStock: params.hideOutOfStock ? 'true' : undefined,
+    ids: params.ids && params.ids.length > 0 ? params.ids.join(',') : undefined,
   });
   return client.get<ProductListResponse>(`/api/product/products${query}`, {
     headers: { 'X-Tenant-Slug': slug },
