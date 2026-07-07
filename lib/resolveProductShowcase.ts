@@ -15,7 +15,9 @@ export async function resolveProductShowcaseBlocks(blocks: PageBlock[], currency
   const allIds = Array.from(new Set(showcaseBlocks.flatMap((b) => b.props.productIds ?? [])));
   if (allIds.length === 0) return blocks;
 
-  const { data: products } = await getProducts({ ids: allIds });
+  // sin limit explicito, getProducts usa el default de ecom-product (30) y
+  // silenciosamente recortaria vitrinas curadas con mas ids que eso.
+  const { data: products } = await getProducts({ ids: allIds, limit: allIds.length });
   const byId = new Map(products.map((p) => [p._id, p]));
 
   function toShowcaseProduct(p: Product) {
