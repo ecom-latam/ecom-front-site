@@ -68,7 +68,7 @@ export default async function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="stylesheet" href={getGoogleFontUrl(fontId ?? 'geist')} />
+        <link rel="stylesheet" href={getGoogleFontUrl(fontId ?? 'geist')} precedence="default" />
       </head>
       <body className={styles.body}>
         <style dangerouslySetInnerHTML={{ __html: brandStyles }} />
