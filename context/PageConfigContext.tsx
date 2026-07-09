@@ -39,8 +39,8 @@ export interface PageConfig {
   // todavia, nada lee este campo en el storefront.
   hasMetrics?: boolean;
   store?: PageStoreConfig;
-  // Paginas visibles del page builder (sin 'home') -- el navbar
-  // arma sus links desde esto.
+  // Paginas visibles del page builder, incluida la que tenga isHome: true
+  // si existe -- el navbar arma sus links desde esto.
   pages?: PageConfigPage[];
 }
 
