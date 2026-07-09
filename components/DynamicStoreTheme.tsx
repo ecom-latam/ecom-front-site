@@ -76,12 +76,13 @@ function toPageConfig(raw: Record<string, unknown>): PageConfig {
       ratings_enabled:       store.ratings_enabled === true,
       reviews_enabled:       store.reviews_enabled === true,
     },
-    // `pages` del backend incluye 'home' (siempre primera, con
-    // rows) -- se expone tal cual por context, sin filtrar. El navbar
-    // (CatalogNavbar) decide si home necesita su propio link aparte segun
-    // hasCatalog. El context no necesita las rows de ninguna pagina -- las
-    // de home se leen directo del fetch SSR (ver InformationalHome), las de
-    // las demas se piden por slug puntual (getPageBySlug) al navegar.
+    // `pages` del backend puede venir vacio (tienda sin ninguna pagina
+    // creada todavia) -- se expone tal cual por context, sin filtrar. Cada
+    // pagina trae su propio isHome; el navbar (CatalogNavbar) decide el link
+    // ('/' vs '/slug') segun ese flag, no por posicion. El context no
+    // necesita los blocks de ninguna pagina -- los de la home se leen
+    // directo del fetch SSR (ver InformationalHome), los de las demas se
+    // piden por slug puntual (getPageBySlug) al navegar.
     pages: Array.isArray(raw.pages)
       ? raw.pages
           .filter((p): p is { slug: string; title: string; isHome: boolean } => typeof p?.slug === 'string')

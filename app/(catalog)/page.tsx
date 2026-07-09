@@ -11,5 +11,13 @@ export default async function CatalogIndex() {
     return <InformationalHome storeInfo={storeInfo} />;
   }
 
+  // Si alguna pagina del builder tiene isHome: true, esa es la que manda en
+  // '/' -- ninguna pagina es home por default (no hay ninguna reservada),
+  // asi que sin una marcada explicitamente cae al catalogo como siempre.
+  const homePage = storeInfo?.pages?.find((p) => p.isHome);
+  if (homePage) {
+    redirect(`/${homePage.slug}`);
+  }
+
   redirect(`/${storeInfo?.catalog_slug ?? 'productos'}`);
 }

@@ -183,8 +183,10 @@ export interface PageInfo {
   // Config comercial de ecom-store, embebida por ecom-page --
   // ausente del todo en tiendas sin catalogo.
   store?: StoreCommerceConfig;
-  // Listado unico de paginas visibles, 'home' siempre primera --
-  // cada una con sus blocks (grilla plana, reemplaza rows[]).
+  // Listado de paginas visibles, en el orden en que se crearon -- cada una
+  // con sus blocks (grilla plana, reemplaza rows[]). Puede venir vacio si la
+  // tienda todavia no creo ninguna pagina. Ninguna es "home" por default:
+  // isHome es un flag que puede estar en cualquiera (o en ninguna).
   pages?: { slug: string; title: string; isHome: boolean; workInProgress: boolean; blocks: PageBlock[] }[];
 }
 
@@ -244,7 +246,8 @@ export const getPageInfo = cache(async (): Promise<PageInfo | null> => {
   }
 });
 
-// Pagina puntual del page builder (no 'home'). null si no existe o
+// Pagina puntual del page builder por slug (la usa el catch-all
+// [pageSlug], no la ruta raiz -- esa usa getPageInfo). null si no existe o
 // esta oculta -- el caller llama notFound().
 export const getPageBySlug = cache(async (pageSlug: string): Promise<PageContent | null> => {
   const slug = await getSlug();
