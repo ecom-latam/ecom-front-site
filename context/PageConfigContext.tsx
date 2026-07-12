@@ -20,6 +20,9 @@ export interface PageStoreConfig {
   interest_free?: boolean;
   ratings_enabled?: boolean;
   reviews_enabled?: boolean;
+  // EC-901: default true (mismo default que el backend) -- solo se oculta la
+  // opcion de efectivo si el vendedor lo desactivo explicitamente.
+  cash_payment_enabled?: boolean;
 }
 
 export interface PageConfigPage {

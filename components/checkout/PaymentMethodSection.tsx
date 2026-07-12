@@ -3,12 +3,13 @@ import type { PaymentMethod } from '@/utils/api/orders';
 import { MercadoPagoLogo } from './MercadoPagoLogo';
 
 interface PaymentMethodSectionProps {
-  value:        PaymentMethod;
-  mpAvailable:  boolean;
-  onChange:     (method: PaymentMethod) => void;
+  value:          PaymentMethod;
+  mpAvailable:    boolean;
+  cashAvailable:  boolean;
+  onChange:       (method: PaymentMethod) => void;
 }
 
-export function PaymentMethodSection({ value, mpAvailable, onChange }: PaymentMethodSectionProps) {
+export function PaymentMethodSection({ value, mpAvailable, cashAvailable, onChange }: PaymentMethodSectionProps) {
   return (
     <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px' }}>
       <Text variant="heading-3" style={{ marginBottom: '20px' }}>Método de pago</Text>
@@ -34,15 +35,17 @@ export function PaymentMethodSection({ value, mpAvailable, onChange }: PaymentMe
             trailing={<MercadoPagoLogo />}
           />
         )}
-        <OptionCard
-          name="paymentMethod"
-          value="cash"
-          label="Efectivo en tienda"
-          description="Pagás al retirar tu pedido en el local. Solo disponible con retiro en tienda."
-          selected={value === 'cash'}
-          onChange={() => onChange('cash')}
-          data-testid="checkout-payment-cash"
-        />
+        {cashAvailable && (
+          <OptionCard
+            name="paymentMethod"
+            value="cash"
+            label="Efectivo en tienda"
+            description="Pagás al retirar tu pedido en el local. Solo disponible con retiro en tienda."
+            selected={value === 'cash'}
+            onChange={() => onChange('cash')}
+            data-testid="checkout-payment-cash"
+          />
+        )}
       </div>
     </section>
   );

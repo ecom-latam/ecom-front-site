@@ -20,7 +20,7 @@ export default function CheckoutPage() {
     ready, submitting, error,
     savedAddresses, selectedAddressId,
     form, set, applyAddress, handleSubmit,
-    mpAvailable,
+    mpAvailable, cashAvailable,
     subtotal, items, itemCount, currency,
   } = useCheckoutForm();
 
@@ -69,6 +69,7 @@ export default function CheckoutPage() {
             <PaymentMethodSection
               value={form.paymentMethod}
               mpAvailable={mpAvailable}
+              cashAvailable={cashAvailable}
               onChange={(method) => set('paymentMethod', method)}
             />
             <NotesSection
