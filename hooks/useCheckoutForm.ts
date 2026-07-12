@@ -59,7 +59,7 @@ export function useCheckoutForm() {
     if (role !== 'Customer') { router.replace('/productos'); return; }
     setReady(true);
     dispatch(fetchAddressesRequest());
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps — router is stable in practice but not guaranteed; auth check runs once on mount
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps -- router is stable in practice but not guaranteed; auth check runs once on mount
 
   useEffect(() => {
     if (addressInitialized.current || addressesLoading) return;
@@ -73,7 +73,15 @@ export function useCheckoutForm() {
   }, [reduxAddresses, addressesLoading]);
 
   function set(field: keyof CheckoutForm, value: string) {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    setForm((prev) => {
+      const next = { ...prev, [field]: value };
+      // EC-895: efectivo en tienda se paga contra retiro -- forzar pickup apenas
+      // se elige, sin importar qué método de envío estuviera seleccionado antes.
+      if (field === 'paymentMethod' && value === 'cash') {
+        next.shippingMethod = 'pickup';
+      }
+      return next;
+    });
     setError(null);
   }
 
@@ -121,6 +129,17 @@ export function useCheckoutForm() {
     window.location.href = data.initPoint;
   }
 
+  async function payWithCash() {
+    const { data: order } = await orders.create({
+      shippingAddress,
+      paymentMethod:  'cash',
+      shippingMethod: 'pickup',
+      notes:          form.notes,
+    });
+    await clearCart();
+    router.push(`/pedidos/${order._id}`);
+  }
+
   async function handleSubmit() {
     if (form.fullName.trim().length < 3) {
       setError('El nombre completo es requerido (mínimo 3 caracteres).');
@@ -145,8 +164,9 @@ export function useCheckoutForm() {
     setSubmitting(true);
     setError(null);
     try {
-      if (form.paymentMethod === 'mp') await payWithMercadoPago();
-      else                             await payWithTransfer();
+      if (form.paymentMethod === 'mp')        await payWithMercadoPago();
+      else if (form.paymentMethod === 'cash') await payWithCash();
+      else                                    await payWithTransfer();
     } catch {
       setError('No se pudo iniciar el pago. Intentá nuevamente.');
       setSubmitting(false);

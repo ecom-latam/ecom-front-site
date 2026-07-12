@@ -56,6 +56,7 @@ export default function CheckoutPage() {
             <ShippingMethodSection
               value={form.shippingMethod}
               onChange={(method) => set('shippingMethod', method)}
+              forcedPickup={form.paymentMethod === 'cash'}
             />
             <ShippingDataSection
               form={form}

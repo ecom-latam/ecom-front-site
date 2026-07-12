@@ -15,18 +15,22 @@ import { formatPrice } from '@/lib/format';
 
 const STATUS_LABEL: Record<string, string> = {
   new: 'Nuevo',
+  notified: 'Transferencia enviada',
   confirmed: 'Confirmado',
   processing: 'En preparación',
   shipped: 'Enviado',
+  ready: 'Listo para retirar',
   delivered: 'Entregado',
   cancelled: 'Cancelado',
 };
 
 const STATUS_TONE: Record<string, BadgeTone> = {
   new: 'neutral',
+  notified: 'warning',
   confirmed: 'info',
   processing: 'warning',
   shipped: 'info',
+  ready: 'info',
   delivered: 'success',
   cancelled: 'danger',
 };
@@ -36,6 +40,12 @@ const PAYMENT_LABEL: Record<string, string> = {
   in_progress: 'Notificado',
   paid: 'Pagado',
   failed: 'Fallido',
+};
+
+const PAYMENT_METHOD_LABEL: Record<string, string> = {
+  transfer: 'Transferencia',
+  mp: 'Mercado Pago',
+  cash: 'Efectivo',
 };
 
 const PAYMENT_TONE: Record<string, BadgeTone> = {
@@ -94,9 +104,11 @@ export default function AdminPedidosPage() {
             options={[
               { value: '__all__', label: 'Todos los estados' },
               { value: 'new', label: 'Nuevo' },
+              { value: 'notified', label: 'Transferencia enviada' },
               { value: 'confirmed', label: 'Confirmado' },
               { value: 'processing', label: 'En preparación' },
               { value: 'shipped', label: 'Enviado' },
+              { value: 'ready', label: 'Listo para retirar' },
               { value: 'delivered', label: 'Entregado' },
               { value: 'cancelled', label: 'Cancelado' },
             ]}
@@ -128,6 +140,7 @@ export default function AdminPedidosPage() {
             options={[
               { value: '__all__', label: 'Todos los métodos' },
               { value: 'transfer', label: 'Transferencia' },
+              { value: 'mp', label: 'Mercado Pago' },
               { value: 'cash', label: 'Efectivo' },
             ]}
           />
@@ -179,7 +192,7 @@ export default function AdminPedidosPage() {
                   </Table.Td>
                   <Table.Td>{formatPrice(order.total, currency)}</Table.Td>
                   <Table.Td>
-                    {order.paymentMethod === 'transfer' ? 'Transferencia' : 'Efectivo'}
+                    {PAYMENT_METHOD_LABEL[order.paymentMethod] ?? order.paymentMethod}
                   </Table.Td>
                   <Table.Td>
                     <Badge tone={PAYMENT_TONE[order.paymentStatus]} variant="pill">
