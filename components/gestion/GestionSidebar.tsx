@@ -143,7 +143,7 @@ export function GestionSidebar({ role }: Props) {
     .filter((group) => group.items.length > 0);
 
   return (
-    <Sidebar>
+    <Sidebar style={{ position: 'sticky', top: 56, height: 'calc(100vh - 56px)', overflowY: 'auto' }}>
       <Sidebar.Header label="Panel" />
       <Sidebar.Nav>
         {visibleGroups.map((group, idx) => (
