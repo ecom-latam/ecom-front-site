@@ -47,7 +47,9 @@ export default async function CatalogLayout({
   return (
     <>
       <PromoBar position="above-navbar" />
-      <CatalogNavbar />
+      <div style={{ position: 'sticky', top: 0, zIndex: 20 }}>
+        <CatalogNavbar />
+      </div>
       <PromoBar position="below-navbar" />
       <CartDrawer />
       {children}
