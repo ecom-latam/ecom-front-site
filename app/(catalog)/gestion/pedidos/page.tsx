@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import styles from './page.module.scss';
 import { useRouter } from 'next/navigation';
 import type { OrderStatus, PaymentStatus, PaymentMethod } from '@/utils/api/orders';
-import { Badge, Table, Text, Pagination } from 'zoui';
+import { Badge, Table, Text, Pagination, IllustrationMessage } from 'zoui';
 import { StoreSelect } from '@/components/ui/StoreSelect';
 import { StoreButton } from '@/components/ui/StoreButton';
 import type { BadgeTone } from 'zoui';
@@ -140,27 +140,33 @@ export default function AdminPedidosPage() {
             <div key={i} className={styles.skeletonItem} style={{ background: 'var(--color-bg-subtle)' }} />
           ))}
         </div>
-      ) : orderList.length === 0 ? (
-        <div style={{ textAlign: 'center', paddingTop: '48px' }}>
-          <Text variant="body" color="muted">No se encontraron pedidos.</Text>
-        </div>
       ) : (
         <>
-          <Table>
-            <Table.Head>
-              <Table.Row>
-                <Table.Th>Nº</Table.Th>
-                <Table.Th>Fecha</Table.Th>
-                <Table.Th>Cliente</Table.Th>
-                <Table.Th>Total</Table.Th>
-                <Table.Th>Pago</Table.Th>
-                <Table.Th>Estado pago</Table.Th>
-                <Table.Th>Estado orden</Table.Th>
-                <Table.Th></Table.Th>
-              </Table.Row>
-            </Table.Head>
-            <Table.Body>
-              {orderList.map((order) => (
+          <Table data-testid="pedidos-table">
+            <Table.Root>
+              <Table.Head>
+                <Table.Row>
+                  <Table.Th>Nº</Table.Th>
+                  <Table.Th>Fecha</Table.Th>
+                  <Table.Th>Cliente</Table.Th>
+                  <Table.Th>Total</Table.Th>
+                  <Table.Th>Pago</Table.Th>
+                  <Table.Th>Estado pago</Table.Th>
+                  <Table.Th>Estado orden</Table.Th>
+                  <Table.Th></Table.Th>
+                </Table.Row>
+              </Table.Head>
+              <Table.Body>
+                {orderList.length === 0 && (
+                  <tr><td className={styles.emptyCell} colSpan={8}>
+                    <IllustrationMessage
+                      name="products-loading"
+                      title="No hay pedidos todavía"
+                      description="Cuando alguien compre en tu tienda, va a aparecer acá."
+                    />
+                  </td></tr>
+                )}
+                {orderList.map((order) => (
                 <Table.Row key={order._id}>
                   <Table.Td>#{order.orderNumber}</Table.Td>
                   <Table.Td>
@@ -197,7 +203,8 @@ export default function AdminPedidosPage() {
                   </Table.Td>
                 </Table.Row>
               ))}
-            </Table.Body>
+              </Table.Body>
+            </Table.Root>
           </Table>
 
           {totalPages > 1 && (
