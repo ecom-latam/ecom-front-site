@@ -43,8 +43,11 @@ export function useCheckoutForm() {
   const { list: reduxAddresses, loading: addressesLoading } = useAppSelector((s) => s.addresses);
   const addressInitialized = useRef(false);
 
-  const mpAvailable = !!store?.mp_public_key && currency === 'ARS';
-  const subtotal     = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const mpAvailable   = !!store?.mp_public_key && currency === 'ARS';
+  // EC-901: default true (mismo default que el backend) -- solo se oculta si
+  // el vendedor lo desactivo explicitamente desde Cobros.
+  const cashAvailable = store?.cash_payment_enabled !== false;
+  const subtotal      = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const [ready,             setReady]             = useState(false);
   const [submitting,        setSubmitting]        = useState(false);
@@ -177,7 +180,7 @@ export function useCheckoutForm() {
     ready, submitting, error,
     savedAddresses, selectedAddressId,
     form, set, applyAddress, handleSubmit,
-    mpAvailable,
+    mpAvailable, cashAvailable,
     subtotal, items, itemCount, currency,
   };
 }
