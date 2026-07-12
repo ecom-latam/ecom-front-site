@@ -22,6 +22,7 @@ const ACCEPT_ERRORS: Record<string, string> = {
   'MS01-ERR050': 'El link de invitación expiró. Pedí uno nuevo al administrador.',
   'MS01-ERR051': 'El link de invitación es inválido.',
   'MS01-ERR052': 'Tu cuenta fue creada con un proveedor externo. Contactá al administrador.',
+  'MS01-ERR053': 'La tienda ya alcanzó su límite de colaboradores. Avisale al administrador.',
   INTERNAL_ERROR: 'Error del servidor. Intentá de nuevo.',
 };
 
