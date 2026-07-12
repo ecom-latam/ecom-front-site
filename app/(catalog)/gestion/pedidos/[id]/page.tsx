@@ -52,6 +52,12 @@ const PAYMENT_TONE: Record<string, BadgeTone> = {
   failed: 'danger',
 };
 
+const PAYMENT_METHOD_LABEL: Record<string, string> = {
+  transfer: 'Transferencia bancaria',
+  mp: 'Mercado Pago',
+  cash: 'Efectivo en tienda',
+};
+
 const STATUS_ACTION_LABEL: Record<string, string> = {
   notified: 'Transferencia recibida',
   confirmed: 'Confirmar pedido',
@@ -60,6 +66,10 @@ const STATUS_ACTION_LABEL: Record<string, string> = {
   ready: 'Preparar para retirar',
   delivered: 'Marcar como entregado',
 };
+
+// EC-895: en cash:pickup el ultimo paso confirma retiro Y pago en una sola
+// accion -- el boton lo tiene que decir, "Marcar como entregado" no alcanza.
+const CASH_DELIVERED_ACTION_LABEL = 'Confirmar retiro y pago recibido';
 
 export default function AdminPedidoDetailPage() {
   const router = useRouter();
@@ -244,7 +254,7 @@ export default function AdminPedidoDetailPage() {
           <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '20px' }}>
             <Text variant="heading-3" style={{ marginBottom: '12px' }}>Pago</Text>
             <Text variant="body-sm" style={{ marginBottom: '12px' }}>
-              {order.paymentMethod === 'transfer' ? 'Transferencia bancaria' : 'Efectivo en mano'}
+              {PAYMENT_METHOD_LABEL[order.paymentMethod] ?? order.paymentMethod}
             </Text>
             {canConfirmPayment && (
               <StoreButton
@@ -274,7 +284,9 @@ export default function AdminPedidoDetailPage() {
                     data-testid={`status-btn-${status}`}
                     style={{ justifyContent: 'center' }}
                   >
-                    {STATUS_ACTION_LABEL[status]}
+                    {order.paymentMethod === 'cash' && status === 'delivered'
+                      ? CASH_DELIVERED_ACTION_LABEL
+                      : STATUS_ACTION_LABEL[status]}
                   </StoreButton>
                 ))}
                 {canCancel && (

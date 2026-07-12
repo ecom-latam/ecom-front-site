@@ -1,7 +1,9 @@
 import { apiClient } from './client';
 import type { AxiosRequestConfig } from 'axios';
 
-export type PaymentMethod = 'transfer' | 'mercadopago' | 'mp';
+// EC-895: 'mercadopago' nunca existió en el backend (typo/artefacto viejo) --
+// los valores reales son transfer | mp | cash.
+export type PaymentMethod = 'transfer' | 'mp' | 'cash';
 export type ShippingMethod = 'delivery' | 'pickup';
 export type PaymentStatus = 'pending' | 'in_progress' | 'paid' | 'failed';
 export type OrderStatus = 'new' | 'notified' | 'confirmed' | 'processing' | 'shipped' | 'ready' | 'delivered' | 'cancelled';

@@ -34,6 +34,15 @@ export function PaymentMethodSection({ value, mpAvailable, onChange }: PaymentMe
             trailing={<MercadoPagoLogo />}
           />
         )}
+        <OptionCard
+          name="paymentMethod"
+          value="cash"
+          label="Efectivo en tienda"
+          description="Pagás al retirar tu pedido en el local. Solo disponible con retiro en tienda."
+          selected={value === 'cash'}
+          onChange={() => onChange('cash')}
+          data-testid="checkout-payment-cash"
+        />
       </div>
     </section>
   );
