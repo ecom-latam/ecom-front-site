@@ -19,9 +19,9 @@ export const auth = {
   logout: () =>
     apiClient.post('/api/auth/logout', {}),
 
-  getInvitation: (token: string) =>
-    apiClient.get<InviteInfo>(`/api/auth/invitations/${token}`),
+  getInvitation: (token: string, config?: AxiosRequestConfig) =>
+    apiClient.get<InviteInfo>(`/api/auth/invitations/${token}`, config),
 
-  acceptInvitation: (token: string, body: { email: string; password: string }) =>
-    apiClient.post<{ accessToken?: string }>(`/api/auth/invitations/${token}`, body),
+  acceptInvitation: (token: string, body: { email: string; password: string }, config?: AxiosRequestConfig) =>
+    apiClient.post<{ userId: string; email: string }>(`/api/auth/invitations/${token}/accept`, body, config),
 };
