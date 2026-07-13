@@ -91,6 +91,10 @@
   --navbar-height: 64px;
   --navbar-mobile-height: 56px;
   --sidebar-width: 224px;
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
 }
 
 [data-theme=dark] {
@@ -8989,6 +8993,38 @@
   min-width: 0;
 }
 
+.zoui-resumen-tienda-card__recommendation-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+  padding: 0;
+  list-style: none;
+}
+
+.zoui-resumen-tienda-card__recommendation-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.zoui-resumen-tienda-card__recommendation-item-dot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+}
+.zoui-resumen-tienda-card__recommendation-item[data-tone=success] .zoui-resumen-tienda-card__recommendation-item-dot {
+  color: var(--color-success-500);
+}
+.zoui-resumen-tienda-card__recommendation-item[data-tone=warning] .zoui-resumen-tienda-card__recommendation-item-dot {
+  color: var(--color-warning-500);
+}
+.zoui-resumen-tienda-card__recommendation-item[data-tone=danger] .zoui-resumen-tienda-card__recommendation-item-dot {
+  color: var(--color-danger-500);
+}
+
 .zoui-resumen-tienda-card__recommendation-cta {
   flex-shrink: 0;
   background: var(--color-bg-muted);
@@ -9157,7 +9193,7 @@
   overflow: hidden;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   .zoui-page-renderer__cell {
     grid-column: span 12 !important;
     grid-row: span 1 !important;

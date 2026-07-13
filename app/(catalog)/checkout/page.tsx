@@ -51,7 +51,7 @@ export default function CheckoutPage() {
       <div className={styles.containerMain}>
         <Text variant="heading-2" style={{ marginBottom: '32px' }}>Checkout</Text>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '32px', alignItems: 'start' }}>
+        <div className={styles.grid}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <ShippingMethodSection
               value={form.shippingMethod}
