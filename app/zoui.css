@@ -9273,11 +9273,16 @@
 .zoui-page-renderer__cell {
   min-width: 0;
   overflow: hidden;
+  grid-column: var(--zoui-page-col-desktop);
+  grid-row: var(--zoui-page-row-desktop);
 }
 
 @media (max-width: 639px) {
+  .zoui-page-renderer {
+    grid-template-columns: repeat(4, 1fr);
+  }
   .zoui-page-renderer__cell {
-    grid-column: span 12 !important;
+    grid-column: var(--zoui-page-col-mobile) !important;
     grid-row: span 1 !important;
   }
 }
