@@ -72,6 +72,7 @@ export function CatalogNavbar() {
       }}
       onRegister={() => router.push('/registro')}
       onMyAccount={isCustomer ? () => router.push('/mi-cuenta') : undefined}
+      testId="catalog-navbar"
     />
   );
 }
