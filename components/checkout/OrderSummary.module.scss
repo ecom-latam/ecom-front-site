@@ -1,9 +1,0 @@
-// EC-910: sticky solo tiene sentido en el layout de 2 columnas (desde 768px,
-// ver page.module.scss .grid) -- en la columna unica de mobile, un resumen
-// pegado arriba mientras se scrollea el formulario se ve roto, no ayuda.
-.wrap {
-  @media (min-width: 768px) {
-    position: sticky;
-    top: 24px;
-  }
-}

@@ -4,7 +4,6 @@ import type { PaymentMethod } from '@/utils/api/orders';
 import type { Currency } from '@/context/PageConfigContext';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { formatPrice } from '@/lib/format';
-import styles from './OrderSummary.module.scss';
 
 interface CartItem {
   _id:      string;
@@ -26,7 +25,7 @@ interface OrderSummaryProps {
 
 export function OrderSummary({ items, subtotal, currency, error, submitting, paymentMethod, onSubmit }: OrderSummaryProps) {
   return (
-    <div className={styles.wrap}>
+    <div style={{ position: 'sticky', top: '24px' }}>
       <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px' }}>
         <Text variant="heading-3" style={{ marginBottom: '20px' }}>Resumen del pedido</Text>
 
