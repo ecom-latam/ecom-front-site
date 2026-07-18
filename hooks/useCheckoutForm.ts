@@ -44,9 +44,7 @@ export function useCheckoutForm() {
   const addressInitialized = useRef(false);
 
   const mpAvailable   = !!store?.mp_public_key && currency === 'ARS';
-  // EC-901: default true (mismo default que el backend) -- solo se oculta si
-  // el vendedor lo desactivo explicitamente desde Cobros.
-  const cashAvailable = store?.cash_payment_enabled !== false;
+  const cashAvailable = store?.cash_payment_enabled;
   const subtotal      = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const [ready,             setReady]             = useState(false);
