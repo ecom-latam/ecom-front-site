@@ -2586,12 +2586,6 @@
   --_radius: 0;
   --_fw: var(--font-weight-semibold);
 }
-.zoui-field[data-variant=frame] .zoui-field__label {
-  color: color-mix(in srgb, var(--color-inverse-fg) 65%, transparent);
-}
-.zoui-field[data-variant=frame] .zoui-field__hint {
-  color: color-mix(in srgb, var(--color-inverse-fg) 50%, transparent);
-}
 .zoui-field[data-variant=frame] .zoui-field__icon {
   color: color-mix(in srgb, var(--color-inverse-fg) 55%, transparent);
 }
@@ -2605,9 +2599,6 @@
   --_ph: color-mix(in srgb, var(--color-pill-fg) 45%, transparent);
   --_radius: var(--radius-full);
   --_px: 18px;
-}
-.zoui-field[data-variant=capsule] .zoui-field__label {
-  color: color-mix(in srgb, var(--color-pill-fg) 65%, transparent);
 }
 .zoui-field[data-variant=capsule] .zoui-field__icon {
   color: color-mix(in srgb, var(--color-pill-fg) 55%, transparent);
@@ -5501,6 +5492,9 @@
 .zoui-product-card[data-variant=filled] .zoui-product-card__media {
   background: var(--color-brand-400);
 }
+.zoui-product-card[data-variant=filled] .zoui-star-rating {
+  --zsr-color: #ffffff;
+}
 
 .zoui-product-card[data-variant=ghost] {
   --_bg: transparent;
@@ -6543,7 +6537,6 @@
   --_cart-hover-bg: var(--color-brand-600);
   --_badge-bg: var(--color-neutral-900);
   --_badge-shadow: var(--color-bg-surface);
-  align-items: stretch;
   padding: 0 var(--space-6) 0 0;
 }
 .zoui-navbar[data-variant=frame] .zoui-navbar__brand {
