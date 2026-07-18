@@ -94,3 +94,18 @@ button, input, select, textarea {
 [data-theme="dark"][data-store-theme="glass"] {
   --color-border-default: rgba(255, 255, 255, 0.12);
 }
+
+/* EC-908 (reinicio): Toast/Modal/Drawer de zoui se portan a document.body
+   (createPortal), fuera de app/layout.tsx -- sin esto, un toast o modal
+   disparado en mobile (ej. carrito, error de red) queda flotando arriba
+   del aviso "disponible solo en version web", interactivo. Estas clases
+   son globales (definidas en zoui.css), por eso viven en este archivo y
+   no en layout.module.scss (un CSS module no admite una regla compuesta
+   solo por selectores :global()). */
+@media (max-width: 767px) {
+  .zoui-toast-stack,
+  .zoui-modal-overlay,
+  .zoui-drawer-overlay {
+    display: none !important;
+  }
+}

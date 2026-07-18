@@ -12,19 +12,3 @@
   margin: 0 auto;
   padding: 32px 16px;
 }
-
-// EC-910: antes era un style inline fijo '1fr 380px' sin ninguna media
-// query -- la columna de resumen sola ya superaba el ancho de un telefono.
-// 768px coincide con $breakpoint-md de zoui (mismo criterio que
-// ProductDetailSection, el otro layout de 2 columnas de este front).
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-  align-items: start;
-
-  @media (min-width: 768px) {
-    grid-template-columns: 1fr 380px;
-    gap: 32px;
-  }
-}

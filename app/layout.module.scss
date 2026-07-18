@@ -5,3 +5,36 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+// EC-908 (reinicio): 767px como literal -- este front no importa ningun
+// partial de breakpoints compartido (se reviso todo el approach responsive
+// de cero), asi que no hay un token comun a que apuntar todavia.
+.mobileNotice {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .wrapper { display: none; }
+
+  .mobileNotice {
+    display:         flex;
+    flex-direction:  column;
+    align-items:     center;
+    justify-content: center;
+    gap:             16px;
+    min-height:      100dvh;
+    padding:         32px;
+    text-align:      center;
+    background:      var(--color-bg-subtle);
+  }
+
+  .mobileNoticeIcon  { font-size: 40px; }
+  .mobileNoticeTitle { font-size: 18px; font-weight: 700; color: var(--color-fg-primary); margin: 0; }
+  .mobileNoticeBody  { font-size: 14px; color: var(--color-fg-secondary); margin: 0; max-width: 320px; line-height: 1.5; }
+}
