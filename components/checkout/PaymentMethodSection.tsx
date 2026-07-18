@@ -5,7 +5,7 @@ import { MercadoPagoLogo } from './MercadoPagoLogo';
 interface PaymentMethodSectionProps {
   value:          PaymentMethod;
   mpAvailable:    boolean;
-  cashAvailable:  boolean;
+  cashAvailable:  boolean | undefined;
   onChange:       (method: PaymentMethod) => void;
 }
 

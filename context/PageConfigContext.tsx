@@ -20,9 +20,10 @@ export interface PageStoreConfig {
   interest_free?: boolean;
   ratings_enabled?: boolean;
   reviews_enabled?: boolean;
-  // EC-901: default true (mismo default que el backend) -- solo se oculta la
-  // opcion de efectivo si el vendedor lo desactivo explicitamente.
-  cash_payment_enabled?: boolean;
+  // El backend siempre lo devuelve cuando `store` existe (default false en
+  // la config base, ver ecom-store/StoreConfig.js) -- no opcional a proposito,
+  // para no tener que adivinar un valor en el frontend si faltara.
+  cash_payment_enabled: boolean;
 }
 
 export interface PageConfigPage {

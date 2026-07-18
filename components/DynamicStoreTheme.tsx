@@ -75,6 +75,7 @@ function toPageConfig(raw: Record<string, unknown>): PageConfig {
       interest_free:         store.interest_free === true,
       ratings_enabled:       store.ratings_enabled === true,
       reviews_enabled:       store.reviews_enabled === true,
+      cash_payment_enabled:  store.cash_payment_enabled === true,
     },
     // `pages` del backend puede venir vacio (tienda sin ninguna pagina
     // creada todavia) -- se expone tal cual por context, sin filtrar. Cada
