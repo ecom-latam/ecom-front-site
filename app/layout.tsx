@@ -72,13 +72,26 @@ export default async function RootLayout({
       </head>
       <body className={styles.body}>
         <style dangerouslySetInnerHTML={{ __html: brandStyles }} />
+        {/* EC-908 (reinicio): la tienda se repiensa de cero para mobile --
+            mientras tanto, este aviso reemplaza el body entero por debajo
+            del breakpoint. 100% CSS (ver layout.module.scss), nunca JS
+            detectando el viewport. */}
+        <div className={styles.mobileNotice}>
+          <span className={styles.mobileNoticeIcon} aria-hidden="true">💻</span>
+          <p className={styles.mobileNoticeTitle}>Disponible solo en versión web</p>
+          <p className={styles.mobileNoticeBody}>
+            Por ahora, esta tienda funciona únicamente desde una computadora. Ingresá desde un navegador de escritorio para continuar.
+          </p>
+        </div>
         <StoreProvider>
           <DynamicStoreTheme initialConfig={(storeInfo ?? {}) as Record<string, unknown>}>
             <ZouiProvider linkComponent={NextLink} imageComponent={NextImage} font={fontId ?? 'geist'}>
               <ToastProvider>
                 <ErrorModalProvider>
                   <CartProvider hasSession={hasSession}>
-                    {children}
+                    <div className={styles.wrapper}>
+                      {children}
+                    </div>
                   </CartProvider>
                 </ErrorModalProvider>
               </ToastProvider>
