@@ -36,7 +36,7 @@ export default async function RootLayout({
   const hue2 = Math.round(Math.max(0, Math.min(360, storeInfo?.brand2_hue ?? (hue + 60) % 360)));
   const sat2 = Math.round(Math.max(0, Math.min(100, storeInfo?.brand2_saturation ?? sat)));
   const lit2 = Math.round(Math.max(0, Math.min(100, storeInfo?.brand2_lightness ?? lit)));
-  const storeTheme = storeInfo?.theme ?? 'outlined';
+  const storeTheme = storeInfo?.theme ?? 'filled';
   const brandContrast = (lit >= 62 || (hue >= 45 && hue <= 75)) ? '#000000' : '#ffffff';
   const fontId = storeInfo?.font_id;
   const scale = brandScale(hue, sat, lit);
