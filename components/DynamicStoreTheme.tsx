@@ -134,7 +134,7 @@ export function DynamicStoreTheme({
 
   // El fondo de la tienda publica es siempre el del theme elegido --
   // ya no es una seleccion independiente (background eliminado).
-  const backgroundVariant = (config.theme ?? 'outlined') as SurfaceVariant;
+  const backgroundVariant = (config.theme ?? 'filled') as SurfaceVariant;
 
   return (
     <PageConfigContext.Provider value={config}>

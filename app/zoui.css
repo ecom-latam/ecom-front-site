@@ -562,24 +562,6 @@
   color: #f5f5f5;
 }
 
-.zoui-badge[data-variant=brutalist] {
-  background: var(--_border);
-  border: 2px solid #0A0A0A;
-  color: var(--_fg);
-  --_radius: 0;
-  font-weight: 700;
-  box-shadow: 2px 2px 0 0 #0A0A0A;
-}
-
-.zoui-badge[data-variant=glass] {
-  background: color-mix(in srgb, var(--_bg) 50%, transparent);
-  border-color: color-mix(in srgb, var(--_border) 60%, transparent);
-  color: var(--_fg);
-  backdrop-filter: blur(8px) saturate(160%);
-  -webkit-backdrop-filter: blur(8px) saturate(160%);
-  box-shadow: inset 0 1px 0 0 color-mix(in srgb, #ffffff 20%, transparent);
-}
-
 .zoui-badge[data-variant=retro] {
   background: var(--_border);
   border-color: var(--_accent);
@@ -588,13 +570,6 @@
   --_radius: 3px;
   font-weight: 600;
   box-shadow: 1px 1px 0 0 var(--_accent);
-}
-
-.zoui-badge[data-variant=glow] {
-  background: color-mix(in srgb, var(--_accent) 12%, transparent);
-  border-color: color-mix(in srgb, var(--_accent) 35%, transparent);
-  color: var(--_on-dark);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--_accent) 25%, transparent);
 }
 
 .zoui-badge[data-variant=gradient] {
@@ -619,13 +594,6 @@
   --_radius: 0;
   font-weight: 600;
   box-shadow: 0 0 6px color-mix(in srgb, var(--_accent) 30%, transparent), inset 0 0 4px color-mix(in srgb, var(--_accent) 10%, transparent);
-}
-
-.zoui-badge[data-variant="3d"] {
-  background: var(--_bg);
-  border-color: var(--_accent);
-  color: var(--_fg);
-  box-shadow: 1px 1px 0 0 var(--_accent), 2px 2px 0 0 color-mix(in srgb, var(--_accent) 40%, transparent);
 }
 
 .zoui-badge {
@@ -1028,68 +996,6 @@
   box-shadow: var(--shadow-md), inset 0 1px 0 0 color-mix(in srgb, #ffffff 10%, transparent);
 }
 
-.zoui-btn[data-variant=brutalist] {
-  --_color: #0A0A0A;
-  --_color-hover: #0A0A0A;
-  --_color-active: #0A0A0A;
-  --_fg-on-color: #FFD60A;
-  --_radius: 0;
-  --_fw: 800;
-  --_tt: uppercase;
-  --_ls: 0.04em;
-  --_ring: #0A0A0A;
-  border: 2px solid #0A0A0A;
-  box-shadow: 4px 4px 0 0 #0A0A0A;
-  transition: transform 0.1s var(--easing-standard), box-shadow 0.1s var(--easing-standard);
-}
-.zoui-btn[data-variant=brutalist]:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 0 #0A0A0A;
-}
-.zoui-btn[data-variant=brutalist]:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0 0 0 0 #0A0A0A;
-}
-.zoui-btn[data-variant=brutalist][data-emphasis=filled] {
-  background: #FFD60A;
-  color: #0A0A0A;
-}
-.zoui-btn[data-variant=brutalist][data-emphasis=outlined] {
-  background: #ffffff;
-  color: #0A0A0A;
-}
-.zoui-btn[data-variant=brutalist][data-emphasis=ghost] {
-  background: transparent;
-  color: #0A0A0A;
-  border-color: transparent;
-  box-shadow: none;
-}
-.zoui-btn[data-variant=brutalist][data-emphasis=ghost]:hover {
-  box-shadow: none;
-  transform: none;
-  background: color-mix(in srgb, #0A0A0A 8%, transparent);
-}
-
-.zoui-btn[data-variant=glass] {
-  --_color: var(--color-fg-primary);
-  --_color-hover: var(--color-fg-primary);
-  --_color-active: var(--color-fg-primary);
-  --_fg-on-color: var(--color-bg-surface);
-  --_fw: 600;
-  --_ring: var(--color-fg-primary);
-  backdrop-filter: blur(14px) saturate(180%);
-  -webkit-backdrop-filter: blur(14px) saturate(180%);
-}
-.zoui-btn[data-variant=glass][data-emphasis=filled] {
-  background: color-mix(in srgb, var(--color-bg-surface) 45%, transparent);
-  border-color: color-mix(in srgb, var(--color-fg-primary) 15%, transparent);
-  color: var(--color-fg-primary);
-  box-shadow: 0 4px 16px 0 color-mix(in srgb, var(--color-fg-primary) 8%, transparent), inset 0 1px 0 0 color-mix(in srgb, var(--color-bg-surface) 60%, transparent);
-}
-.zoui-btn[data-variant=glass][data-emphasis=filled]:hover {
-  background: color-mix(in srgb, var(--color-bg-surface) 70%, transparent);
-}
-
 .zoui-btn[data-variant=retro] {
   --_color: #8B6914;
   --_color-hover: #6B5010;
@@ -1111,48 +1017,6 @@
 }
 .zoui-btn[data-variant=retro][data-emphasis=filled]:active {
   background: #E4C99F;
-}
-
-.zoui-btn[data-variant=glow] {
-  --_color: var(--color-brand-400);
-  --_color-hover: var(--color-brand-300);
-  --_color-active: var(--color-brand-500);
-  --_fg-on-color: #0A0A0F;
-  --_fw: 600;
-  --_ring: var(--color-brand-400);
-  text-shadow: 0 0 8px color-mix(in srgb, var(--color-brand-400) 60%, transparent);
-}
-.zoui-btn[data-variant=glow][data-emphasis=filled] {
-  background: #0A0A0F;
-  color: var(--color-brand-300);
-  border: 1px solid var(--color-brand-500);
-  box-shadow: 0 0 0 1px var(--color-brand-500), 0 0 20px color-mix(in srgb, var(--color-brand-500) 45%, transparent), inset 0 0 18px color-mix(in srgb, var(--color-brand-500) 15%, transparent);
-}
-.zoui-btn[data-variant=glow][data-emphasis=filled]:hover {
-  color: #ffffff;
-  box-shadow: 0 0 0 1px var(--color-brand-400), 0 0 32px color-mix(in srgb, var(--color-brand-500) 70%, transparent), inset 0 0 26px color-mix(in srgb, var(--color-brand-500) 22%, transparent);
-}
-
-.zoui-btn[data-variant="3d"] {
-  --_color: var(--color-brand-500);
-  --_color-hover: var(--color-brand-400);
-  --_color-active: var(--color-brand-500);
-  --_fg-on-color: var(--color-fg-on-brand);
-  --_fw: 700;
-  --_radius: 8px;
-  --_ring: var(--color-brand-500);
-  transition: transform 0.08s var(--easing-standard), box-shadow 0.08s var(--easing-standard), background 0.12s var(--easing-standard);
-}
-.zoui-btn[data-variant="3d"][data-emphasis=filled] {
-  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, #000 20%, transparent), 0 4px 0 0 var(--color-brand-700), 0 4px 8px 0 rgba(0, 0, 0, 0.18);
-}
-.zoui-btn[data-variant="3d"][data-emphasis=filled]:hover {
-  transform: translateY(-1px);
-  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, #000 20%, transparent), 0 5px 0 0 var(--color-brand-700), 0 7px 12px 0 rgba(0, 0, 0, 0.22);
-}
-.zoui-btn[data-variant="3d"][data-emphasis=filled]:active {
-  transform: translateY(3px);
-  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, #000 20%, transparent), 0 1px 0 0 var(--color-brand-700), 0 1px 2px 0 rgba(0, 0, 0, 0.15);
 }
 
 .zoui-btn[data-variant=gradient] {
@@ -1225,14 +1089,6 @@
   --_color-active: color-mix(in srgb, var(--color-danger-500) 30%, var(--color-neutral-800));
   --_fg-on-color: #fca5a5;
   border-color: var(--color-danger-500);
-}
-
-[data-theme=dark] .zoui-btn[data-variant="3d"][data-emphasis=filled] {
-  --_color: color-mix(in srgb, var(--color-brand-500) 16%, var(--color-neutral-900));
-  --_color-hover: color-mix(in srgb, var(--color-brand-500) 24%, var(--color-neutral-800));
-  --_color-active: color-mix(in srgb, var(--color-brand-500) 32%, var(--color-neutral-800));
-  --_fg-on-color: var(--color-brand-300);
-  border-color: var(--color-brand-500);
 }
 
 .zoui-text {
@@ -1487,29 +1343,6 @@
   --_close-color: color-mix(in srgb, var(--color-pill-fg) 45%, transparent);
 }
 
-.zoui-modal[data-variant=brutalist] {
-  --_bg: #ffffff;
-  --_fg: #0A0A0A;
-  --_border: #0A0A0A;
-  --_radius: 0;
-  --_shadow: none;
-  border-width: 2px;
-  box-shadow: 5px 5px 0 0 #0A0A0A;
-}
-.zoui-modal[data-variant=brutalist] .zoui-modal__footer {
-  border-top-color: #0A0A0A;
-  border-top-width: 2px;
-}
-
-.zoui-modal[data-variant=glass] {
-  --_bg: color-mix(in srgb, var(--color-bg-surface) 60%, transparent);
-  --_border: color-mix(in srgb, var(--color-fg-primary) 12%, transparent);
-  --_shadow: var(--shadow-lg);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  box-shadow: var(--shadow-lg), inset 0 1px 0 0 color-mix(in srgb, #ffffff 30%, transparent);
-}
-
 .zoui-modal[data-variant=retro] {
   --_bg: #FFF8EE;
   --_fg: #2C2416;
@@ -1530,24 +1363,6 @@
   --_divider: var(--color-brand-200);
   --_close-hover: var(--color-brand-100);
   --_close-color: var(--color-brand-400);
-}
-
-.zoui-modal[data-variant=glow] {
-  --_bg: #0A0A0F;
-  --_fg: var(--color-brand-100);
-  --_fg-body: color-mix(in srgb, var(--color-brand-300) 70%, transparent);
-  --_border: color-mix(in srgb, var(--color-brand-500) 35%, transparent);
-  --_divider: color-mix(in srgb, var(--color-brand-500) 20%, transparent);
-  --_shadow: 0 0 40px color-mix(in srgb, var(--color-brand-500) 20%, transparent), var(--shadow-lg);
-  --_close-hover: color-mix(in srgb, var(--color-brand-500) 12%, transparent);
-  --_close-color: color-mix(in srgb, var(--color-brand-400) 60%, transparent);
-}
-
-.zoui-modal[data-variant="3d"] {
-  --_border: var(--color-brand-300);
-  --_shadow:
-    inset 0 -1px 0 0 color-mix(in srgb, #000 6%, transparent),
-    5px 5px 0 0 var(--color-brand-700);
 }
 
 .zoui-modal[data-variant=gradient] {
@@ -1982,36 +1797,6 @@
   --_close-color: color-mix(in srgb, var(--color-pill-fg) 45%, transparent);
 }
 
-.zoui-drawer[data-variant=brutalist] {
-  --_bg: #ffffff;
-  --_fg: #0A0A0A;
-  --_border: #0A0A0A;
-  border-width: 0;
-}
-.zoui-drawer[data-variant=brutalist][data-side=right] {
-  border-left: 3px solid #0A0A0A;
-  box-shadow: -4px 0 0 0 #0A0A0A;
-}
-.zoui-drawer[data-variant=brutalist][data-side=left] {
-  border-right: 3px solid #0A0A0A;
-  box-shadow: 4px 0 0 0 #0A0A0A;
-}
-.zoui-drawer[data-variant=brutalist] .zoui-drawer__header {
-  border-bottom-width: 2px;
-  border-bottom-color: #0A0A0A;
-}
-.zoui-drawer[data-variant=brutalist] .zoui-drawer__footer {
-  border-top-width: 2px;
-  border-top-color: #0A0A0A;
-}
-
-.zoui-drawer[data-variant=glass] {
-  --_bg: color-mix(in srgb, var(--color-bg-surface) 60%, transparent);
-  --_border: color-mix(in srgb, var(--color-fg-primary) 12%, transparent);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-}
-
 .zoui-drawer[data-variant=retro] {
   --_bg: #FFF8EE;
   --_fg: #2C2416;
@@ -2028,34 +1813,6 @@
   --_divider: var(--color-brand-200);
   --_close-hover: var(--color-brand-100);
   --_close-color: var(--color-brand-400);
-}
-
-.zoui-drawer[data-variant=glow] {
-  --_bg: #0A0A0F;
-  --_fg: var(--color-brand-100);
-  --_fg-body: color-mix(in srgb, var(--color-brand-300) 70%, transparent);
-  --_border: color-mix(in srgb, var(--color-brand-500) 35%, transparent);
-  --_divider: color-mix(in srgb, var(--color-brand-500) 20%, transparent);
-  --_shadow-r: -4px 0 32px color-mix(in srgb, var(--color-brand-500) 20%, transparent);
-  --_shadow-l: 4px 0 32px color-mix(in srgb, var(--color-brand-500) 20%, transparent);
-  --_close-hover: color-mix(in srgb, var(--color-brand-500) 12%, transparent);
-  --_close-color: color-mix(in srgb, var(--color-brand-400) 60%, transparent);
-}
-
-.zoui-drawer[data-variant="3d"] {
-  --_border: var(--color-brand-300);
-}
-.zoui-drawer[data-variant="3d"][data-side=right] {
-  --_shadow-r:
-    inset 1px 0 0 0 color-mix(in srgb, #000 6%, transparent),
-    -4px 0 0 0 var(--color-brand-700),
-    -4px 0 16px 0 rgb(0 0 0 / 0.14);
-}
-.zoui-drawer[data-variant="3d"][data-side=left] {
-  --_shadow-l:
-    inset -1px 0 0 0 color-mix(in srgb, #000 6%, transparent),
-    4px 0 0 0 var(--color-brand-700),
-    4px 0 16px 0 rgb(0 0 0 / 0.14);
 }
 
 .zoui-drawer[data-variant=gradient] {
@@ -2244,23 +2001,6 @@
   color: var(--color-pill-fg);
 }
 
-.zoui-toast[data-variant=brutalist] {
-  --_bg: #ffffff;
-  --_fg: #0A0A0A;
-  --_border: #0A0A0A;
-  border-width: 2px;
-  border-radius: 0;
-  box-shadow: 4px 4px 0 0 #0A0A0A;
-}
-
-.zoui-toast[data-variant=glass] {
-  --_bg: color-mix(in srgb, var(--color-bg-surface) 55%, transparent);
-  --_border: color-mix(in srgb, var(--color-fg-primary) 12%, transparent);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  box-shadow: var(--shadow-md), inset 0 1px 0 0 color-mix(in srgb, #ffffff 25%, transparent);
-}
-
 .zoui-toast[data-variant=retro] {
   --_bg: #FFF8EE;
   --_fg: #2C2416;
@@ -2277,30 +2017,6 @@
 }
 .zoui-toast[data-variant=soft] .zoui-toast__icon {
   color: var(--_icon-color);
-}
-
-.zoui-toast[data-variant=glow] {
-  --_bg: #0A0A0F;
-  --_fg: var(--color-brand-100);
-  --_border: color-mix(in srgb, var(--color-brand-500) 35%, transparent);
-  --_action-color: var(--color-brand-400);
-  box-shadow: var(--shadow-md), 0 0 24px color-mix(in srgb, var(--color-brand-500) 20%, transparent);
-}
-.zoui-toast[data-variant=glow] .zoui-toast__icon {
-  color: var(--_icon-color);
-  filter: brightness(1.4);
-}
-.zoui-toast[data-variant=glow] .zoui-toast__close {
-  color: color-mix(in srgb, var(--color-brand-400) 60%, transparent);
-}
-.zoui-toast[data-variant=glow] .zoui-toast__close:hover {
-  background: color-mix(in srgb, var(--color-brand-500) 12%, transparent);
-  color: var(--color-brand-100);
-}
-
-.zoui-toast[data-variant="3d"] {
-  --_border: var(--color-brand-300);
-  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, #000 6%, transparent), 3px 3px 0 0 var(--color-brand-700), var(--shadow-sm);
 }
 
 .zoui-toast[data-variant=gradient] {
@@ -2568,33 +2284,6 @@
   --_radius: var(--radius-xl);
 }
 
-.zoui-table-wrapper[data-variant=brutalist] {
-  --_head-bg: #f5f5f5;
-  --_head-fg: #0A0A0A;
-  --_bg: #ffffff;
-  --_fg: #0A0A0A;
-  --_border: #0A0A0A;
-  --_cell-border: #e5e5e5;
-  --_radius: 0;
-  --_shadow: 4px 4px 0 0 #0A0A0A;
-  --_stripe-tinted: #f0f0f0;
-  border-width: 2px;
-}
-.zoui-table-wrapper[data-variant=brutalist] .zoui-table__th {
-  border-bottom-color: #0A0A0A;
-  border-bottom-width: 2px;
-}
-
-.zoui-table-wrapper[data-variant=glass] {
-  --_bg: color-mix(in srgb, var(--color-bg-surface) 55%, transparent);
-  --_head-bg: color-mix(in srgb, var(--color-bg-subtle) 55%, transparent);
-  --_border: color-mix(in srgb, var(--color-fg-primary) 12%, transparent);
-  --_cell-border: color-mix(in srgb, var(--color-fg-primary) 8%, transparent);
-  --_shadow: var(--shadow-md), inset 0 1px 0 0 color-mix(in srgb, #ffffff 25%, transparent);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-}
-
 .zoui-table-wrapper[data-variant=retro] {
   --_bg: #FFF8EE;
   --_head-bg: #f5e8d0;
@@ -2629,28 +2318,6 @@
   --_row-selected: color-mix(in srgb, var(--color-brand-500) 15%, transparent);
   --_stripe-bg: color-mix(in srgb, var(--color-brand-500) 8%, transparent);
   --_stripe-tinted: color-mix(in srgb, var(--color-brand-500) 15%, transparent);
-}
-
-.zoui-table-wrapper[data-variant=glow] {
-  --_bg: #0A0A0F;
-  --_head-bg: #0A0A0F;
-  --_head-fg: var(--color-brand-400);
-  --_fg: var(--color-brand-100);
-  --_fg-muted: color-mix(in srgb, var(--color-brand-300) 60%, transparent);
-  --_border: color-mix(in srgb, var(--color-brand-500) 35%, transparent);
-  --_cell-border: color-mix(in srgb, var(--color-brand-500) 15%, transparent);
-  --_row-hover: color-mix(in srgb, var(--color-brand-500) 8%, transparent);
-  --_row-selected: color-mix(in srgb, var(--color-brand-500) 15%, transparent);
-  --_stripe-bg: color-mix(in srgb, var(--color-brand-500) 5%, transparent);
-  --_stripe-tinted: color-mix(in srgb, var(--color-brand-500) 12%, #0A0A0F);
-  --_shadow: 0 0 32px color-mix(in srgb, var(--color-brand-500) 15%, transparent);
-}
-
-.zoui-table-wrapper[data-variant="3d"] {
-  --_border: var(--color-brand-300);
-  --_shadow:
-    inset 0 -1px 0 0 color-mix(in srgb, #000 6%, transparent),
-    4px 4px 0 0 var(--color-brand-700);
 }
 
 .zoui-table-wrapper[data-variant=gradient] {
@@ -2972,44 +2639,6 @@
   border-color: #3A3A3F;
 }
 
-.zoui-field[data-variant=brutalist] {
-  --_bg: #FFFFFF;
-  --_fg: #0A0A0A;
-  --_border: #0A0A0A;
-  --_border-focus: #0A0A0A;
-  --_radius: 0;
-  --_fw: var(--font-weight-semibold);
-}
-.zoui-field[data-variant=brutalist] .zoui-field__control {
-  border: 2px solid var(--_border);
-  box-shadow: 3px 3px 0 0 var(--_border);
-  transition: none;
-}
-.zoui-field[data-variant=brutalist] .zoui-field__control:focus-within {
-  box-shadow: 5px 5px 0 0 var(--_border);
-  transform: translate(-1px, -1px);
-}
-
-.zoui-field[data-variant=brutalist][data-error] .zoui-field__control {
-  border-color: var(--color-danger-500);
-  box-shadow: 3px 3px 0 0 var(--color-danger-500);
-}
-.zoui-field[data-variant=brutalist][data-error] .zoui-field__control:focus-within {
-  box-shadow: 5px 5px 0 0 var(--color-danger-500);
-}
-
-.zoui-field[data-variant=glass] {
-  --_bg: color-mix(in srgb, var(--color-bg-surface) 50%, transparent);
-  --_border: color-mix(in srgb, var(--color-fg-primary) 15%, transparent);
-  --_border-focus: var(--color-brand-400);
-  --_ring: var(--color-brand-400);
-}
-.zoui-field[data-variant=glass] .zoui-field__control {
-  backdrop-filter: blur(12px) saturate(160%);
-  -webkit-backdrop-filter: blur(12px) saturate(160%);
-  box-shadow: inset 0 1px 0 0 color-mix(in srgb, #ffffff 25%, transparent);
-}
-
 .zoui-field[data-variant=boutique] {
   --_bg: var(--color-bg-surface);
   --_border: var(--color-fg-primary);
@@ -3102,32 +2731,6 @@
   border-color: color-mix(in srgb, var(--color-brand-500) 40%, var(--color-neutral-600));
 }
 
-.zoui-field[data-variant=glow] {
-  --_bg: #0A0A0F;
-  --_fg: var(--color-brand-200);
-  --_border: color-mix(in srgb, var(--color-brand-500) 40%, transparent);
-  --_border-focus: var(--color-brand-400);
-  --_ring: var(--color-brand-400);
-  --_ph: color-mix(in srgb, var(--color-brand-400) 35%, transparent);
-}
-.zoui-field[data-variant=glow] .zoui-field__label {
-  color: var(--color-brand-400);
-  text-transform: none;
-  letter-spacing: 0;
-}
-.zoui-field[data-variant=glow] .zoui-field__hint {
-  color: color-mix(in srgb, var(--color-brand-400) 55%, transparent);
-}
-.zoui-field[data-variant=glow] .zoui-field__icon {
-  color: var(--color-brand-500);
-}
-.zoui-field[data-variant=glow] .zoui-field__control {
-  box-shadow: 0 0 14px color-mix(in srgb, var(--color-brand-500) 12%, transparent);
-}
-.zoui-field[data-variant=glow] .zoui-field__control:focus-within {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand-400) 20%, transparent), 0 0 24px color-mix(in srgb, var(--color-brand-500) 28%, transparent);
-}
-
 .zoui-field[data-variant=neon] {
   --_bg: #050508;
   --_fg: #ffffff;
@@ -3154,17 +2757,6 @@
 }
 .zoui-field[data-variant=neon] .zoui-field__control:focus-within {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-brand-400) 25%, transparent), 0 0 22px color-mix(in srgb, var(--color-brand-400) 45%, transparent), inset 0 0 12px color-mix(in srgb, var(--color-brand-500) 12%, transparent);
-}
-
-.zoui-field[data-variant="3d"] .zoui-field__control {
-  border-color: var(--color-brand-300);
-  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, #000 12%, transparent), 0 4px 0 0 var(--color-brand-700), 0 4px 8px 0 rgba(0, 0, 0, 0.15);
-  transition: transform 0.08s var(--easing-standard), box-shadow 0.08s var(--easing-standard), border-color var(--duration-fast) var(--easing-standard);
-}
-.zoui-field[data-variant="3d"] .zoui-field__control:focus-within {
-  border-color: var(--color-brand-500);
-  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, #000 12%, transparent), 0 2px 0 0 var(--color-brand-700), 0 0 0 3px color-mix(in srgb, var(--color-brand-500) 20%, transparent);
-  transform: translateY(2px);
 }
 
 .zoui-field[data-variant=gradient] {
@@ -3449,22 +3041,6 @@
   padding-bottom: 1px;
 }
 
-.zoui-field[data-variant=brutalist] .zoui-select__trigger {
-  border: 2px solid var(--_border);
-  box-shadow: 3px 3px 0 0 var(--_border);
-  transition: none;
-}
-.zoui-field[data-variant=brutalist] .zoui-select__trigger:focus-visible, .zoui-field[data-variant=brutalist] .zoui-select__trigger[data-state=open] {
-  box-shadow: 5px 5px 0 0 var(--_border);
-  transform: translate(-1px, -1px);
-}
-
-.zoui-field[data-variant=glass] .zoui-select__trigger {
-  backdrop-filter: blur(12px) saturate(160%);
-  -webkit-backdrop-filter: blur(12px) saturate(160%);
-  box-shadow: inset 0 1px 0 0 color-mix(in srgb, #ffffff 25%, transparent);
-}
-
 .zoui-field[data-variant=capsule] .zoui-select__trigger {
   box-shadow: var(--shadow-md), inset 0 1px 0 0 color-mix(in srgb, #ffffff 10%, transparent);
 }
@@ -3474,16 +3050,6 @@
 }
 .zoui-field[data-variant=retro] .zoui-select__trigger:focus-visible, .zoui-field[data-variant=retro] .zoui-select__trigger[data-state=open] {
   box-shadow: inset 2px 2px 0 0 rgba(0, 0, 0, 0.07), 0 0 0 3px color-mix(in srgb, #8B6914 20%, transparent);
-}
-
-.zoui-field[data-variant="3d"] .zoui-select__trigger {
-  border-color: var(--color-brand-300);
-  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, #000 12%, transparent), 0 4px 0 0 var(--color-brand-700), 0 4px 8px 0 rgba(0, 0, 0, 0.15);
-  transition: transform 0.08s var(--easing-standard), box-shadow 0.08s var(--easing-standard), border-color var(--duration-fast) var(--easing-standard);
-}
-.zoui-field[data-variant="3d"] .zoui-select__trigger:focus-visible, .zoui-field[data-variant="3d"] .zoui-select__trigger[data-state=open] {
-  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, #000 12%, transparent), 0 2px 0 0 var(--color-brand-700), 0 0 0 3px color-mix(in srgb, var(--color-brand-500) 20%, transparent);
-  transform: translateY(2px);
 }
 
 .zoui-select__content {
@@ -3719,36 +3285,6 @@
   color: var(--color-brand-400);
 }
 
-.zoui-select__content[data-variant=brutalist] {
-  background: #FFFFFF;
-  border: 2px solid #0A0A0A;
-  border-radius: 0;
-  box-shadow: 4px 4px 0 0 #0A0A0A;
-}
-.zoui-select__content[data-variant=brutalist] .zoui-select__item {
-  border-radius: 0;
-  font-weight: 600;
-}
-.zoui-select__content[data-variant=brutalist] .zoui-select__item[data-highlighted] {
-  background: #FFD60A;
-  color: #0A0A0A;
-}
-.zoui-select__content[data-variant=brutalist] .zoui-select__item-indicator {
-  color: #0A0A0A;
-}
-
-.zoui-select__content[data-variant=glass] {
-  background: color-mix(in srgb, var(--color-bg-surface) 60%, transparent);
-  border-color: color-mix(in srgb, var(--color-fg-primary) 15%, transparent);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  box-shadow: var(--shadow-lg), inset 0 1px 0 0 color-mix(in srgb, #ffffff 25%, transparent);
-}
-.zoui-select__content[data-variant=glass] .zoui-select__item[data-highlighted] {
-  background: color-mix(in srgb, var(--color-brand-500) 12%, transparent);
-  color: var(--color-brand-700);
-}
-
 .zoui-select__content[data-variant=retro] {
   background: #FFF8EE;
   border-color: #C4A882;
@@ -3781,36 +3317,6 @@
 }
 .zoui-select__content[data-variant=soft] .zoui-select__item-indicator {
   color: var(--color-brand-600);
-}
-
-.zoui-select__content[data-variant=glow] {
-  background: #0A0A0F;
-  border-color: color-mix(in srgb, var(--color-brand-500) 50%, transparent);
-  border-radius: var(--radius-md);
-  box-shadow: 0 0 24px color-mix(in srgb, var(--color-brand-500) 20%, transparent), 0 8px 24px rgba(0, 0, 0, 0.6);
-}
-.zoui-select__content[data-variant=glow] .zoui-select__item {
-  color: var(--color-brand-200);
-  border-radius: var(--radius-sm);
-}
-.zoui-select__content[data-variant=glow] .zoui-select__item[data-highlighted] {
-  background: color-mix(in srgb, var(--color-brand-500) 15%, transparent);
-  color: var(--color-brand-300);
-}
-.zoui-select__content[data-variant=glow] .zoui-select__item[data-state=checked] {
-  color: var(--color-brand-300);
-}
-.zoui-select__content[data-variant=glow] .zoui-select__item-indicator {
-  color: var(--color-brand-400);
-}
-
-.zoui-select__content[data-variant="3d"] {
-  border-color: var(--color-brand-300);
-  box-shadow: 0 6px 0 0 var(--color-brand-700), 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-.zoui-select__content[data-variant="3d"] .zoui-select__item[data-highlighted] {
-  background: var(--color-brand-50);
-  color: var(--color-brand-700);
 }
 
 .zoui-select__content[data-variant=gradient] {
@@ -3866,38 +3372,9 @@
   color: var(--color-brand-400);
 }
 
-[data-theme=dark] .zoui-select__content[data-variant=glass] .zoui-select__item[data-highlighted] {
-  color: var(--color-brand-300);
-}
-
-[data-theme=dark] .zoui-select__content[data-variant="3d"] {
-  border-color: var(--color-brand-400);
-  box-shadow: 0 6px 0 0 var(--color-brand-700), 0 8px 16px rgba(0, 0, 0, 0.5);
-}
-[data-theme=dark] .zoui-select__content[data-variant="3d"] .zoui-select__item[data-highlighted] {
-  background: color-mix(in srgb, var(--color-brand-500) 15%, transparent);
-  color: var(--color-brand-300);
-}
-
 [data-theme=dark] .zoui-select__content[data-variant=gradient] .zoui-select__item[data-highlighted] {
   background: color-mix(in srgb, var(--color-brand-500) 15%, transparent);
   color: var(--color-brand-300);
-}
-
-[data-theme=dark] .zoui-select__content[data-variant=brutalist] {
-  background: #0A0A0A;
-  border-color: #F0F0F0;
-  box-shadow: 4px 4px 0 0 #F0F0F0;
-}
-[data-theme=dark] .zoui-select__content[data-variant=brutalist] .zoui-select__item {
-  color: #F0F0F0;
-}
-[data-theme=dark] .zoui-select__content[data-variant=brutalist] .zoui-select__item[data-highlighted] {
-  background: #FFD60A;
-  color: #0A0A0A;
-}
-[data-theme=dark] .zoui-select__content[data-variant=brutalist] .zoui-select__item-indicator {
-  color: #FFD60A;
 }
 
 .zoui-switch[data-variant=outlined] {
@@ -4042,39 +3519,6 @@
   box-shadow: none;
 }
 
-.zoui-switch[data-variant=brutalist] {
-  --_track-off: #ffffff;
-  --_track-on: #FFD60A;
-  --_thumb-clr: #0A0A0A;
-  --_thumb-sh: none;
-}
-.zoui-switch[data-variant=brutalist] .zoui-switch__track {
-  border-radius: 3px;
-  box-shadow: inset 0 0 0 2px #0A0A0A, 2px 2px 0 0 #0A0A0A;
-  transition: none;
-}
-.zoui-switch[data-variant=brutalist] .zoui-switch__thumb {
-  border-radius: 2px;
-  transition: none;
-}
-.zoui-switch[data-variant=brutalist] .zoui-switch__input:checked ~ .zoui-switch__track {
-  box-shadow: inset 0 0 0 2px #0A0A0A, 2px 2px 0 0 #0A0A0A;
-}
-
-.zoui-switch[data-variant=glass] {
-  --_track-off: color-mix(in srgb, var(--color-bg-surface) 50%, transparent);
-  --_track-on: color-mix(in srgb, var(--color-brand-500) 55%, transparent);
-  --_thumb-sh: 0 1px 4px rgb(0 0 0 / .15);
-}
-.zoui-switch[data-variant=glass] .zoui-switch__track {
-  backdrop-filter: blur(8px) saturate(160%);
-  -webkit-backdrop-filter: blur(8px) saturate(160%);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, #ffffff 20%, transparent), inset 0 1px 0 0 color-mix(in srgb, #ffffff 30%, transparent);
-}
-.zoui-switch[data-variant=glass] .zoui-switch__input:checked ~ .zoui-switch__track {
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-brand-300) 30%, transparent);
-}
-
 .zoui-switch[data-variant=retro] {
   --_track-off: #E8D5B7;
   --_track-on: #8B6914;
@@ -4082,42 +3526,6 @@
   --_thumb-sh: 0 1px 3px rgb(139 105 20 / .3);
   --_ring: #8B6914;
   color: #2C2416;
-}
-
-.zoui-switch[data-variant=glow] {
-  --_track-off: #0A0A0F;
-  --_track-on: color-mix(in srgb, var(--color-brand-600) 90%, transparent);
-  --_ring: var(--color-brand-400);
-  color: var(--color-brand-200);
-}
-.zoui-switch[data-variant=glow] .zoui-switch__track {
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-brand-500) 25%, transparent);
-}
-.zoui-switch[data-variant=glow] .zoui-switch__thumb {
-  background: #52525B;
-  box-shadow: none;
-}
-.zoui-switch[data-variant=glow] .zoui-switch__input:checked ~ .zoui-switch__track {
-  box-shadow: 0 0 12px color-mix(in srgb, var(--color-brand-500) 45%, transparent);
-}
-.zoui-switch[data-variant=glow] .zoui-switch__input:checked ~ .zoui-switch__track .zoui-switch__thumb {
-  background: var(--color-brand-200);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--color-brand-400) 60%, transparent);
-}
-
-.zoui-switch[data-variant="3d"] {
-  --_track-off: var(--color-neutral-200);
-  --_track-on: var(--color-brand-500);
-  --_thumb-sh:
-    0 2px 4px rgb(0 0 0 / .3),
-    0 0 0 1px color-mix(in srgb, #000 8%, transparent),
-    inset 0 1px 0 0 color-mix(in srgb, #fff 60%, transparent);
-}
-.zoui-switch[data-variant="3d"] .zoui-switch__track {
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-.zoui-switch[data-variant="3d"] .zoui-switch__input:checked ~ .zoui-switch__track {
-  box-shadow: inset 0 2px 4px color-mix(in srgb, var(--color-brand-700) 30%, transparent);
 }
 
 .zoui-switch[data-variant=gradient] {
@@ -4385,47 +3793,6 @@
   box-shadow: var(--shadow-md);
 }
 
-.zoui-pagination[data-variant=brutalist] {
-  --_radius: 0;
-  --_fg: #0A0A0A;
-  --_fg-hover: #0A0A0A;
-  --_bg-hover: #f5f5f5;
-  --_nav-border: #0A0A0A;
-  --_nav-bg: #ffffff;
-  --_nav-bg-hover: #f5f5f5;
-  --_nav-fg: #0A0A0A;
-  --_active-bg: #FFD60A;
-  --_active-fg: #0A0A0A;
-  --_active-border: #0A0A0A;
-  --_muted: #737373;
-}
-.zoui-pagination[data-variant=brutalist] .zoui-pagination__cell--nav {
-  border-width: 2px;
-}
-.zoui-pagination[data-variant=brutalist] .zoui-pagination__cell--page[data-active] {
-  border: 2px solid #0A0A0A;
-  box-shadow: 3px 3px 0 0 #0A0A0A;
-}
-
-[data-theme=dark] .zoui-pagination[data-variant=brutalist] {
-  --_fg: #E5E5E5;
-  --_fg-hover: #FFFFFF;
-  --_bg-hover: #2a2a2a;
-  --_muted: #909090;
-}
-
-.zoui-pagination[data-variant=glass] {
-  --_nav-border: color-mix(in srgb, var(--color-fg-primary) 15%, transparent);
-  --_nav-bg: color-mix(in srgb, var(--color-bg-surface) 45%, transparent);
-  --_nav-bg-hover: color-mix(in srgb, var(--color-bg-surface) 65%, transparent);
-  --_bg-hover: color-mix(in srgb, var(--color-bg-surface) 40%, transparent);
-}
-.zoui-pagination[data-variant=glass] .zoui-pagination__cell--nav,
-.zoui-pagination[data-variant=glass] .zoui-pagination__cell--page[data-active] {
-  backdrop-filter: blur(12px) saturate(160%);
-  -webkit-backdrop-filter: blur(12px) saturate(160%);
-}
-
 .zoui-pagination[data-variant=retro] {
   --_fg: #7A5C1E;
   --_fg-hover: #2C2416;
@@ -4442,30 +3809,6 @@
 }
 .zoui-pagination[data-variant=retro] .zoui-pagination__cell--nav {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.zoui-pagination[data-variant=glow] {
-  --_fg: color-mix(in srgb, var(--color-brand-300) 70%, transparent);
-  --_fg-hover: var(--color-brand-300);
-  --_bg-hover: color-mix(in srgb, var(--color-brand-500) 8%, transparent);
-  --_nav-border: color-mix(in srgb, var(--color-brand-500) 35%, transparent);
-  --_nav-bg: #0A0A0F;
-  --_nav-bg-hover: #14141B;
-  --_nav-fg: var(--color-brand-300);
-  --_nav-border-hover: color-mix(in srgb, var(--color-brand-500) 55%, transparent);
-  --_active-bg: var(--color-brand-500);
-  --_active-fg: #ffffff;
-  --_muted: color-mix(in srgb, var(--color-brand-400) 40%, transparent);
-}
-.zoui-pagination[data-variant=glow] .zoui-pagination__cell--page[data-active] {
-  box-shadow: 0 0 16px color-mix(in srgb, var(--color-brand-500) 50%, transparent);
-}
-
-.zoui-pagination[data-variant="3d"] {
-  --_nav-border: var(--color-brand-300);
-}
-.zoui-pagination[data-variant="3d"] .zoui-pagination__cell--page[data-active] {
-  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, #000 6%, transparent), 2px 2px 0 0 var(--color-brand-700);
 }
 
 .zoui-pagination[data-variant=gradient] {
@@ -4754,36 +4097,6 @@
   color: var(--color-pill-fg);
 }
 
-.zoui-empty-state[data-variant=brutalist] {
-  --_bg: #ffffff;
-  --_fg: #0A0A0A;
-  --_border: #0A0A0A;
-  --_radius: 0;
-  --_shadow: none;
-  border-width: 2px;
-  box-shadow: 5px 5px 0 0 #0A0A0A;
-}
-.zoui-empty-state[data-variant=brutalist] .zoui-empty-state__media {
-  background: #f0f0f0;
-  color: #0A0A0A;
-  border: 2px solid #0A0A0A;
-  border-radius: 0;
-}
-
-[data-theme=dark] .zoui-empty-state[data-variant=brutalist] {
-  --_bg: #ffffff;
-  --_fg: #0A0A0A;
-}
-
-.zoui-empty-state[data-variant=glass] {
-  --_bg: color-mix(in srgb, var(--color-bg-surface) 60%, transparent);
-  --_border: color-mix(in srgb, var(--color-fg-primary) 12%, transparent);
-  --_shadow: var(--shadow-lg);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  box-shadow: var(--shadow-lg), inset 0 1px 0 0 color-mix(in srgb, #ffffff 30%, transparent);
-}
-
 .zoui-empty-state[data-variant=retro] {
   --_bg: #FFF8EE;
   --_fg: #2C2416;
@@ -4797,21 +4110,6 @@
 .zoui-empty-state[data-variant=retro] .zoui-empty-state__media {
   background: #f5e8d0;
   color: #A88B5A;
-}
-
-.zoui-empty-state[data-variant=glow] {
-  --_bg: #0A0A0F;
-  --_fg: var(--color-brand-100);
-  --_border: color-mix(in srgb, var(--color-brand-500) 35%, transparent);
-  --_shadow: 0 0 40px color-mix(in srgb, var(--color-brand-500) 20%, transparent), var(--shadow-lg);
-}
-.zoui-empty-state[data-variant=glow] .zoui-empty-state__description {
-  color: color-mix(in srgb, var(--color-brand-300) 70%, transparent);
-}
-.zoui-empty-state[data-variant=glow] .zoui-empty-state__media {
-  background: color-mix(in srgb, var(--color-brand-500) 15%, transparent);
-  color: var(--color-brand-400);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--color-brand-500) 25%, transparent);
 }
 
 .zoui-empty-state[data-variant=gradient] {
@@ -4837,25 +4135,6 @@
   background: color-mix(in srgb, var(--color-brand-400) 12%, transparent);
   color: var(--color-brand-400);
   box-shadow: 0 0 10px color-mix(in srgb, var(--color-brand-400) 20%, transparent);
-}
-
-.zoui-empty-state[data-variant="3d"] {
-  --_bg: var(--color-bg-surface);
-  --_border: var(--color-brand-300);
-  --_radius: var(--radius-md);
-  --_shadow:
-    inset 0 -1px 0 0 color-mix(in srgb, #000 6%, transparent),
-    4px 4px 0 0 var(--color-brand-700),
-    4px 8px 16px 0 rgba(0, 0, 0, .14);
-}
-.zoui-empty-state[data-variant="3d"] .zoui-empty-state__media {
-  background: color-mix(in srgb, var(--color-brand-500) 10%, transparent);
-  color: var(--color-brand-600);
-  box-shadow: 2px 2px 0 0 var(--color-brand-700);
-}
-
-[data-theme=dark] .zoui-empty-state[data-variant="3d"] {
-  --_border: var(--color-brand-600);
 }
 
 .zoui-empty-state {
@@ -5053,32 +4332,12 @@
   background: var(--color-bg-surface);
 }
 
-.zoui-surface[data-variant=glass] {
-  background: color-mix(in srgb, var(--color-bg-surface) 70%, transparent);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-}
-
-.zoui-surface[data-variant=glow] {
-  background: color-mix(in srgb, var(--color-brand-500) 8%, var(--color-bg-surface));
-  box-shadow: inset 0 1px 0 0 color-mix(in srgb, var(--color-brand-500) 20%, transparent);
-}
-
 .zoui-surface[data-variant=gradient] {
   background: linear-gradient(160deg, var(--color-bg-surface) 40%, color-mix(in srgb, var(--color-brand-500) 8%, var(--color-bg-surface)));
 }
 
-.zoui-surface[data-variant="3d"] {
-  background: var(--color-bg-muted);
-}
-
 .zoui-surface[data-variant=retro] {
   background: #f5f0e8;
-}
-
-.zoui-surface[data-variant=brutalist] {
-  background: #ffffff;
-  color: #000000;
 }
 
 .zoui-surface[data-variant=neon] {
@@ -5178,37 +4437,6 @@
   color: #a5d6a7;
 }
 
-.zoui-breadcrumbs[data-variant=glass] .zoui-breadcrumbs__link {
-  color: color-mix(in srgb, var(--color-fg-secondary) 80%, transparent);
-}
-
-.zoui-breadcrumbs[data-variant=glass] .zoui-breadcrumbs__current {
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.zoui-breadcrumbs[data-variant=brutalist] .zoui-breadcrumbs__list {
-  gap: 8px;
-}
-
-.zoui-breadcrumbs[data-variant=brutalist] .zoui-breadcrumbs__link {
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 11px;
-  color: var(--color-fg-primary);
-  text-decoration: underline;
-}
-
-.zoui-breadcrumbs[data-variant=brutalist] .zoui-breadcrumbs__current {
-  font-weight: 900;
-  text-transform: uppercase;
-  font-size: 11px;
-}
-
-.zoui-breadcrumbs[data-variant=brutalist] .zoui-breadcrumbs__separator {
-  color: var(--color-fg-primary);
-  font-weight: 900;
-}
-
 .zoui-breadcrumbs[data-variant=retro] .zoui-breadcrumbs__link {
   color: #92400e;
 }
@@ -5223,15 +4451,6 @@
 
 .zoui-breadcrumbs[data-variant=retro] .zoui-breadcrumbs__current {
   color: #78350f;
-}
-
-.zoui-breadcrumbs[data-variant=glow] .zoui-breadcrumbs__current {
-  color: var(--color-brand-400);
-  text-shadow: 0 0 8px var(--color-brand-500);
-}
-
-.zoui-breadcrumbs[data-variant=glow] .zoui-breadcrumbs__link {
-  color: var(--color-brand-300);
 }
 
 .zoui-breadcrumbs[data-variant=gradient] .zoui-breadcrumbs__current {
@@ -5257,11 +4476,6 @@
 .zoui-breadcrumbs[data-variant=neon] .zoui-breadcrumbs__current {
   color: var(--color-brand-300);
   text-shadow: 0 0 10px var(--color-brand-400);
-}
-
-.zoui-breadcrumbs[data-variant="3d"] .zoui-breadcrumbs__current {
-  color: var(--color-brand-600);
-  text-shadow: 1px 1px 0 var(--color-brand-200), 2px 2px 0 var(--color-brand-100);
 }
 
 .zoui-breadcrumbs[data-variant=frame] .zoui-breadcrumbs__current {
@@ -5387,19 +4601,6 @@
   background: rgba(76, 175, 80, 0.08);
 }
 
-.zoui-chip-group[data-variant=brutalist] .zoui-chip-group__chip {
-  border: 2px solid var(--color-fg-primary);
-  border-radius: 0;
-  color: var(--color-fg-primary);
-  font-weight: 700;
-}
-
-.zoui-chip-group[data-variant=brutalist] .zoui-chip-group__chip--active {
-  background: var(--color-fg-primary);
-  color: var(--color-bg-surface);
-  font-weight: 900;
-}
-
 .zoui-chip-group[data-variant=frame] .zoui-chip-group__chip {
   border: none;
   border-bottom: 2px solid transparent;
@@ -5423,18 +4624,6 @@
   border-color: var(--color-brand-500);
 }
 
-.zoui-chip-group[data-variant=glass] .zoui-chip-group__chip {
-  border-color: color-mix(in srgb, var(--color-border-subtle) 50%, transparent);
-  background: color-mix(in srgb, white 10%, transparent);
-  color: color-mix(in srgb, var(--color-fg-secondary) 80%, transparent);
-}
-
-.zoui-chip-group[data-variant=glass] .zoui-chip-group__chip--active {
-  background: color-mix(in srgb, var(--color-brand-500) 20%, transparent);
-  border-color: var(--color-brand-400);
-  color: white;
-}
-
 .zoui-chip-group[data-variant=retro] .zoui-chip-group__chip {
   border-color: #92400e;
   color: #92400e;
@@ -5444,13 +4633,6 @@
   background: #92400e;
   color: #fef3c7;
   border-color: #92400e;
-}
-
-.zoui-chip-group[data-variant=glow] .zoui-chip-group__chip--active {
-  border-color: var(--color-brand-400);
-  color: var(--color-brand-400);
-  background: color-mix(in srgb, var(--color-brand-500) 8%, transparent);
-  text-shadow: 0 0 8px var(--color-brand-500);
 }
 
 .zoui-chip-group[data-variant=gradient] .zoui-chip-group__chip--active {
@@ -5469,13 +4651,6 @@
   color: var(--color-brand-300);
   background: color-mix(in srgb, var(--color-brand-500) 12%, transparent);
   box-shadow: 0 0 8px var(--color-brand-500);
-}
-
-.zoui-chip-group[data-variant="3d"] .zoui-chip-group__chip--active {
-  border-color: var(--color-brand-400);
-  color: var(--color-brand-600);
-  background: var(--color-brand-50);
-  box-shadow: 2px 2px 0 var(--color-brand-300), 4px 4px 0 var(--color-brand-200);
 }
 
 .zoui-chip-group {
@@ -5543,16 +4718,6 @@
   box-shadow: 0 0 0 2px #0b0e0c, 0 0 0 4px #4caf50;
 }
 
-.zoui-swatch-selector[data-variant=brutalist] .zoui-swatch-selector__swatch {
-  border-radius: 0;
-  border: 2px solid var(--color-fg-primary);
-}
-
-.zoui-swatch-selector[data-variant=brutalist] .zoui-swatch-selector__swatch--active {
-  border: 3px solid var(--color-fg-primary);
-  box-shadow: 3px 3px 0 var(--color-fg-primary);
-}
-
 .zoui-swatch-selector[data-variant=frame] .zoui-swatch-selector__swatch {
   border-radius: 0;
   border: none;
@@ -5564,11 +4729,6 @@
   box-shadow: none;
 }
 
-.zoui-swatch-selector[data-variant=glow] .zoui-swatch-selector__swatch--active {
-  border-color: var(--color-brand-400);
-  box-shadow: 0 0 0 2px var(--color-bg-surface), 0 0 0 4px var(--color-brand-400), 0 0 12px var(--color-brand-500);
-}
-
 .zoui-swatch-selector[data-variant=neon] .zoui-swatch-selector__swatch--active {
   border-color: var(--color-brand-300);
   box-shadow: 0 0 0 2px #000, 0 0 0 4px var(--color-brand-400), 0 0 16px var(--color-brand-500);
@@ -5577,21 +4737,6 @@
 .zoui-swatch-selector[data-variant=retro] .zoui-swatch-selector__swatch--active {
   border-color: #92400e;
   box-shadow: 0 0 0 2px #fef3c7, 0 0 0 4px #92400e;
-}
-
-.zoui-swatch-selector[data-variant="3d"] .zoui-swatch-selector__swatch--active {
-  border-color: var(--color-brand-500);
-  box-shadow: 2px 2px 0 var(--color-brand-300), 4px 4px 0 var(--color-brand-200);
-}
-
-.zoui-swatch-selector[data-variant=glass] .zoui-swatch-selector__swatch {
-  backdrop-filter: blur(4px);
-  border-color: color-mix(in srgb, var(--color-border-subtle) 40%, transparent);
-}
-
-.zoui-swatch-selector[data-variant=glass] .zoui-swatch-selector__swatch--active {
-  border-color: var(--color-brand-400);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 0 4px var(--color-brand-400);
 }
 
 .zoui-swatch-selector[data-variant=gradient] .zoui-swatch-selector__swatch--active {
@@ -5750,24 +4895,6 @@
   border-radius: var(--radius-lg);
 }
 
-.zoui-quantity-stepper[data-variant=brutalist] {
-  border: 3px solid var(--color-fg-primary);
-  border-radius: 0;
-  box-shadow: 4px 4px 0 var(--color-fg-primary);
-}
-.zoui-quantity-stepper[data-variant=brutalist] .zoui-quantity-stepper__input {
-  border-color: var(--color-fg-primary);
-}
-.zoui-quantity-stepper[data-variant=brutalist]:focus-within {
-  box-shadow: 4px 4px 0 #FFD60A;
-}
-
-.zoui-quantity-stepper[data-variant=glass] {
-  backdrop-filter: blur(8px);
-  background: color-mix(in srgb, var(--color-bg-surface) 60%, transparent);
-  border-color: color-mix(in srgb, var(--color-border-subtle) 50%, transparent);
-}
-
 .zoui-quantity-stepper[data-variant=retro] {
   border-color: #92400e;
   background: #fef3c7;
@@ -5780,13 +4907,6 @@
 }
 .zoui-quantity-stepper[data-variant=retro] .zoui-quantity-stepper__btn:hover:not(:disabled) {
   background: color-mix(in srgb, #92400e 10%, transparent);
-}
-
-.zoui-quantity-stepper[data-variant=glow] {
-  border-color: var(--color-brand-300);
-}
-.zoui-quantity-stepper[data-variant=glow]:focus-within {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-brand-500) 20%, transparent), 0 0 12px color-mix(in srgb, var(--color-brand-500) 40%, transparent);
 }
 
 .zoui-quantity-stepper[data-variant=gradient] {
@@ -5807,14 +4927,6 @@
 }
 .zoui-quantity-stepper[data-variant=neon]:focus-within {
   box-shadow: 0 0 12px var(--color-brand-500);
-}
-
-.zoui-quantity-stepper[data-variant="3d"] {
-  border-color: var(--color-brand-500);
-  box-shadow: 2px 2px 0 var(--color-brand-300), 4px 4px 0 var(--color-brand-200);
-}
-.zoui-quantity-stepper[data-variant="3d"]:focus-within {
-  box-shadow: 1px 1px 0 var(--color-brand-300), 2px 2px 0 var(--color-brand-200);
 }
 
 .zoui-quantity-stepper {
@@ -5962,24 +5074,6 @@
   padding: 4px 10px;
 }
 
-.zoui-star-rating[data-variant=brutalist] {
-  --zsr-color: var(--color-fg-primary);
-}
-.zoui-star-rating[data-variant=brutalist] .zoui-star-rating__fill--full {
-  stroke-width: 2.5;
-}
-.zoui-star-rating[data-variant=brutalist] .zoui-star-rating__fill--empty {
-  stroke: var(--color-fg-primary);
-  stroke-width: 2.5;
-}
-
-.zoui-star-rating[data-variant=glass] {
-  --zsr-color: color-mix(in srgb, var(--color-brand-400) 80%, transparent);
-}
-.zoui-star-rating[data-variant=glass] .zoui-star-rating__fill--empty {
-  stroke: color-mix(in srgb, var(--color-border-default) 60%, transparent);
-}
-
 .zoui-star-rating[data-variant=retro] {
   --zsr-color: #92400e;
 }
@@ -5989,13 +5083,6 @@
 .zoui-star-rating[data-variant=retro] .zoui-star-rating__value,
 .zoui-star-rating[data-variant=retro] .zoui-star-rating__count {
   color: #78350f;
-}
-
-.zoui-star-rating[data-variant=glow] {
-  --zsr-color: var(--color-brand-400);
-}
-.zoui-star-rating[data-variant=glow] .zoui-star-rating__fill--full {
-  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--color-brand-500) 70%, transparent));
 }
 
 .zoui-star-rating[data-variant=gradient] {
@@ -6014,13 +5101,6 @@
 .zoui-star-rating[data-variant=neon] .zoui-star-rating__value,
 .zoui-star-rating[data-variant=neon] .zoui-star-rating__count {
   color: var(--color-brand-300);
-}
-
-.zoui-star-rating[data-variant="3d"] {
-  --zsr-color: var(--color-brand-500);
-}
-.zoui-star-rating[data-variant="3d"] .zoui-star-rating__fill--full {
-  filter: drop-shadow(2px 2px 0 var(--color-brand-300));
 }
 
 .zoui-star-rating {
@@ -6210,28 +5290,6 @@
   color: var(--color-brand-contrast);
 }
 
-.zoui-tabs[data-variant=brutalist] .zoui-tabs__trigger {
-  border-bottom: 2px solid var(--color-fg-primary);
-  color: var(--color-fg-primary);
-  font-weight: 700;
-}
-
-.zoui-tabs[data-variant=brutalist] .zoui-tabs__trigger--active {
-  background: var(--color-fg-primary);
-  color: var(--color-bg-surface);
-  font-weight: 900;
-}
-
-.zoui-tabs[data-variant=glass] .zoui-tabs__trigger {
-  color: color-mix(in srgb, var(--color-fg-secondary) 80%, transparent);
-}
-
-.zoui-tabs[data-variant=glass] .zoui-tabs__trigger--active {
-  background: color-mix(in srgb, var(--color-brand-500) 20%, transparent);
-  border-bottom-color: var(--color-brand-400);
-  color: white;
-}
-
 .zoui-tabs[data-variant=retro] .zoui-tabs__trigger {
   color: #92400e;
 }
@@ -6240,13 +5298,6 @@
   background: #92400e;
   color: #fef3c7;
   border-bottom-color: #92400e;
-}
-
-.zoui-tabs[data-variant=glow] .zoui-tabs__trigger--active {
-  border-bottom-color: var(--color-brand-400);
-  color: var(--color-brand-400);
-  background: color-mix(in srgb, var(--color-brand-500) 8%, transparent);
-  text-shadow: 0 0 8px var(--color-brand-500);
 }
 
 .zoui-tabs[data-variant=gradient] .zoui-tabs__trigger--active {
@@ -6265,13 +5316,6 @@
   color: var(--color-brand-300);
   background: color-mix(in srgb, var(--color-brand-500) 12%, transparent);
   box-shadow: 0 0 8px var(--color-brand-500);
-}
-
-.zoui-tabs[data-variant="3d"] .zoui-tabs__trigger--active {
-  border-bottom-color: var(--color-brand-400);
-  color: var(--color-brand-600);
-  background: var(--color-brand-50);
-  box-shadow: 2px 2px 0 var(--color-brand-300), 4px 4px 0 var(--color-brand-200);
 }
 
 .zoui-tabs {
@@ -6373,30 +5417,9 @@
   border-radius: var(--radius-sm);
 }
 
-.zoui-tooltip[data-variant=brutalist] .zoui-tooltip__bubble {
-  background: var(--color-fg-primary);
-  color: var(--color-bg-surface);
-  border: 2px solid var(--color-fg-primary);
-  border-radius: 0;
-  font-weight: 700;
-  box-shadow: none;
-}
-
-.zoui-tooltip[data-variant=glass] .zoui-tooltip__bubble {
-  background: color-mix(in srgb, var(--color-fg-primary) 70%, transparent);
-  color: white;
-  backdrop-filter: blur(4px);
-}
-
 .zoui-tooltip[data-variant=retro] .zoui-tooltip__bubble {
   background: #92400e;
   color: #fef3c7;
-}
-
-.zoui-tooltip[data-variant=glow] .zoui-tooltip__bubble {
-  background: var(--color-fg-primary);
-  color: var(--color-brand-400);
-  box-shadow: 0 0 8px var(--color-brand-500);
 }
 
 .zoui-tooltip[data-variant=gradient] .zoui-tooltip__bubble {
@@ -6409,12 +5432,6 @@
   color: var(--color-brand-300);
   border: 1px solid var(--color-brand-400);
   box-shadow: 0 0 8px var(--color-brand-500);
-}
-
-.zoui-tooltip[data-variant="3d"] .zoui-tooltip__bubble {
-  background: var(--color-brand-50);
-  color: var(--color-brand-600);
-  box-shadow: 2px 2px 0 var(--color-brand-300), 4px 4px 0 var(--color-brand-200);
 }
 
 .zoui-tooltip {
@@ -6592,39 +5609,6 @@
   background: color-mix(in srgb, var(--color-pill-fg) 8%, transparent);
 }
 
-.zoui-product-card[data-variant=brutalist] {
-  --_bg: #ffffff;
-  --_border: #0A0A0A;
-  --_radius: 0;
-  --_shadow: none;
-  --_fg: #0A0A0A;
-  --_fg-muted: #525252;
-  --_price-color: #0A0A0A;
-  --_hover-shadow: none;
-  --_hover-border: #0A0A0A;
-  border-width: 2px;
-  box-shadow: 4px 4px 0 0 #0A0A0A;
-}
-.zoui-product-card[data-variant=brutalist]:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 0 #0A0A0A;
-}
-
-[data-theme=dark] .zoui-product-card[data-variant=brutalist] {
-  --_bg: #ffffff;
-  --_fg: #0A0A0A;
-}
-
-.zoui-product-card[data-variant=glass] {
-  --_bg: color-mix(in srgb, var(--color-bg-surface) 55%, transparent);
-  --_border: color-mix(in srgb, var(--color-fg-primary) 12%, transparent);
-  --_shadow: var(--shadow-md);
-  --_hover-shadow: var(--shadow-lg);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  box-shadow: var(--shadow-md), inset 0 1px 0 0 color-mix(in srgb, #ffffff 25%, transparent);
-}
-
 .zoui-product-card[data-variant=retro] {
   --_bg: #FFF8EE;
   --_border: #C4A882;
@@ -6639,45 +5623,6 @@
 }
 .zoui-product-card[data-variant=retro] .zoui-product-card__media {
   background: #f5e8d0;
-}
-
-.zoui-product-card[data-variant=glow] {
-  --_bg: #0A0A0F;
-  --_border: color-mix(in srgb, var(--color-brand-500) 30%, transparent);
-  --_radius: var(--radius-lg);
-  --_fg: var(--color-brand-100);
-  --_fg-muted: color-mix(in srgb, var(--color-brand-300) 60%, transparent);
-  --_price-color: var(--color-brand-400);
-  --_badge-bg: var(--color-brand-500);
-  --_hover-shadow: 0 0 32px color-mix(in srgb, var(--color-brand-500) 25%, transparent);
-  --_hover-border: color-mix(in srgb, var(--color-brand-400) 50%, transparent);
-}
-.zoui-product-card[data-variant=glow] .zoui-product-card__media {
-  background: #14141C;
-}
-
-.zoui-product-card[data-variant="3d"] {
-  --_bg: var(--color-bg-surface);
-  --_border: var(--color-brand-300);
-  --_radius: var(--radius-md);
-  --_shadow:
-    inset 0 -1px 0 0 color-mix(in srgb, #000 6%, transparent),
-    4px 4px 0 0 var(--color-brand-700),
-    4px 8px 16px 0 rgba(0, 0, 0, .14);
-  --_hover-shadow:
-    inset 0 -1px 0 0 color-mix(in srgb, #000 6%, transparent),
-    6px 6px 0 0 var(--color-brand-700),
-    6px 10px 20px 0 rgba(0, 0, 0, .2);
-  --_hover-border: var(--color-brand-400);
-  transition: transform 0.08s var(--easing-standard), box-shadow 0.08s var(--easing-standard), border-color var(--duration-fast) var(--easing-standard);
-}
-.zoui-product-card[data-variant="3d"]:hover {
-  transform: translate(-2px, -2px);
-}
-
-[data-theme=dark] .zoui-product-card[data-variant="3d"] {
-  --_border: var(--color-brand-600);
-  --_hover-border: var(--color-brand-500);
 }
 
 .zoui-product-card[data-variant=gradient] {
@@ -6985,39 +5930,6 @@
   --_active-bg: var(--color-brand-600);
 }
 
-.zoui-sidebar[data-variant=brutalist] {
-  --_bg: var(--color-neutral-0);
-  --_item-hover-bg: var(--color-neutral-100);
-  --_item-hover-fg: var(--color-neutral-900);
-  --_active-bg: var(--color-neutral-900);
-  --_active-fg: var(--color-neutral-0);
-  --_item-radius: 0;
-  border: 2px solid var(--color-neutral-900);
-  box-shadow: 4px 4px 0 0 var(--color-neutral-900);
-}
-
-[data-theme=dark] .zoui-sidebar[data-variant=brutalist] {
-  --_bg: var(--color-neutral-900);
-  --_item-hover-bg: var(--color-neutral-800);
-  --_item-hover-fg: var(--color-neutral-100);
-  --_active-bg: var(--color-neutral-100);
-  --_active-fg: var(--color-neutral-900);
-  border-color: var(--color-neutral-100);
-  box-shadow: 4px 4px 0 0 var(--color-neutral-100);
-}
-
-.zoui-sidebar[data-variant=glass] {
-  --_bg: color-mix(in srgb, white 10%, transparent);
-  --_item-hover-bg: color-mix(in srgb, white 12%, transparent);
-  --_item-hover-fg: var(--color-fg-primary);
-  --_active-bg: color-mix(in srgb, white 22%, transparent);
-  --_active-fg: var(--color-fg-primary);
-  border: 1px solid color-mix(in srgb, white 25%, transparent);
-  border-radius: var(--radius-xl);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
 .zoui-sidebar[data-variant=retro] {
   --_bg: #FFF8EE;
   --_fg: #2C2416;
@@ -7043,31 +5955,6 @@
   --_active-bg: #5C3A1E;
   --_active-fg: #F5DDA0;
   border-right-color: #5C3A1E;
-}
-
-.zoui-sidebar[data-variant=glow] {
-  --_bg: var(--color-bg-surface);
-  --_active-bg: color-mix(in srgb, var(--color-brand-400) 15%, transparent);
-  --_active-fg: var(--color-brand-600);
-  border-right: 1px solid color-mix(in srgb, var(--color-brand-400) 30%, transparent);
-  box-shadow: 4px 0 20px color-mix(in srgb, var(--color-brand-400) 20%, transparent);
-}
-
-[data-theme=dark] .zoui-sidebar[data-variant=glow] {
-  --_active-fg: var(--color-brand-300);
-}
-
-.zoui-sidebar[data-variant="3d"] {
-  --_bg: var(--color-bg-surface);
-  --_active-bg: var(--color-brand-50);
-  --_active-fg: var(--color-brand-700);
-  border: 1px solid var(--color-brand-300);
-  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, #000 6%, transparent), 4px 4px 0 0 var(--color-brand-700);
-}
-
-[data-theme=dark] .zoui-sidebar[data-variant="3d"] {
-  --_active-bg: color-mix(in srgb, var(--color-brand-400) 15%, transparent);
-  --_active-fg: var(--color-brand-300);
 }
 
 .zoui-sidebar[data-variant=gradient] {
@@ -7744,88 +6631,6 @@
   background: radial-gradient(800px 300px at 80% 0%, color-mix(in srgb, var(--color-brand-800) 30%, transparent) 0%, transparent 60%), radial-gradient(600px 300px at 20% 100%, color-mix(in srgb, var(--color-brand-900) 40%, transparent) 0%, transparent 60%), var(--color-neutral-900);
 }
 
-.zoui-navbar[data-variant=brutalist] {
-  --_bg: var(--color-neutral-0);
-  --_border: var(--color-neutral-900);
-  --_fg: var(--color-neutral-900);
-  --_fg-muted: var(--color-neutral-700);
-  --_mark-bg: var(--color-neutral-900);
-  --_mark-fg: var(--color-neutral-0);
-  --_mark-radius: 0;
-  --_nav-hover-bg: var(--color-neutral-900);
-  --_nav-hover-fg: var(--color-neutral-0);
-  --_nav-active-bg: var(--color-neutral-900);
-  --_nav-active-fg: var(--color-neutral-0);
-  --_action-fg: var(--color-neutral-900);
-  --_action-hover-bg: var(--color-neutral-100);
-  --_cta-bg: var(--color-neutral-900);
-  --_cta-fg: var(--color-neutral-0);
-  --_cta-hover-bg: #333333;
-  --_cart-bg: var(--color-neutral-900);
-  --_cart-fg: var(--color-neutral-0);
-  --_cart-border: var(--color-neutral-900);
-  --_cart-hover-bg: #333333;
-  --_cart-hover-fg: var(--color-neutral-0);
-  --_badge-bg: var(--color-neutral-0);
-  --_badge-fg: var(--color-neutral-900);
-  --_badge-shadow: var(--color-neutral-900);
-  border-bottom: 3px solid var(--color-neutral-900);
-}
-.zoui-navbar[data-variant=brutalist] .zoui-navbar__nav button {
-  border-radius: 0;
-}
-.zoui-navbar[data-variant=brutalist] .zoui-navbar__action {
-  border-radius: 0;
-}
-.zoui-navbar[data-variant=brutalist] .zoui-navbar__cart {
-  border-radius: 0;
-}
-.zoui-navbar[data-variant=brutalist] .zoui-navbar__mark {
-  border-radius: 0;
-}
-
-[data-theme=dark] .zoui-navbar[data-variant=brutalist] {
-  --_bg: var(--color-neutral-900);
-  --_border: var(--color-neutral-0);
-  --_fg: var(--color-neutral-0);
-  --_fg-muted: var(--color-neutral-300);
-  --_mark-bg: var(--color-neutral-0);
-  --_mark-fg: var(--color-neutral-900);
-  --_nav-hover-bg: var(--color-neutral-0);
-  --_nav-hover-fg: var(--color-neutral-900);
-  --_nav-active-bg: var(--color-neutral-0);
-  --_nav-active-fg: var(--color-neutral-900);
-  --_action-fg: var(--color-neutral-300);
-  --_action-hover-bg:var(--color-neutral-800);
-  --_cta-bg: var(--color-neutral-0);
-  --_cta-fg: var(--color-neutral-900);
-  --_cta-hover-bg: var(--color-neutral-200);
-  --_cart-bg: var(--color-neutral-0);
-  --_cart-fg: var(--color-neutral-900);
-  --_cart-border: var(--color-neutral-0);
-  --_cart-hover-bg: var(--color-neutral-200);
-  --_cart-hover-fg: var(--color-neutral-900);
-  --_badge-bg: var(--color-neutral-900);
-  --_badge-fg: var(--color-neutral-0);
-  --_badge-shadow: var(--color-neutral-0);
-  border-bottom-color: var(--color-neutral-0);
-}
-
-.zoui-navbar[data-variant=glass] {
-  --_bg: rgba(255,255,255,.72);
-  --_border: rgba(255,255,255,.35);
-  --_fg: var(--color-neutral-900);
-  --_fg-muted: var(--color-neutral-600);
-  --_nav-hover-bg: rgba(255,255,255,.45);
-  --_nav-active-bg: rgba(255,255,255,.65);
-  --_action-hover-bg: rgba(255,255,255,.45);
-  --_cart-bg: rgba(255,255,255,.4);
-  --_cart-border: rgba(255,255,255,.35);
-  --_cart-hover-bg: rgba(255,255,255,.6);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-}
-
 .zoui-navbar[data-variant=retro] {
   --_bg: #F5EDD6;
   --_border: #8B6F3E;
@@ -7872,57 +6677,6 @@
   --_badge-bg: #5C3A1E;
   --_badge-fg: #F5DDA0;
   --_badge-shadow: #1A120A;
-}
-
-.zoui-navbar[data-variant=glow] {
-  --_bg: #0A0A0F;
-  --_border: rgba(96,165,250,.2);
-  --_fg: var(--color-neutral-0);
-  --_fg-muted: rgba(255,255,255,.45);
-  --_mark-bg: var(--color-brand-500);
-  --_mark-fg: var(--color-neutral-0);
-  --_nav-hover-bg: rgba(96,165,250,.08);
-  --_nav-active-bg: rgba(96,165,250,.15);
-  --_nav-active-fg: var(--color-brand-300);
-  --_action-fg: rgba(255,255,255,.55);
-  --_action-hover-bg: rgba(255,255,255,.05);
-  --_cta-bg: var(--color-brand-500);
-  --_cta-fg: var(--color-neutral-0);
-  --_cta-hover-bg: var(--color-brand-400);
-  --_cart-bg: rgba(96,165,250,.1);
-  --_cart-fg: var(--color-brand-300);
-  --_cart-border: rgba(96,165,250,.25);
-  --_cart-hover-bg: rgba(96,165,250,.15);
-  --_badge-bg: var(--color-brand-400);
-  --_badge-fg: var(--color-neutral-900);
-  --_badge-shadow: #0A0A0F;
-  box-shadow: 0 1px 0 0 rgba(96, 165, 250, 0.2), inset 0 0 40px rgba(96, 165, 250, 0.03);
-}
-
-.zoui-navbar[data-variant="3d"] {
-  --_bg: var(--color-brand-500);
-  --_border: transparent;
-  --_fg: var(--color-brand-contrast);
-  --_fg-muted: color-mix(in srgb, var(--color-brand-contrast) 65%, transparent);
-  --_mark-bg: color-mix(in srgb, var(--color-brand-contrast) 15%, transparent);
-  --_mark-fg: var(--color-brand-contrast);
-  --_nav-hover-bg: color-mix(in srgb, var(--color-brand-contrast) 12%, transparent);
-  --_nav-active-bg: color-mix(in srgb, var(--color-brand-contrast) 20%, transparent);
-  --_nav-active-fg: var(--color-brand-contrast);
-  --_action-fg: color-mix(in srgb, var(--color-brand-contrast) 75%, transparent);
-  --_action-hover-bg: color-mix(in srgb, var(--color-brand-contrast) 12%, transparent);
-  --_cta-bg: color-mix(in srgb, #000 20%, transparent);
-  --_cta-fg: var(--color-brand-contrast);
-  --_cta-hover-bg: color-mix(in srgb, #000 32%, transparent);
-  --_cart-bg: color-mix(in srgb, var(--color-brand-contrast) 12%, transparent);
-  --_cart-fg: var(--color-brand-contrast);
-  --_cart-border: color-mix(in srgb, var(--color-brand-contrast) 22%, transparent);
-  --_cart-hover-bg: color-mix(in srgb, var(--color-brand-contrast) 22%, transparent);
-  --_cart-hover-fg: var(--color-brand-contrast);
-  --_badge-bg: var(--color-brand-700);
-  --_badge-fg: var(--color-brand-contrast);
-  --_badge-shadow: var(--color-brand-500);
-  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, #000 15%, transparent), 0 4px 0 0 var(--color-brand-700), 0 6px 12px 0 rgba(0, 0, 0, 0.2);
 }
 
 .zoui-navbar[data-variant=gradient] {
@@ -8358,55 +7112,6 @@
   --_btn-hover-fg: var(--color-neutral-0);
 }
 
-.zoui-view-toggle[data-variant=brutalist] {
-  --_bg: var(--color-neutral-0);
-  --_border: 3px solid var(--color-neutral-900);
-  --_radius: 0;
-  --_padding: 0px;
-  --_gap: 0px;
-  --_btn-fg: var(--color-neutral-900);
-  --_btn-hover-bg: var(--color-neutral-100);
-  --_btn-hover-fg: var(--color-neutral-900);
-  --_active-bg: var(--color-neutral-900);
-  --_active-fg: var(--color-neutral-0);
-  --_active-hover-bg: #333333;
-  overflow: hidden;
-}
-.zoui-view-toggle[data-variant=brutalist] .zoui-view-toggle__btn {
-  border-radius: 0;
-  border-right: 2px solid var(--color-neutral-900);
-}
-.zoui-view-toggle[data-variant=brutalist] .zoui-view-toggle__btn:last-child {
-  border-right: 0;
-}
-
-[data-theme=dark] .zoui-view-toggle[data-variant=brutalist] {
-  --_bg: var(--color-neutral-900);
-  --_border: 3px solid var(--color-neutral-0);
-  --_btn-fg: var(--color-neutral-300);
-  --_btn-hover-bg: var(--color-neutral-800);
-  --_btn-hover-fg: var(--color-neutral-0);
-  --_active-bg: var(--color-neutral-0);
-  --_active-fg: var(--color-neutral-900);
-  --_active-hover-bg: var(--color-neutral-200);
-}
-[data-theme=dark] .zoui-view-toggle[data-variant=brutalist] .zoui-view-toggle__btn {
-  border-right-color: var(--color-neutral-0);
-}
-
-.zoui-view-toggle[data-variant=glass] {
-  --_bg: rgba(255,255,255,.6);
-  --_border: 1px solid rgba(255,255,255,.4);
-  --_btn-fg: var(--color-neutral-700);
-  --_btn-hover-bg: rgba(255,255,255,.4);
-  --_btn-hover-fg: var(--color-neutral-900);
-  --_active-bg: var(--color-brand-500);
-  --_active-fg: var(--color-fg-on-brand);
-  --_active-hover-bg: var(--color-brand-600);
-  backdrop-filter: blur(10px) saturate(180%);
-  -webkit-backdrop-filter: blur(10px) saturate(180%);
-}
-
 .zoui-view-toggle[data-variant=retro] {
   --_bg: #F5EDD6;
   --_border: 2px solid #8B6F3E;
@@ -8430,42 +7135,6 @@
   --_active-bg: #5C3A1E;
   --_active-fg: #F5DDA0;
   --_active-hover-bg: #3E2814;
-}
-
-.zoui-view-toggle[data-variant=glow] {
-  --_bg: #0A0A0F;
-  --_border: 1px solid rgba(96,165,250,.2);
-  --_btn-fg: rgba(255,255,255,.4);
-  --_btn-hover-bg: rgba(96,165,250,.08);
-  --_btn-hover-fg: rgba(255,255,255,.8);
-  --_active-bg: var(--color-brand-500);
-  --_active-fg: var(--color-neutral-0);
-  --_active-hover-bg: var(--color-brand-400);
-}
-.zoui-view-toggle[data-variant=glow] .zoui-view-toggle__btn[aria-pressed=true] {
-  box-shadow: 0 0 12px color-mix(in srgb, var(--color-brand-500) 40%, transparent);
-}
-
-.zoui-view-toggle[data-variant="3d"] {
-  --_bg: var(--color-bg-surface);
-  --_border: 1px solid var(--color-brand-300);
-  --_btn-fg: var(--color-fg-secondary);
-  --_btn-hover-bg: var(--color-brand-50);
-  --_btn-hover-fg: var(--color-brand-700);
-  --_active-bg: var(--color-brand-500);
-  --_active-fg: var(--color-brand-contrast);
-  --_active-hover-bg: var(--color-brand-400);
-  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, #000 8%, transparent), 0 4px 0 0 var(--color-brand-700), 0 4px 10px 0 rgba(0, 0, 0, 0.15);
-  transition: transform 0.08s var(--easing-standard), box-shadow 0.08s var(--easing-standard);
-}
-.zoui-view-toggle[data-variant="3d"] .zoui-view-toggle__btn[aria-pressed=true] {
-  box-shadow: inset 0 2px 4px 0 color-mix(in srgb, #000 25%, transparent);
-}
-
-[data-theme=dark] .zoui-view-toggle[data-variant="3d"] {
-  --_border: 1px solid var(--color-brand-600);
-  --_btn-hover-bg: var(--color-brand-950, color-mix(in srgb, var(--color-brand-900) 60%, #000));
-  --_btn-hover-fg: var(--color-brand-300);
 }
 
 .zoui-view-toggle[data-variant=gradient] {
@@ -8702,44 +7371,6 @@
   --_fg-muted: color-mix(in srgb, var(--color-pill-fg) 55%, transparent);
 }
 
-.zoui-option-card[data-variant=brutalist] {
-  --_bg: #ffffff;
-  --_border: #0A0A0A;
-  --_radius: 0;
-  --_fg: #0A0A0A;
-  --_fg-muted: #525252;
-  --_indicator-border: #0A0A0A;
-  --_indicator-bg: #0A0A0A;
-  --_selected-bg: #ffffff;
-  --_selected-border: #0A0A0A;
-  border-width: 2px;
-}
-.zoui-option-card[data-variant=brutalist][data-selected] {
-  box-shadow: 4px 4px 0 0 #0A0A0A;
-}
-
-[data-theme=dark] .zoui-option-card[data-variant=brutalist] {
-  --_bg: var(--color-neutral-900);
-  --_fg: #ffffff;
-  --_border: #ffffff;
-  --_indicator-border: #ffffff;
-  --_indicator-bg: #ffffff;
-  --_selected-bg: var(--color-neutral-900);
-  --_selected-border: #ffffff;
-}
-[data-theme=dark] .zoui-option-card[data-variant=brutalist][data-selected] {
-  box-shadow: 4px 4px 0 0 #ffffff;
-}
-
-.zoui-option-card[data-variant=glass] {
-  --_bg: color-mix(in srgb, var(--color-bg-surface) 55%, transparent);
-  --_border: color-mix(in srgb, var(--color-fg-primary) 12%, transparent);
-  --_selected-bg: color-mix(in srgb, var(--color-brand-100) 45%, transparent);
-  --_selected-shadow: var(--shadow-md);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-}
-
 .zoui-option-card[data-variant=retro] {
   --_bg: #FFF8EE;
   --_border: #C4A882;
@@ -8761,31 +7392,6 @@
   --_indicator-bg: #F5DDA0;
   --_selected-bg: #2A1D10;
   --_selected-border: #F5DDA0;
-}
-
-.zoui-option-card[data-variant=glow] {
-  --_bg: #0A0A0F;
-  --_border: color-mix(in srgb, var(--color-brand-500) 30%, transparent);
-  --_radius: var(--radius-lg);
-  --_fg: var(--color-brand-100);
-  --_fg-muted: color-mix(in srgb, var(--color-brand-300) 60%, transparent);
-  --_indicator-border: color-mix(in srgb, var(--color-brand-300) 50%, transparent);
-  --_indicator-bg: var(--color-brand-400);
-  --_selected-bg: #0A0A0F;
-  --_selected-border: color-mix(in srgb, var(--color-brand-400) 60%, transparent);
-  --_selected-shadow: 0 0 24px color-mix(in srgb, var(--color-brand-500) 25%, transparent);
-}
-
-.zoui-option-card[data-variant="3d"] {
-  --_border: var(--color-brand-300);
-  --_selected-border: var(--color-brand-500);
-  --_selected-shadow:
-    inset 0 -1px 0 0 color-mix(in srgb, #000 6%, transparent),
-    3px 3px 0 0 var(--color-brand-700);
-  transition: transform 0.08s var(--easing-standard), box-shadow 0.08s var(--easing-standard), border-color var(--duration-fast) var(--easing-standard);
-}
-.zoui-option-card[data-variant="3d"][data-selected] {
-  transform: translate(-1px, -1px);
 }
 
 .zoui-option-card[data-variant=gradient] {
@@ -8987,6 +7593,38 @@
 .zoui-resumen-tienda-card__recommendation-body {
   flex: 1;
   min-width: 0;
+}
+
+.zoui-resumen-tienda-card__recommendation-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+  padding: 0;
+  list-style: none;
+}
+
+.zoui-resumen-tienda-card__recommendation-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.zoui-resumen-tienda-card__recommendation-item-dot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+}
+.zoui-resumen-tienda-card__recommendation-item[data-tone=success] .zoui-resumen-tienda-card__recommendation-item-dot {
+  color: var(--color-success-500);
+}
+.zoui-resumen-tienda-card__recommendation-item[data-tone=warning] .zoui-resumen-tienda-card__recommendation-item-dot {
+  color: var(--color-warning-500);
+}
+.zoui-resumen-tienda-card__recommendation-item[data-tone=danger] .zoui-resumen-tienda-card__recommendation-item-dot {
+  color: var(--color-danger-500);
 }
 
 .zoui-resumen-tienda-card__recommendation-cta {
@@ -9349,4 +7987,23 @@
 
 *, *::before, *::after {
   box-sizing: border-box;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 999px;
 }
