@@ -7775,6 +7775,49 @@
   color: var(--color-brand-300);
 }
 
+.zoui-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-default);
+  border-radius: 16px;
+  padding: 26px 28px;
+}
+
+.zoui-card[data-compact] {
+  border-radius: 14px;
+  padding: 18px 22px;
+}
+
+.zoui-card__title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+}
+
+.zoui-card__subtitle {
+  display: block;
+  font-size: 13px !important;
+  margin-bottom: var(--space-5);
+}
+
+.zoui-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin: var(--space-4) -28px -26px;
+  padding: 16px;
+  background: var(--color-bg-muted);
+  border-top: 1px solid var(--color-border-strong);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.zoui-card[data-compact] .zoui-card__footer {
+  margin: var(--space-3) -22px -18px;
+  padding: 16px;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+}
+
 .zoui-page-renderer {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
