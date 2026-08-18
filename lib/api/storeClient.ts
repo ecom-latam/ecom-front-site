@@ -71,7 +71,7 @@ export interface ProductListParams {
   ids?: string[];
 }
 
-async function getSlug(): Promise<string> {
+export async function getSlug(): Promise<string> {
   const headersList = await headers();
   const slug = headersList.get('x-store-slug');
   if (!slug) notFound();
