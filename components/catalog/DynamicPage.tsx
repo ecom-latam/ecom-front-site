@@ -2,6 +2,7 @@
 
 import { DynamicPageRenderer } from 'zoui';
 import type { PageContent } from '@/lib/api/storeClient';
+import { subscribeToNewsletter } from '@/lib/actions/newsletter';
 import { PageUnderConstruction } from './PageUnderConstruction';
 import styles from './DynamicPage.module.scss';
 
@@ -15,7 +16,11 @@ export function DynamicPage({ page }: { page: PageContent }) {
   return (
     <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
       <div className={styles.content}>
-        <DynamicPageRenderer blocks={page.blocks} showGrid={page.workInProgress} />
+        <DynamicPageRenderer
+          blocks={page.blocks}
+          showGrid={page.workInProgress}
+          actions={{ onNewsletterSubmit: subscribeToNewsletter }}
+        />
       </div>
     </main>
   );
