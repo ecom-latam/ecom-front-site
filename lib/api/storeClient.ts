@@ -122,6 +122,18 @@ export async function getCategories(): Promise<Category[]> {
   });
 }
 
+export interface ReviewsSummary {
+  avgRating:   number | null;
+  reviewCount: number;
+}
+
+export async function getReviewsSummary(): Promise<ReviewsSummary> {
+  const slug = await getSlug();
+  return client.get<ReviewsSummary>('/api/product/reviews/summary', {
+    headers: { 'X-Tenant-Slug': slug },
+  });
+}
+
 
 export interface StorePolicies {
   returns_enabled?: boolean;
