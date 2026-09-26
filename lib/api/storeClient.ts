@@ -1,7 +1,7 @@
 import { cache } from 'react';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import type { PageBlock } from 'zoui';
+import type { PageBlock, MobileBlockOverlay } from 'zoui';
 
 import { BFF_BASE_URL, BffError, client } from './client';
 
@@ -199,7 +199,7 @@ export interface PageInfo {
   // con sus blocks (grilla plana, reemplaza rows[]). Puede venir vacio si la
   // tienda todavia no creo ninguna pagina. Ninguna es "home" por default:
   // isHome es un flag que puede estar en cualquiera (o en ninguna).
-  pages?: { slug: string; title: string; isHome: boolean; workInProgress: boolean; blocks: PageBlock[] }[];
+  pages?: { slug: string; title: string; isHome: boolean; workInProgress: boolean; blocks: PageBlock[]; mobileBlocks?: MobileBlockOverlay[] | null }[];
 }
 
 // Pagina puntual del page builder, servida por
@@ -209,6 +209,10 @@ export interface PageContent {
   title:          string;
   workInProgress: boolean;
   blocks:         PageBlock[];
+  // EC-1060: null/undefined = sin personalizar (fallback automatico de
+  // EC-1059); un array (incluso vacio) = mobile editado de forma
+  // independiente en el builder.
+  mobileBlocks?:  MobileBlockOverlay[] | null;
 }
 
 export interface ProductReview {
