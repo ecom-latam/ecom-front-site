@@ -21,7 +21,7 @@ export function InformationalHome({ storeInfo }: { storeInfo: PageInfo }) {
   return (
     <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
       <div className={styles.content}>
-        <DynamicPageRenderer blocks={blocks} showGrid={homePage?.workInProgress} />
+        <DynamicPageRenderer blocks={blocks} mobileBlocks={homePage?.mobileBlocks} showGrid={homePage?.workInProgress} />
       </div>
     </main>
   );

@@ -19,6 +19,7 @@ export function DynamicPage({ page }: { page: PageContent }) {
       <div className={styles.content}>
         <DynamicPageRenderer
           blocks={page.blocks}
+          mobileBlocks={page.mobileBlocks}
           showGrid={page.workInProgress}
           actions={{ onNewsletterSubmit: subscribeToNewsletter, onContactSubmit: submitContactMessage }}
         />
