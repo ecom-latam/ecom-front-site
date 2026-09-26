@@ -7834,6 +7834,9 @@
 }
 
 @container zoui-page (max-width: 720px) {
+  .zoui-page-renderer {
+    grid-auto-rows: auto !important;
+  }
   .zoui-page-renderer > .zoui-page-renderer__cell {
     grid-column: span 100 !important;
     grid-row: span 1 !important;
