@@ -2,8 +2,6 @@
 
 import { DynamicPageRenderer } from 'zoui';
 import type { PageContent } from '@/lib/api/storeClient';
-import { subscribeToNewsletter } from '@/lib/actions/newsletter';
-import { submitContactMessage } from '@/lib/actions/contact';
 import { PageUnderConstruction } from './PageUnderConstruction';
 import styles from './DynamicPage.module.scss';
 
@@ -21,7 +19,6 @@ export function DynamicPage({ page }: { page: PageContent }) {
           blocks={page.blocks}
           mobileBlocks={page.mobileBlocks}
           showGrid={page.workInProgress}
-          actions={{ onNewsletterSubmit: subscribeToNewsletter, onContactSubmit: submitContactMessage }}
         />
       </div>
     </main>

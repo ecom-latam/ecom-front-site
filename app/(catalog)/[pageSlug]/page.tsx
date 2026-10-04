@@ -2,9 +2,6 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getPageBySlug, getPageInfo, getCategories, getProducts } from '@/lib/api/storeClient';
-import { resolveProductShowcaseBlocks } from '@/lib/resolveProductShowcase';
-import { resolveCategoryShowcaseBlocks } from '@/lib/resolveCategoryShowcase';
-import { resolveReviewsSummaryBlocks } from '@/lib/resolveReviewsSummary';
 import { DynamicPage } from '@/components/catalog/DynamicPage';
 import { Text } from 'zoui';
 import { ProductGrid } from '../productos/ProductGrid';
@@ -77,8 +74,5 @@ export default async function DynamicPageRoute({ params, searchParams }: Props) 
 
   const page = await getPageBySlug(params.pageSlug);
   if (!page) notFound();
-  const productResolved = await resolveProductShowcaseBlocks(page.blocks, storeInfo?.store?.currency);
-  const categoryResolved = await resolveCategoryShowcaseBlocks(productResolved, catalogSlug);
-  const blocks = await resolveReviewsSummaryBlocks(categoryResolved);
-  return <DynamicPage page={{ ...page, blocks }} />;
+  return <DynamicPage page={page} />;
 }
