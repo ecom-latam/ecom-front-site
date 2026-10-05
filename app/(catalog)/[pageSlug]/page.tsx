@@ -74,5 +74,5 @@ export default async function DynamicPageRoute({ params, searchParams }: Props) 
 
   const page = await getPageBySlug(params.pageSlug);
   if (!page) notFound();
-  return <DynamicPage page={page} />;
+  return <DynamicPage page={page} layout={storeInfo?.layout} />;
 }
