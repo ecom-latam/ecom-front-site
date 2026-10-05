@@ -3,6 +3,7 @@
 import { DynamicPageRenderer } from 'zoui';
 import type { PageInfo } from '@/lib/api/storeClient';
 import { PageUnderConstruction } from './PageUnderConstruction';
+import { SiteRegion } from './SiteRegion';
 import styles from './InformationalHome.module.scss';
 
 // EC-559/EC-589: home de tiendas tipo "informativa" (sin catalogo) --
@@ -19,10 +20,14 @@ export function InformationalHome({ storeInfo }: { storeInfo: PageInfo }) {
   }
 
   return (
-    <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
-      <div className={styles.content}>
-        <DynamicPageRenderer blocks={blocks} mobileBlocks={homePage?.mobileBlocks} showGrid={homePage?.workInProgress} />
-      </div>
-    </main>
+    <>
+      <SiteRegion region={storeInfo.layout?.header} name="header" />
+      <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }} data-mobile-ready>
+        <div className={styles.content}>
+          <DynamicPageRenderer blocks={blocks} mobileBlocks={homePage?.mobileBlocks} showGrid={homePage?.workInProgress} />
+        </div>
+      </main>
+      <SiteRegion region={storeInfo.layout?.footer} name="footer" />
+    </>
   );
 }

@@ -34,6 +34,12 @@
     background:      var(--color-bg-subtle);
   }
 
+  // Las paginas armadas con el editor (marcan su contenido con
+  // data-mobile-ready) si se ven en celular; el resto del sitio (la tienda:
+  // catalogo, carrito, checkout, cuenta) mantiene el aviso.
+  .body:has([data-mobile-ready]) .wrapper { display: flex; }
+  .body:has([data-mobile-ready]) .mobileNotice { display: none; }
+
   .mobileNoticeIcon  { font-size: 40px; }
   .mobileNoticeTitle { font-size: 18px; font-weight: 700; color: var(--color-fg-primary); margin: 0; }
   .mobileNoticeBody  { font-size: 14px; color: var(--color-fg-secondary); margin: 0; max-width: 320px; line-height: 1.5; }

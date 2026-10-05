@@ -199,7 +199,20 @@ export interface PageInfo {
   // con sus blocks (grilla plana, reemplaza rows[]). Puede venir vacio si la
   // tienda todavia no creo ninguna pagina. Ninguna es "home" por default:
   // isHome es un flag que puede estar en cualquiera (o en ninguna).
+  layout?: SiteLayoutContent;
   pages?: { slug: string; title: string; isHome: boolean; workInProgress: boolean; blocks: PageBlock[]; mobileBlocks?: MobileBlockOverlay[] | null }[];
+}
+
+// Contenido que se repite en todas las paginas del sitio: el encabezado
+// (bajo la barra de la plataforma) y el pie.
+export interface SiteRegionContent {
+  backgroundColor: string | null;
+  blocks:          PageBlock[];
+}
+
+export interface SiteLayoutContent {
+  header: SiteRegionContent;
+  footer: SiteRegionContent;
 }
 
 // Pagina puntual del page builder, servida por

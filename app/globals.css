@@ -103,9 +103,9 @@ button, input, select, textarea {
    no en layout.module.scss (un CSS module no admite una regla compuesta
    solo por selectores :global()). */
 @media (max-width: 767px) {
-  .zoui-toast-stack,
-  .zoui-modal-overlay,
-  .zoui-drawer-overlay {
+  body:not(:has([data-mobile-ready])) .zoui-toast-stack,
+  body:not(:has([data-mobile-ready])) .zoui-modal-overlay,
+  body:not(:has([data-mobile-ready])) .zoui-drawer-overlay {
     display: none !important;
   }
 }
