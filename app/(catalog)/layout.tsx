@@ -3,6 +3,7 @@ import { CatalogNavbar } from '@/components/catalog/CatalogNavbar';
 import { CartDrawer } from '@/components/catalog/CartDrawer';
 import { PromoBar } from '@/components/catalog/PromoBar';
 import { PageUnderConstruction } from '@/components/catalog/PageUnderConstruction';
+import { SiteRegion } from '@/components/catalog/SiteRegion';
 import { getPageInfo } from '@/lib/api/storeClient';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -51,8 +52,10 @@ export default async function CatalogLayout({
         <CatalogNavbar />
       </div>
       <PromoBar position="below-navbar" />
+      <SiteRegion region={info?.layout?.header} name="header" />
       <CartDrawer />
       {children}
+      <SiteRegion region={info?.layout?.footer} name="footer" />
       <PromoBar position="footer" />
     </>
   );
