@@ -13,7 +13,7 @@ export function DynamicPage({ page }: { page: PageContent }) {
   }
 
   return (
-    <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
+    <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }} data-mobile-ready>
       <div className={styles.content}>
         <DynamicPageRenderer
           blocks={page.blocks}
