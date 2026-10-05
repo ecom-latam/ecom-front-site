@@ -7926,7 +7926,8 @@
   .zoui-group__grid:not(.zoui-group__grid--keep) > .zoui-page-renderer__cell--background {
     display: none;
   }
-  .zoui-typography[style*="--zoui-fs"] {
+  .zoui-typography[style*="--zoui-fs"],
+  .zoui-richtext[style*="--zoui-fs"] {
     font-size: min(var(--zoui-fs), max(22px, 8.5cqw)) !important;
   }
 }
@@ -7982,7 +7983,8 @@
   .zoui-page-renderer-dual__mobile .zoui-group__grid:not(.zoui-group__grid--keep) > .zoui-page-renderer__cell--background {
     display: none;
   }
-  .zoui-page-renderer-dual__mobile .zoui-typography[style*="--zoui-fs"] {
+  .zoui-page-renderer-dual__mobile .zoui-typography[style*="--zoui-fs"],
+  .zoui-page-renderer-dual__mobile .zoui-richtext[style*="--zoui-fs"] {
     font-size: min(var(--zoui-fs), max(22px, 8.5cqw)) !important;
   }
 }
@@ -8313,6 +8315,52 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+
+.zoui-richtext {
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+}
+.zoui-richtext > * {
+  margin: 0;
+}
+.zoui-richtext > * + * {
+  margin-top: var(--zoui-rt-gap, 1em);
+}
+.zoui-richtext a {
+  color: var(--zoui-rt-link, var(--color-brand-600, #2563eb));
+  text-decoration: var(--zoui-rt-link-decoration, underline);
+  text-underline-offset: 0.15em;
+}
+.zoui-richtext .zoui-richtext__h {
+  line-height: 1.2;
+  font-weight: 700;
+}
+.zoui-richtext .zoui-richtext__h[data-level="1"] {
+  font-size: 2em;
+}
+.zoui-richtext .zoui-richtext__h[data-level="2"] {
+  font-size: 1.6em;
+}
+.zoui-richtext .zoui-richtext__h[data-level="3"] {
+  font-size: 1.3em;
+}
+.zoui-richtext .zoui-richtext__h[data-level="4"] {
+  font-size: 1.1em;
+}
+.zoui-richtext .zoui-richtext__list {
+  padding-left: var(--zoui-rt-indent, 1.5em);
+}
+.zoui-richtext .zoui-richtext__list li::marker {
+  color: var(--zoui-rt-marker, currentColor);
+}
+.zoui-richtext .zoui-richtext__list li + li {
+  margin-top: var(--zoui-rt-item-gap, 4px);
+}
+.zoui-richtext .zoui-richtext__quote {
+  padding-left: 1em;
+  border-left: var(--zoui-rt-accent-width, 4px) solid var(--zoui-rt-accent, var(--color-brand-500, #3b82f6));
+  font-style: italic;
 }
 
 *, *::before, *::after {
