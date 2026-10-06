@@ -171,6 +171,13 @@ export interface StoreCommerceConfig {
   transfer_cuit?: string;
 }
 
+export interface ActiveTheme {
+  id: string;
+  name: string;
+  updatedAt: string | null;
+  kit: Record<string, unknown>;
+}
+
 export interface PageInfo {
   name: string;
   description?: string;
@@ -183,6 +190,7 @@ export interface PageInfo {
   brand2_lightness?: number | null;
   font_id?: string;
   theme?: string;
+  activeTheme?: ActiveTheme | null;
   hasCatalog?: boolean;
   catalog_label?: string;
   catalog_slug?: string;

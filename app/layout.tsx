@@ -5,12 +5,14 @@ import styles from "./layout.module.scss";
 import "./zoui.css";
 import NextLink from "next/link";
 import NextImage from "next/image";
-import { ToastProvider, ZouiProvider, brandScale, getGoogleFontUrl } from "zoui";
+import { ToastProvider, ZouiProvider, brandScale, createThemeCssCache, getGoogleFontUrl } from "zoui";
 import { CartProvider } from "@/context/CartContext";
 import { DynamicStoreTheme } from "@/components/DynamicStoreTheme";
 import { getPageInfo } from "@/lib/api/storeClient";
 import { ErrorModalProvider } from "@/components/ui/ErrorModal";
 import { StoreProvider } from "@/store/StoreProvider";
+
+const themeCssCache = createThemeCssCache();
 
 export const metadata: Metadata = {
   title: "ecom store",
@@ -41,6 +43,8 @@ export default async function RootLayout({
   const fontId = storeInfo?.font_id;
   const scale = brandScale(hue, sat, lit);
   const scale2 = brandScale(hue2, sat2, lit2);
+  const activeTheme = storeInfo?.activeTheme;
+  const themeCss = activeTheme ? themeCssCache.get(`${activeTheme.id}:${activeTheme.updatedAt}`, { kit: activeTheme.kit }) : '';
   const brandStyles = `
     :root {
       --color-brand-50:       ${scale[50]};
@@ -72,6 +76,7 @@ export default async function RootLayout({
       </head>
       <body className={styles.body}>
         <style dangerouslySetInnerHTML={{ __html: brandStyles }} />
+        {themeCss && <style data-theme-css dangerouslySetInnerHTML={{ __html: themeCss }} />}
         {/* EC-908 (reinicio): la tienda se repiensa de cero para mobile --
             mientras tanto, este aviso reemplaza el body entero por debajo
             del breakpoint. 100% CSS (ver layout.module.scss), nunca JS
