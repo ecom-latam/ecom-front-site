@@ -5,7 +5,7 @@ import styles from "./layout.module.scss";
 import "./zoui.css";
 import NextLink from "next/link";
 import NextImage from "next/image";
-import { ToastProvider, ZouiProvider, brandScale, createThemeCssCache, getGoogleFontUrl } from "zoui";
+import { ToastProvider, ZouiProvider, backgroundTokens, brandScale, createThemeCssCache, getGoogleFontUrl } from "zoui";
 import { CartProvider } from "@/context/CartContext";
 import { DynamicStoreTheme } from "@/components/DynamicStoreTheme";
 import { getPageInfo } from "@/lib/api/storeClient";
@@ -44,6 +44,9 @@ export default async function RootLayout({
   const scale2 = brandScale(hue2, sat2, lit2);
   const activeTheme = storeInfo?.activeTheme;
   const themeCss = activeTheme ? themeCssCache.get(`${activeTheme.id}:${activeTheme.updatedAt}`, { kit: activeTheme.kit }) : '';
+  const background = activeTheme?.background
+    ? `:root:root { ${Object.entries(backgroundTokens(activeTheme.background)).map(([name, value]) => `--${name}: ${value};`).join(' ')} }`
+    : '';
   const brandStyles = `
     :root {
       --color-brand-50:       ${scale[50]};
@@ -64,6 +67,7 @@ export default async function RootLayout({
       --color-brand2-600:     ${scale2[600]};
       --color-brand2-700:     ${scale2[700]};
     }
+    ${background}
   `.trim();
 
   return (
