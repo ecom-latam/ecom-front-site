@@ -7843,6 +7843,55 @@ button.zoui-gal__item {
   color: var(--color-danger-700);
 }
 
+.zoui-mp {
+  min-height: 100vh;
+  background: var(--color-bg-surface);
+}
+
+.zoui-mp__container {
+  max-width: 672px;
+  margin: 0 auto;
+  padding: 64px 16px;
+  text-align: center;
+}
+
+.zoui-mp__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  border: 2px solid var(--_state-color);
+  border-radius: 50%;
+  color: var(--_state-color);
+  font-size: 32px;
+}
+.zoui-mp__icon--success {
+  --_state-color: var(--color-success-600, #16a34a);
+}
+.zoui-mp__icon--pending {
+  --_state-color: var(--color-warning-600, #d97706);
+}
+.zoui-mp__icon--failure {
+  --_state-color: var(--color-error-600, #dc2626);
+}
+
+.zoui-mp__title {
+  margin-bottom: 12px;
+}
+
+.zoui-mp__body {
+  margin-bottom: 28px;
+}
+
+.zoui-mp__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
 .zoui-float-preview {
   position: relative;
   outline: 1px dashed var(--color-brand-500, #3b82f6);
