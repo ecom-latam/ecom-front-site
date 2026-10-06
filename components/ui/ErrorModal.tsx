@@ -22,12 +22,6 @@ const SEVERITY_ICONS: Record<ErrorSeverity, string> = {
   alert: '🚨',
 };
 
-const SEVERITY_VARIANTS: Record<ErrorSeverity, 'outlined' | 'soft' | 'filled'> = {
-  info: 'outlined',
-  warning: 'soft',
-  alert: 'outlined',
-};
-
 interface ErrorModalState {
   open: boolean;
   error: ErrorDefinition | null;
@@ -69,7 +63,7 @@ export function ErrorModalProvider({ children }: { children: React.ReactNode }) 
   return (
     <ErrorModalContext.Provider value={{ showError }}>
       {children}
-      <Modal open={state.open} variant={SEVERITY_VARIANTS[severity]} size="sm" onClose={handleClose}>
+      <Modal open={state.open} size="sm" onClose={handleClose}>
         <Modal.Header>
           <span>{SEVERITY_ICONS[severity]}</span>{' '}
           <span data-testid="error-modal-message">{error.message}</span>

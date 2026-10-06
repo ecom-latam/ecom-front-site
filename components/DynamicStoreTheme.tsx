@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { brandScale, BRAND_STEPS, ZouiThemeProvider, getFontOption, loadFont } from 'zoui';
-import type { SurfaceVariant } from 'zoui';
 import { PageConfigContext } from '@/context/PageConfigContext';
 import type { PageConfig } from '@/context/PageConfigContext';
 
@@ -132,14 +131,10 @@ export function DynamicStoreTheme({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // El fondo de la tienda publica es siempre el del theme elegido --
-  // ya no es una seleccion independiente (background eliminado).
-  const backgroundVariant = (config.theme ?? 'filled') as SurfaceVariant;
-
   return (
     <PageConfigContext.Provider value={config}>
       <ZouiThemeProvider variant={config.theme}>
-        <div className="zoui-surface" data-variant={backgroundVariant}>
+        <div className="zoui-surface">
           {children}
         </div>
       </ZouiThemeProvider>
