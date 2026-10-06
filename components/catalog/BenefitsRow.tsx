@@ -51,37 +51,13 @@ export function BenefitsRow(props: BenefitsRowProps) {
   if (benefits.length === 0) return null;
 
   return (
-    <div
-      style={{
-        display:       'flex',
-        flexWrap:      'wrap',
-        gap:           '12px',
-        marginTop:     '20px',
-        paddingTop:    '20px',
-        borderTop:     '1px solid var(--color-border-subtle)',
-      }}
-    >
+    <div className="zoui-product__benefits">
       {benefits.map((b, i) => (
-        <div
-          key={i}
-          style={{
-            display:     'flex',
-            alignItems:  'center',
-            gap:         '6px',
-            flex:        '1 1 140px',
-          }}
-        >
-          <span aria-hidden="true" style={{ fontSize: '16px', lineHeight: 1 }}>
+        <div key={i} className="zoui-product__benefit">
+          <span aria-hidden="true" className="zoui-product__benefit-icon">
             {b.icon}
           </span>
-          <span
-            style={{
-              fontFamily:  'var(--font-ui)',
-              fontSize:    '12px',
-              color:       'var(--color-fg-secondary)',
-              lineHeight:  1.3,
-            }}
-          >
+          <span className="zoui-product__benefit-text">
             {b.label}
           </span>
         </div>

@@ -89,17 +89,17 @@ export function PDPInfoPanel({
   return (
     <>
       {categoryName && categoryId && (
-        <Link href={`/${catalog_slug ?? 'productos'}?categoryId=${categoryId}`} style={{ textDecoration: 'none', marginBottom: '8px', display: 'block' }}>
+        <Link href={`/${catalog_slug ?? 'productos'}?categoryId=${categoryId}`} className="zoui-product__category">
           <Text variant="overline" color="muted">{categoryName}</Text>
         </Link>
       )}
 
-      <Text variant="heading-2">{product.name}</Text>
+      <Text variant="heading-2" className="zoui-product__name">{product.name}</Text>
 
-      <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-        <Text variant="heading-1"><Price value={displayPrice} /></Text>
+      <div className="zoui-product__price-row">
+        <Text variant="heading-1" className="zoui-product__price"><Price value={displayPrice} /></Text>
         {hasDiscount && (
-          <Text variant="body" color="muted" style={{ textDecoration: 'line-through' }}>
+          <Text variant="body" color="muted" className="zoui-product__price-old">
             <Price value={product.price} />
           </Text>
         )}
@@ -109,7 +109,7 @@ export function PDPInfoPanel({
       </div>
 
       {showInstallments && (
-        <Text variant="body-sm" color="secondary" style={{ marginTop: '6px' }}>
+        <Text variant="body-sm" color="secondary" className="zoui-product__installments">
           {interestFree
             ? `${installmentsCount} cuotas sin interés`
             : `Hasta ${installmentsCount} cuotas`}
@@ -117,13 +117,13 @@ export function PDPInfoPanel({
       )}
 
       {product.description && (
-        <Text variant="body-sm" color="secondary" style={{ marginTop: '16px', whiteSpace: 'pre-line' }}>
+        <Text variant="body-sm" color="secondary" className="zoui-product__description">
           {product.description}
         </Text>
       )}
 
       {product.hasVariants && product.linkedOptions.length > 0 && (
-        <div style={{ marginTop: '24px' }}>
+        <div className="zoui-product__variants">
           <VariantSelector
             product={product}
             onVariantChange={handleVariantChange}
@@ -131,7 +131,7 @@ export function PDPInfoPanel({
         </div>
       )}
 
-      <div style={{ marginTop: '20px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+      <div className="zoui-product__status">
         {product.hasVariants && selectedVariant === null ? (
           <Text variant="body-sm" color="muted">Seleccioná una opción para ver disponibilidad</Text>
         ) : effectiveStock > 0 ? (
@@ -147,8 +147,8 @@ export function PDPInfoPanel({
       </div>
 
       {/* Buy bar */}
-      <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div className="zoui-product__buy">
+        <div className="zoui-product__buy-row">
           <QuantityStepper
             value={quantity}
             onChange={setQuantity}
@@ -156,7 +156,7 @@ export function PDPInfoPanel({
             max={effectiveStock > 0 ? effectiveStock : 1}
             disabled={!canBuy}
           />
-          <div style={{ flex: 1 }}>
+          <div className="zoui-product__buy-main">
             <AddToCartButton
               product={product}
               hasSession={hasSession}
@@ -181,7 +181,7 @@ export function PDPInfoPanel({
       </div>
 
       {shareEnabled && (
-        <div style={{ marginTop: '16px' }}>
+        <div className="zoui-product__share">
           <ShareButton title={product.name} />
         </div>
       )}

@@ -34,43 +34,17 @@ function DistributionBars({
 }) {
   const rows = [5, 4, 3, 2, 1] as const;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', minWidth: '180px' }}>
+    <div className="zoui-product__bars">
       {rows.map((star) => {
         const count = distribution[star] ?? 0;
         const pct   = total > 0 ? Math.round((count / total) * 100) : 0;
         return (
-          <div key={star} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div key={star} className="zoui-product__bar-row">
             <StarRating value={star} readonly size="sm" />
-            <div
-              style={{
-                flex: 1,
-                height: '8px',
-                borderRadius: '9999px',
-                background: 'var(--color-bg-subtle)',
-                overflow: 'hidden',
-              }}
-            >
-              <div
-                style={{
-                  width: `${pct}%`,
-                  height: '100%',
-                  borderRadius: '9999px',
-                  background: 'var(--color-brand-400)',
-                  transition: 'width 300ms ease',
-                }}
-              />
+            <div className="zoui-product__bar">
+              <div className="zoui-product__bar-fill" style={{ width: `${pct}%` }} />
             </div>
-            <span
-              style={{
-                fontFamily: 'var(--font-ui)',
-                fontSize: '12px',
-                color: 'var(--color-fg-secondary)',
-                minWidth: '28px',
-                textAlign: 'right',
-              }}
-            >
-              {count}
-            </span>
+            <span className="zoui-product__bar-count">{count}</span>
           </div>
         );
       })}
@@ -85,91 +59,21 @@ function ReviewCard({
 }) {
   const { initial, name } = getBuyerDisplay(review.buyerEmail);
   return (
-    <div
-      style={{
-        padding: '16px',
-        borderRadius: 'var(--radius-md)',
-        border: '1px solid var(--color-border-subtle)',
-        background: 'var(--color-bg-subtle)',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '10px',
-      }}
-    >
-      {/* Author row */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <div
-          style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            background: 'var(--color-brand-100)',
-            color: 'var(--color-brand-700)',
-            fontFamily: 'var(--font-ui)',
-            fontWeight: 600,
-            fontSize: '14px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}
-        >
-          {initial}
+    <div className="zoui-product__review">
+      <div className="zoui-product__review-head">
+        <div className="zoui-product__avatar">{initial}</div>
+        <div className="zoui-product__review-author">
+          <strong>{name}</strong>
+          <span>{formatDate(review.createdAt)}</span>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-          <span
-            style={{
-              fontFamily: 'var(--font-ui)',
-              fontSize: '13px',
-              fontWeight: 600,
-              color: 'var(--color-fg-primary)',
-              textTransform: 'capitalize',
-            }}
-          >
-            {name}
-          </span>
-          <span
-            style={{
-              fontFamily: 'var(--font-ui)',
-              fontSize: '12px',
-              color: 'var(--color-fg-disabled)',
-            }}
-          >
-            {formatDate(review.createdAt)}
-          </span>
-        </div>
-        <div style={{ marginLeft: 'auto' }}>
+        <div className="zoui-product__review-stars">
           <StarRating value={review.rating} readonly size="sm" />
         </div>
       </div>
 
-      {review.title && (
-        <p
-          style={{
-            fontFamily: 'var(--font-ui)',
-            fontSize: '14px',
-            fontWeight: 600,
-            color: 'var(--color-fg-primary)',
-            margin: 0,
-          }}
-        >
-          {review.title}
-        </p>
-      )}
+      {review.title && <p className="zoui-product__review-title">{review.title}</p>}
 
-      {review.body && (
-        <p
-          style={{
-            fontFamily: 'var(--font-ui)',
-            fontSize: '14px',
-            color: 'var(--color-fg-secondary)',
-            margin: 0,
-            lineHeight: 1.55,
-          }}
-        >
-          {review.body}
-        </p>
-      )}
+      {review.body && <p className="zoui-product__review-body">{review.body}</p>}
     </div>
   );
 }
@@ -190,42 +94,23 @@ export function RatingsBlock({
   if (!hasRatings && !hasReviews) {
     if (!reviewsEnabled) return null;
     return (
-      <section style={{ marginTop: '48px' }}>
-        <Text variant="heading-3" tag="h2" style={{ marginBottom: '16px' }}>Reseñas</Text>
+      <section className="zoui-product__reviews">
+        <h2 className="zoui-product__section-title">Reseñas</h2>
         <Text variant="body-sm" color="secondary">Todavía no hay reseñas para este producto.</Text>
       </section>
     );
   }
 
   return (
-    <section style={{ marginTop: '48px' }}>
-      <Text variant="heading-3" tag="h2" style={{ marginBottom: '24px' }}>Reseñas</Text>
+    <section className="zoui-product__reviews">
+      <h2 className="zoui-product__section-title">Reseñas</h2>
 
-      {/* Summary: big score + distribution bars */}
       {hasRatings && (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '32px',
-            marginBottom: '32px',
-            flexWrap: 'wrap',
-          }}
-        >
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-            <span
-              style={{
-                fontFamily: 'var(--font-ui)',
-                fontSize: '48px',
-                fontWeight: 700,
-                color: 'var(--color-fg-primary)',
-                lineHeight: 1,
-              }}
-            >
-              {avgRating!.toFixed(1)}
-            </span>
+        <div className="zoui-product__summary">
+          <div className="zoui-product__summary-main">
+            <span className="zoui-product__score">{avgRating!.toFixed(1)}</span>
             <StarRating value={avgRating!} readonly showValue={false} size="md" />
-            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '13px', color: 'var(--color-fg-secondary)' }}>
+            <span className="zoui-product__muted">
               {total} {total === 1 ? 'reseña' : 'reseñas'}
             </span>
           </div>
@@ -236,15 +121,8 @@ export function RatingsBlock({
         </div>
       )}
 
-      {/* Review cards */}
       {hasReviews && (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '12px',
-          }}
-        >
+        <div className="zoui-product__review-list">
           {reviews.map((r) => (
             <ReviewCard key={r._id} review={r} />
           ))}
@@ -252,8 +130,8 @@ export function RatingsBlock({
       )}
 
       {reviewsEnabled && total > reviews.length && (
-        <div style={{ marginTop: '16px', textAlign: 'center' }}>
-          <span style={{ fontFamily: 'var(--font-ui)', fontSize: '13px', color: 'var(--color-fg-secondary)' }}>
+        <div className="zoui-product__more">
+          <span className="zoui-product__muted">
             Mostrando {reviews.length} de {total} reseñas
           </span>
         </div>

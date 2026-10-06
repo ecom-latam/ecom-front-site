@@ -7430,6 +7430,384 @@ button.zoui-gal__item {
     transition: none;
   }
 }
+.zoui-product {
+  min-height: 100vh;
+  background: var(--color-bg-surface);
+}
+
+.zoui-product__container {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.zoui-product__breadcrumbs {
+  margin-bottom: 24px;
+}
+
+.zoui-product__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  align-items: start;
+}
+@media (min-width: 768px) {
+  .zoui-product__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.zoui-product__gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.zoui-product__image {
+  position: relative;
+  aspect-ratio: 4/5;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-subtle);
+  overflow: hidden;
+  cursor: zoom-in;
+}
+.zoui-product__image img {
+  object-fit: cover;
+}
+
+.zoui-product__image--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-fg-disabled);
+  font-size: 60px;
+  cursor: default;
+}
+
+.zoui-product__thumbs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.zoui-product__thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 72px;
+  height: 90px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-subtle);
+  overflow: hidden;
+  cursor: pointer;
+}
+.zoui-product__thumb img {
+  object-fit: cover;
+}
+.zoui-product__thumb.zoui-product__thumb--active {
+  border-color: var(--color-brand);
+}
+
+.zoui-product__info {
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 80px;
+  align-self: start;
+}
+
+.zoui-product__category {
+  display: block;
+  margin-bottom: 8px;
+  text-decoration: none;
+}
+
+.zoui-product__price-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.zoui-product__price-old {
+  text-decoration: line-through;
+}
+
+.zoui-product__installments {
+  margin-top: 6px;
+}
+
+.zoui-product__description {
+  margin-top: 16px;
+  white-space: pre-line;
+}
+
+.zoui-product__variants {
+  margin-top: 24px;
+}
+
+.zoui-product__options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.zoui-product__option-label {
+  margin-bottom: 8px;
+}
+
+.zoui-product__option-value {
+  margin-left: 8px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.zoui-product__variant-price {
+  color: var(--color-fg-secondary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+}
+.zoui-product__variant-price strong {
+  color: var(--color-fg-primary);
+}
+
+.zoui-product__status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.zoui-product__buy {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.zoui-product__buy-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.zoui-product__buy-main {
+  flex: 1;
+}
+
+.zoui-product__share {
+  margin-top: 16px;
+}
+
+.zoui-product__benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.zoui-product__benefit {
+  display: flex;
+  align-items: center;
+  flex: 1 1 140px;
+  gap: 6px;
+}
+
+.zoui-product__benefit-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.zoui-product__benefit-text {
+  color: var(--color-fg-secondary);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.zoui-product__related,
+.zoui-product__reviews {
+  margin-top: 48px;
+}
+
+.zoui-product__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.zoui-product__section-head .zoui-product__section-title {
+  margin-bottom: 0;
+}
+
+.zoui-product__section-title {
+  margin: 0 0 24px;
+  color: var(--color-fg-primary);
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.zoui-product__section-link {
+  color: var(--color-brand-500);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.zoui-product__summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+.zoui-product__summary-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.zoui-product__score {
+  color: var(--color-fg-primary);
+  font-family: var(--font-ui);
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.zoui-product__muted {
+  color: var(--color-fg-secondary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+}
+
+.zoui-product__bars {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 180px;
+}
+
+.zoui-product__bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.zoui-product__bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-bg-subtle);
+  overflow: hidden;
+}
+
+.zoui-product__bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--color-brand-400);
+  transition: width 300ms ease;
+}
+
+.zoui-product__bar-count {
+  min-width: 28px;
+  color: var(--color-fg-secondary);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  text-align: right;
+}
+
+.zoui-product__review-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.zoui-product__review {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-subtle);
+}
+
+.zoui-product__review-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.zoui-product__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-brand-100);
+  color: var(--color-brand-700);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.zoui-product__review-author {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.zoui-product__review-author strong {
+  color: var(--color-fg-primary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.zoui-product__review-author span {
+  color: var(--color-fg-disabled);
+  font-family: var(--font-ui);
+  font-size: 12px;
+}
+
+.zoui-product__review-stars {
+  margin-left: auto;
+}
+
+.zoui-product__review-title {
+  margin: 0;
+  color: var(--color-fg-primary);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.zoui-product__review-body {
+  margin: 0;
+  color: var(--color-fg-secondary);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.zoui-product__more {
+  margin-top: 16px;
+  text-align: center;
+}
+
 .zoui-cart {
   min-height: 100vh;
   background: var(--color-bg-surface);

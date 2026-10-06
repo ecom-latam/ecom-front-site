@@ -74,7 +74,7 @@ export function VariantSelector({ product, onVariantChange }: VariantSelectorPro
   if (!product.hasVariants || product.linkedOptions.length === 0) return null;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div className="zoui-product__options">
       {product.linkedOptions.map(option => {
         const values = getOptionValues(product, option.storeOptionId);
         const options = values.map(val => ({
@@ -84,10 +84,10 @@ export function VariantSelector({ product, onVariantChange }: VariantSelectorPro
         }));
         return (
           <div key={option.storeOptionId}>
-            <Text tag="p" variant="overline" color="secondary" style={{ marginBottom: '8px' }}>
+            <Text tag="p" variant="overline" color="secondary" className="zoui-product__option-label">
               {option.storeOptionName}
               {selection[option.storeOptionId] && (
-                <Text tag="span" variant="label" color="primary" style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, marginLeft: '8px' }}>
+                <Text tag="span" variant="label" color="primary" className="zoui-product__option-value">
                   {selection[option.storeOptionId]}
                 </Text>
               )}
@@ -103,8 +103,8 @@ export function VariantSelector({ product, onVariantChange }: VariantSelectorPro
       })}
 
       {selectedVariant && (
-        <div style={{ fontSize: '13px', fontFamily: 'var(--font-ui)', color: 'var(--color-fg-secondary)' }}>
-          Precio: <strong style={{ color: 'var(--color-fg-primary)' }}>
+        <div className="zoui-product__variant-price">
+          Precio: <strong>
             <Price value={displayPrice} />
           </strong>
           {' · '}

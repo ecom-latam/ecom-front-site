@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { ProductGallery } from './ProductGallery';
 import { PDPInfoPanel } from './PDPInfoPanel';
 import type { Product, ProductVariant } from '@/lib/api/storeClient';
-import styles from './ProductDetailSection.module.scss';
 
 interface ProductDetailSectionProps {
   product: Product;
@@ -37,15 +36,12 @@ export function ProductDetailSection(props: ProductDetailSectionProps) {
     : product.images;
 
   return (
-    <div className={styles.grid}>
+    <div className="zoui-product__grid">
       <div data-testid="product-gallery-column">
         <ProductGallery images={galleryImages} productName={product.name} />
       </div>
 
-      <div
-        className={styles.infoColumn}
-        style={{ position: 'sticky', top: '80px', alignSelf: 'start' }}
-      >
+      <div className="zoui-product__info">
         <PDPInfoPanel {...props} onVariantSelected={setSelectedVariant} />
       </div>
     </div>

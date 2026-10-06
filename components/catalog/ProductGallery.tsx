@@ -30,19 +30,11 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
   }, [images]);
 
   return (
-    <div className={styles.root} data-testid="product-gallery">
+    <div className="zoui-product__gallery" data-testid="product-gallery">
       {selectedImage ? (
         <button
           type="button"
-          className={styles.mainImage}
-          style={{
-            background: 'var(--color-bg-subtle)',
-            aspectRatio: '4 / 5',
-            position: 'relative',
-            padding: 0,
-            border: 0,
-            cursor: 'zoom-in',
-          }}
+          className="zoui-product__image"
           onClick={() => setLightboxOpen(true)}
           data-testid="product-gallery-main-image-button"
         >
@@ -52,51 +44,30 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
             alt={productName}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
-            style={{ objectFit: 'cover' }}
             priority
             data-testid="product-gallery-main-image"
           />
         </button>
       ) : (
-        <div
-          className={styles.mainImage}
-          style={{
-            background: 'var(--color-bg-subtle)',
-            aspectRatio: '4 / 5',
-            position: 'relative',
-          }}
-        >
-          <div className={styles.emptyPlaceholder} style={{ color: 'var(--color-fg-disabled)' }}>
-            □
-          </div>
-        </div>
+        <div className="zoui-product__image zoui-product__image--empty">□</div>
       )}
 
       {images.length > 1 && (
-        <div className={styles.thumbnails}>
+        <div className="zoui-product__thumbs">
           {images.map((img, i) => (
             <button
               key={img.publicId}
               type="button"
-              className={styles.thumbnail}
+              className={`zoui-product__thumb${img.publicId === selectedImage?.publicId ? ' zoui-product__thumb--active' : ''}`}
               data-testid="product-gallery-thumbnail"
               aria-current={img.publicId === selectedImage?.publicId}
               onClick={() => setSelectedImage(img)}
-              style={{
-                width: '72px',
-                height: '90px',
-                background: 'var(--color-bg-subtle)',
-                position: 'relative',
-                padding: 0,
-                cursor: 'pointer',
-              }}
             >
               <Image
                 src={img.url}
                 alt={`${productName} ${i + 1}`}
                 fill
                 sizes="72px"
-                style={{ objectFit: 'cover' }}
               />
             </button>
           ))}
