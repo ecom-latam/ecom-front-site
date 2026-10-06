@@ -7811,6 +7811,10 @@ button.zoui-gal__item {
   font-family: monospace;
 }
 
+.zoui-auth--preview {
+  min-height: 560px;
+}
+
 .zoui-account {
   min-height: 100vh;
   background: var(--color-bg-surface);
@@ -8300,6 +8304,14 @@ button.zoui-gal__item {
 
 .zoui-account__link-danger-btn {
   color: var(--color-danger-600);
+}
+
+.zoui-account__container--narrow .zoui-account__title {
+  margin-bottom: 32px;
+}
+
+.zoui-account--preview {
+  min-height: 420px;
 }
 
 .zoui-float-preview {
