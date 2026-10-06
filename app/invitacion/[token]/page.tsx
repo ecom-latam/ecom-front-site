@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { isAxiosError } from 'axios';
-import { auth, startSession } from '@/utils/api';
+import { auth } from '@/utils/api';
 import type { InviteInfo } from '@/utils/api/auth';
 import { Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
@@ -66,8 +66,7 @@ export default function InvitacionPage() {
     setSubmitting(true);
 
     try {
-      const { data } = await auth.acceptInvitation(token, { email, password });
-      if (data.accessToken) startSession(data.accessToken);
+      await auth.acceptInvitation(token, { email, password });
       setSuccess(true);
     } catch (err) {
       if (isAxiosError(err)) {
