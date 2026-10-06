@@ -27,8 +27,8 @@ export function CartPageContent() {
 
   if (isLoading && items.length === 0) {
     return (
-      <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
-        <div className={styles.container}>
+      <main className="zoui-cart">
+        <div className="zoui-cart__container">
           <div className={styles.skeleton}>
             {[1, 2, 3].map((i) => (
               <div key={i} className={styles.skeletonItem} style={{ background: 'var(--color-bg-subtle)' }} />
@@ -41,8 +41,8 @@ export function CartPageContent() {
 
   if (items.length === 0) {
     return (
-      <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
-        <div className={styles.containerCenter}>
+      <main className="zoui-cart">
+        <div className="zoui-cart__container zoui-cart__container--center">
           <Text variant="body" color="muted" style={{ marginBottom: '16px' }}>Tu carrito está vacío.</Text>
           <Button size="md" onClick={() => router.push('/productos')}>
             Ver productos
@@ -54,24 +54,23 @@ export function CartPageContent() {
 
   return (
     <>
-    <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <Text variant="heading-2">Mi carrito</Text>
+    <main className="zoui-cart">
+      <div className="zoui-cart__container">
+        <div className="zoui-cart__header">
+          <Text variant="heading-2" className="zoui-cart__title">Mi carrito</Text>
           <Button emphasis="ghost" size="md" onClick={clearCart} disabled={isLoading} style={{ color: 'var(--color-fg-muted)' }}>
             Vaciar carrito
           </Button>
         </div>
 
-        <div className={styles.grid}>
-          <div className={styles.itemsList}>
+        <div className="zoui-cart__grid">
+          <div className="zoui-cart__items">
             {items.map((item) => (
               <div
                 key={item._id}
-                className={styles.item}
-                style={{ border: '1px solid var(--color-border-default)' }}
+                className="zoui-cart__item"
               >
-                <div className={styles.itemImage} style={{ background: 'var(--color-bg-subtle)' }}>
+                <div className="zoui-cart__item-image">
                   {item.image ? (
                     <Image
                       src={item.image}
@@ -81,13 +80,13 @@ export function CartPageContent() {
                       style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                     />
                   ) : (
-                    <div className={styles.itemImageEmpty} style={{ color: 'var(--color-fg-disabled)' }}>
+                    <div className="zoui-cart__item-empty">
                       □
                     </div>
                   )}
                 </div>
 
-                <div className={styles.itemContent}>
+                <div className="zoui-cart__item-content">
                   <Button emphasis="ghost" size="md" onClick={() => router.push(`/producto?id=${item.productId}`)} style={{ fontWeight: 500, padding: 0, height: 'auto', justifyContent: 'flex-start' }}>
                     {item.name}
                   </Button>
@@ -100,11 +99,11 @@ export function CartPageContent() {
                     </Text>
                   )}
 
-                  <Text variant="body-sm" weight="semibold" style={{ marginTop: '4px' }}>
+                  <Text variant="body-sm" weight="semibold" className="zoui-cart__item-price" style={{ marginTop: '4px' }}>
                     {formatPrice(item.price, currency)}
                   </Text>
 
-                  <div className={styles.itemActions}>
+                  <div className="zoui-cart__item-actions">
                     <Button
                       emphasis="outlined"
                       size="md"
@@ -145,18 +144,18 @@ export function CartPageContent() {
             ))}
           </div>
 
-          <div className={styles.summary}>
-            <div className={styles.summaryInner} style={{ border: '1px solid var(--color-border-default)' }}>
-              <Text variant="body" weight="semibold">Resumen</Text>
+          <div className="zoui-cart__summary">
+            <div className="zoui-cart__summary-card">
+              <Text variant="body" weight="semibold" className="zoui-cart__summary-title">Resumen</Text>
 
-              <div className={styles.summaryItems}>
-                <div className={styles.summaryRow}>
+              <div className="zoui-cart__summary-rows">
+                <div className="zoui-cart__summary-row">
                   <Text variant="body-sm" color="secondary">Productos ({items.reduce((s, i) => s + i.quantity, 0)})</Text>
                   <Text variant="body-sm" color="secondary">{formatPrice(subtotal, currency)}</Text>
                 </div>
               </div>
 
-              <div className={styles.summaryTotal} style={{ borderTop: '1px solid var(--color-border-default)' }}>
+              <div className="zoui-cart__summary-total">
                 <Text variant="body-sm" weight="semibold">Subtotal</Text>
                 <Text variant="body-sm" weight="semibold">{formatPrice(subtotal, currency)}</Text>
               </div>
