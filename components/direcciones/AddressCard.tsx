@@ -25,7 +25,7 @@ export function AddressCard({ addr, deleting, settingDefault, onEdit, onDelete, 
 
       <div className="zoui-account__address-actions">
         <StoreButton emphasis="ghost" size="sm" onClick={onEdit} className="zoui-account__inline">
-          <Icon name="edit" size="sm" /> Editar
+          <Icon name="pencil" size="sm" /> Editar
         </StoreButton>
 
         {!addr.isDefault && (
@@ -36,7 +36,7 @@ export function AddressCard({ addr, deleting, settingDefault, onEdit, onDelete, 
         )}
 
         <StoreButton emphasis="ghost" size="sm" disabled={deleting} onClick={onDelete} className="zoui-account__inline zoui-account__link-danger-btn">
-          <Icon name="trash" size="sm" />
+          <Icon name="trash-2" size="sm" />
           {deleting ? 'Eliminando...' : 'Eliminar'}
         </StoreButton>
       </div>
