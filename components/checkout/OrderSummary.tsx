@@ -25,21 +25,21 @@ interface OrderSummaryProps {
 
 export function OrderSummary({ items, subtotal, currency, error, submitting, paymentMethod, onSubmit }: OrderSummaryProps) {
   return (
-    <div style={{ position: 'sticky', top: '24px' }}>
-      <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px' }}>
-        <Text variant="heading-3" style={{ marginBottom: '20px' }}>Resumen del pedido</Text>
+    <div className="zoui-checkout__summary">
+      <section className="zoui-checkout__card">
+        <Text variant="heading-3" className="zoui-checkout__card-title">Resumen del pedido</Text>
 
-        <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <ul className="zoui-checkout__summary-list">
           {items.map((item) => (
-            <li key={item._id} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <div style={{ width: 48, height: 48, background: 'var(--color-bg-subtle)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', flexShrink: 0 }}>
+            <li key={item._id} className="zoui-checkout__summary-item">
+              <div className="zoui-checkout__summary-image">
                 {item.image ? (
                   <Image src={item.image} alt={item.name} width={48} height={48} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
                 ) : (
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-fg-disabled)' }}>□</div>
+                  <div className="zoui-checkout__summary-image-empty">□</div>
                 )}
               </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
+              <div className="zoui-checkout__summary-info">
                 <Text variant="body-sm" weight="medium" truncate>{item.name}</Text>
                 <Text variant="caption" color="muted">x{item.quantity}</Text>
               </div>
@@ -50,25 +50,25 @@ export function OrderSummary({ items, subtotal, currency, error, submitting, pay
           ))}
         </ul>
 
-        <div style={{ borderTop: '1px solid var(--color-border-default)', marginTop: '16px', paddingTop: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+        <div className="zoui-checkout__summary-subtotal">
+          <div className="zoui-checkout__summary-line">
             <Text variant="body-sm" color="muted">Subtotal</Text>
             <Text variant="body-sm">{formatPrice(subtotal, currency)}</Text>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div className="zoui-checkout__summary-line">
             <Text variant="body-sm" color="muted">Envío</Text>
             <Text variant="body-sm">A coordinar</Text>
           </div>
         </div>
 
-        <div style={{ borderTop: '1px solid var(--color-border-default)', marginTop: '16px', paddingTop: '16px', display: 'flex', justifyContent: 'space-between' }}>
+        <div className="zoui-checkout__summary-total">
           <Text variant="body" weight="semibold">Total</Text>
           <Text variant="body" weight="semibold">{formatPrice(subtotal, currency)}</Text>
         </div>
 
         {error && (
-          <div style={{ marginTop: '16px', padding: '12px', background: 'var(--color-error-50)', border: '1px solid var(--color-error-200)', borderRadius: 'var(--radius-md)' }}>
-            <Text variant="body-sm" style={{ color: 'var(--color-error-700)' }}>{error}</Text>
+          <div className="zoui-checkout__error">
+            <Text variant="body-sm">{error}</Text>
           </div>
         )}
 

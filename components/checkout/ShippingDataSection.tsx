@@ -18,8 +18,8 @@ interface ShippingDataSectionProps {
 
 export function ShippingDataSection({ form, set, shippingMethod, savedAddresses, selectedAddressId, onApplyAddress }: ShippingDataSectionProps) {
   return (
-    <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px' }}>
-      <Text variant="heading-3" style={{ marginBottom: '20px' }}>
+    <section className="zoui-checkout__card">
+      <Text variant="heading-3" className="zoui-checkout__card-title">
         {shippingMethod === 'delivery' ? 'Datos de envío' : 'Datos de contacto'}
       </Text>
 
