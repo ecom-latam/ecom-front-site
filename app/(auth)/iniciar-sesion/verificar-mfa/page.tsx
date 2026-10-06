@@ -52,20 +52,13 @@ function MfaVerifyForm() {
   }
 
   return (
-    <div style={{
-      width: '100%',
-      maxWidth: '380px',
-      background: 'var(--color-bg-surface)',
-      borderRadius: 'var(--radius-lg)',
-      border: '1px solid var(--color-border-default)',
-      padding: '40px 32px',
-    }}>
-      <Text variant="heading-2" style={{ marginBottom: '8px' }}>Verificación en dos pasos</Text>
-      <Text variant="body-sm" color="secondary" style={{ marginBottom: '24px' }}>
+    <div className="zoui-auth__card">
+      <Text variant="heading-2" className="zoui-auth__title">Verificación en dos pasos</Text>
+      <Text variant="body-sm" color="secondary" className="zoui-auth__subtitle">
         Ingresá el código de 6 dígitos de tu app de autenticación.
       </Text>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div className="zoui-auth__form">
         <StoreInput
           label="Código"
           type="text"
@@ -74,7 +67,7 @@ function MfaVerifyForm() {
           autoComplete="one-time-code"
           autoFocus
           error={error || undefined}
-          style={{ textAlign: 'center', letterSpacing: '0.2em', fontFamily: 'monospace' }}
+          className="zoui-auth__code"
           fullWidth
           value={code}
           onChange={(e) => setCode(e.target.value)}
@@ -84,7 +77,7 @@ function MfaVerifyForm() {
         <StoreButton
           disabled={code.length !== 6 || loading}
           size="md"
-          style={{ width: '100%', justifyContent: 'center' }}
+          fullWidth
           onClick={handleSubmit}
         >
           {loading ? 'Verificando...' : 'Verificar'}

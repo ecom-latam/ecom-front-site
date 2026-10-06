@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { getAccessTokenRole } from '@/utils/helpers';
-import styles from './page.module.scss';
 import { Badge, Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import type { BadgeTone } from 'zoui';
@@ -57,11 +56,11 @@ export default function MisPedidosPage() {
 
   if (loading) {
     return (
-      <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
-        <div className={styles.container}>
-          <div className={styles.skeleton}>
+      <main className="zoui-account">
+        <div className="zoui-account__container">
+          <div className="zoui-account__skeleton">
             {[1, 2, 3].map((i) => (
-              <div key={i} className={styles.skeletonItem} style={{ background: 'var(--color-bg-subtle)' }} />
+              <div key={i} className="zoui-account__skeleton-item" />
             ))}
           </div>
         </div>
@@ -70,13 +69,13 @@ export default function MisPedidosPage() {
   }
 
   return (
-    <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
-      <div className={styles.container}>
-        <Text variant="heading-2" style={{ marginBottom: '24px' }}>Mis pedidos</Text>
+    <main className="zoui-account">
+      <div className="zoui-account__container">
+        <Text variant="heading-2" className="zoui-account__title">Mis pedidos</Text>
 
         {orderList.length === 0 ? (
-          <div style={{ textAlign: 'center', paddingTop: '48px' }}>
-            <Text variant="body" color="muted" style={{ marginBottom: '16px' }}>
+          <div className="zoui-account__empty">
+            <Text variant="body" color="muted">
               Todavía no tenés pedidos.
             </Text>
             <StoreButton size="md" onClick={() => router.push('/productos')}>
@@ -84,25 +83,14 @@ export default function MisPedidosPage() {
             </StoreButton>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div className="zoui-account__list">
             {orderList.map((order) => (
               <button
                 key={order._id}
+                className="zoui-account__card zoui-account__row"
                 onClick={() => router.push(`/pedidos/${order._id}`)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '16px',
-                  padding: '16px 20px',
-                  background: 'var(--color-bg-default)',
-                  border: '1px solid var(--color-border-default)',
-                  borderRadius: 'var(--radius-lg)',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  width: '100%',
-                }}
-              >
-                <div style={{ flex: 1 }}>
+                >
+                <div className="zoui-account__row-main">
                   <Text variant="body-sm" weight="semibold">
                     Pedido #{order.orderNumber}
                   </Text>

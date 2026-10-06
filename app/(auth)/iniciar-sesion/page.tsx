@@ -65,36 +65,36 @@ function LoginForm() {
   }
 
   return (
-    <div style={{ width: '100%', maxWidth: '384px', background: 'var(--color-bg-surface)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--color-border-default)', padding: '40px 32px' }}>
-      <Link href="/productos" style={{ display: 'block', marginBottom: '24px', textDecoration: 'none' }}>
+    <div className="zoui-auth__card">
+      <Link href="/productos" className="zoui-auth__back">
         <Text variant="body-sm" color="muted">← Volver a la tienda</Text>
       </Link>
 
-      <Text variant="heading-2" style={{ marginBottom: '4px' }}>Iniciar sesión</Text>
-      <Text variant="body-sm" color="muted" style={{ marginBottom: '24px' }}>Accedé a tu cuenta.</Text>
+      <Text variant="heading-2" className="zoui-auth__title">Iniciar sesión</Text>
+      <Text variant="body-sm" color="muted" className="zoui-auth__subtitle">Accedé a tu cuenta.</Text>
 
       {registered && (
-        <div style={{ marginBottom: '16px', background: 'var(--color-success-50)', border: '1px solid var(--color-success-100)', borderRadius: 'var(--radius-md)', padding: '8px 12px' }}>
-          <Text variant="body-sm" style={{ color: 'var(--color-success-700)' }}>Cuenta creada. Podés iniciar sesión.</Text>
+        <div className="zoui-auth__notice">
+          <Text variant="body-sm">Cuenta creada. Podés iniciar sesión.</Text>
         </div>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div className="zoui-auth__form">
         <StoreInput id="email" type="email" autoComplete="email" autoFocus label="Email" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSubmit()} data-testid="store-login-email" />
         <StorePasswordInput id="password" autoComplete="current-password" label="Contraseña" fullWidth value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSubmit()} data-testid="store-login-password" />
 
         {error && (
-          <Text variant="body-sm" style={{ color: 'var(--color-error-500)' }} data-testid="store-login-error">{error}</Text>
+          <Text variant="body-sm" className="zoui-auth__error" data-testid="store-login-error">{error}</Text>
         )}
 
-        <StoreButton loading={loading} disabled={!isValid || loading} size="md" style={{ width: '100%' }} onClick={handleSubmit} data-testid="store-login-submit">
+        <StoreButton loading={loading} disabled={!isValid || loading} size="md" fullWidth onClick={handleSubmit} data-testid="store-login-submit">
           {loading ? 'Ingresando...' : 'Ingresar'}
         </StoreButton>
       </div>
 
-      <Text variant="body-sm" color="muted" style={{ textAlign: 'center', marginTop: '24px' }}>
+      <Text variant="body-sm" color="muted" className="zoui-auth__footer">
         ¿No tenés cuenta?{' '}
-        <Link href="/registro" style={{ color: 'var(--color-fg-primary)', fontWeight: 500, textDecoration: 'underline' }}>
+        <Link href="/registro" className="zoui-auth__link">
           Registrate
         </Link>
       </Text>

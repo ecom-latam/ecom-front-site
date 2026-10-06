@@ -76,16 +76,6 @@ function UnirseContent() {
     }
   }
 
-  const cardStyle: React.CSSProperties = {
-    width: '100%',
-    maxWidth: '384px',
-    background: 'var(--color-bg-surface)',
-    borderRadius: 'var(--radius-lg)',
-    boxShadow: 'var(--shadow-sm)',
-    border: '1px solid var(--color-border-default)',
-    padding: '40px 32px',
-  };
-
   if (phase === 'loading') {
     return (
       <Text variant="body-sm" color="muted">Verificando invitación...</Text>
@@ -94,9 +84,9 @@ function UnirseContent() {
 
   if (phase === 'expired') {
     return (
-      <div style={{ ...cardStyle, textAlign: 'center' }}>
-        <Text tag="p" variant="heading-1" style={{ marginBottom: '16px' }}>⏱</Text>
-        <Text variant="heading-3" style={{ marginBottom: '8px' }}>Link expirado</Text>
+      <div className="zoui-auth__card zoui-auth__card--center">
+        <Text tag="p" variant="heading-1" className="zoui-auth__icon">⏱</Text>
+        <Text variant="heading-3" className="zoui-auth__title">Link expirado</Text>
         <Text variant="body-sm" color="secondary">El link de invitación venció. Pedile uno nuevo al administrador de la tienda.</Text>
       </div>
     );
@@ -104,9 +94,9 @@ function UnirseContent() {
 
   if (phase === 'invalid') {
     return (
-      <div style={{ ...cardStyle, textAlign: 'center' }}>
-        <Text tag="p" variant="heading-1" style={{ marginBottom: '16px' }}>✗</Text>
-        <Text variant="heading-3" style={{ marginBottom: '8px' }}>Link inválido</Text>
+      <div className="zoui-auth__card zoui-auth__card--center">
+        <Text tag="p" variant="heading-1" className="zoui-auth__icon">✗</Text>
+        <Text variant="heading-3" className="zoui-auth__title">Link inválido</Text>
         <Text variant="body-sm" color="secondary">El link de invitación no es válido.</Text>
       </div>
     );
@@ -114,15 +104,15 @@ function UnirseContent() {
 
   if (phase === 'done') {
     return (
-      <div style={{ ...cardStyle, textAlign: 'center' }}>
-        <Text variant="heading-3" style={{ marginBottom: '12px' }}>¡Te uniste al equipo!</Text>
-        <Text variant="body-sm" color="secondary" style={{ marginBottom: '24px' }}>
+      <div className="zoui-auth__card zoui-auth__card--center">
+        <Text variant="heading-3" className="zoui-auth__title">¡Te uniste al equipo!</Text>
+        <Text variant="body-sm" color="secondary" className="zoui-auth__subtitle">
           Tu rol es <strong>{ROLE_LABELS[role] ?? role}</strong>. Iniciá sesión con tu email y contraseña.
         </Text>
         <StoreButton
           emphasis="filled"
           size="md"
-          style={{ width: '100%' }}
+          fullWidth
           onClick={() => router.push('/iniciar-sesion')}
           data-testid="invite-go-to-login"
         >
@@ -133,25 +123,19 @@ function UnirseContent() {
   }
 
   return (
-    <div style={cardStyle}>
-      <Text variant="heading-2" style={{ marginBottom: '8px' }}>Unirte al equipo</Text>
-      <Text variant="body-sm" color="secondary" style={{ marginBottom: '24px' }}>
+    <div className="zoui-auth__card">
+      <Text variant="heading-2" className="zoui-auth__title">Unirte al equipo</Text>
+      <Text variant="body-sm" color="secondary" className="zoui-auth__subtitle">
         Fuiste invitado como <strong>{ROLE_LABELS[role] ?? role}</strong>.
         {' '}Ingresá tu email y contraseña para aceptar.
       </Text>
-      <div style={{
-        background: 'var(--color-bg-subtle)',
-        border: '1px solid var(--color-border-default)',
-        borderRadius: 'var(--radius-md)',
-        padding: '8px 12px',
-        marginBottom: '24px',
-      }}>
+      <div className="zoui-auth__hint">
         <Text variant="caption" color="muted">
           Si ya tenés una cuenta, usá tu email y contraseña habituales. Si no, se creará una nueva cuenta con los datos que ingreses.
         </Text>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div className="zoui-auth__form">
         <StoreInput
           label="Email"
           type="email"
@@ -174,7 +158,7 @@ function UnirseContent() {
         />
 
         {error && (
-          <Text variant="body-sm" style={{ color: 'var(--color-error-500)' }} data-testid="invite-error">
+          <Text variant="body-sm" className="zoui-auth__error" data-testid="invite-error">
             {error}
           </Text>
         )}
@@ -184,7 +168,7 @@ function UnirseContent() {
           size="md"
           loading={submitting}
           disabled={!formValid || submitting}
-          style={{ width: '100%' }}
+          fullWidth
           onClick={handleSubmit}
           data-testid="invite-submit"
         >

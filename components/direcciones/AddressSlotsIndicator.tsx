@@ -10,20 +10,13 @@ interface AddressSlotsIndicatorProps {
 export function AddressSlotsIndicator({ count }: AddressSlotsIndicatorProps) {
   const atLimit = count >= MAX;
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
-      <div style={{ display: 'flex', gap: '5px' }}>
+    <div className="zoui-account__slots">
+      <div className="zoui-account__slot-bars">
         {Array.from({ length: MAX }).map((_, i) => (
-          <div
-            key={i}
-            style={{
-              width: 28, height: 6, borderRadius: 3,
-              background: i < count ? 'var(--color-brand-500)' : 'var(--color-border-default)',
-              transition: 'background 0.2s',
-            }}
-          />
+          <div key={i} className={`zoui-account__slot${i < count ? ' zoui-account__slot--on' : ''}`} />
         ))}
       </div>
-      <Text variant="caption" color="muted" style={{ fontWeight: atLimit ? 600 : 400 }}>
+      <Text variant="caption" color="muted" weight={atLimit ? 'semibold' : 'regular'}>
         {count} / {MAX}{atLimit && ' — límite alcanzado'}
       </Text>
     </div>

@@ -74,17 +74,18 @@ export default function SeguridadPage() {
   }
 
   return (
-    <main style={{ padding: '32px 24px', maxWidth: 560 }}>
-      <Text variant="heading-2" style={{ marginBottom: '32px' }}>Seguridad</Text>
+    <main className="zoui-account">
+      <div className="zoui-account__container zoui-account__container--narrow">
+      <Text variant="heading-2" className="zoui-account__title">Seguridad</Text>
 
       {/* ── Cambiar contraseña ── */}
-      <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px', marginBottom: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-          <div style={{ color: 'var(--color-fg-muted)' }}><ShieldIcon /></div>
-          <Text variant="heading-3">Cambiar contraseña</Text>
+      <section className="zoui-account__card zoui-account__card--roomy zoui-account__card--spaced">
+        <div className="zoui-account__section-head">
+          <ShieldIcon />
+          <Text variant="heading-3" className="zoui-account__card-title">Cambiar contraseña</Text>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div className="zoui-account__fields">
           <StorePasswordInput
             label="Contraseña actual"
             value={form.current}
@@ -116,18 +117,18 @@ export default function SeguridadPage() {
         </div>
 
         {apiError && (
-          <div style={{ marginTop: '16px', padding: '10px 14px', background: 'var(--color-error-50)', border: '1px solid var(--color-error-200)', borderRadius: 'var(--radius-md)' }}>
-            <Text variant="body-sm" style={{ color: 'var(--color-error-700)' }}>{apiError}</Text>
+          <div className="zoui-account__alert zoui-account__alert--error zoui-account__alert--inline">
+            <Text variant="body-sm">{apiError}</Text>
           </div>
         )}
 
         {success && (
-          <div style={{ marginTop: '16px', padding: '10px 14px', background: 'var(--color-success-50)', border: '1px solid var(--color-success-200)', borderRadius: 'var(--radius-md)' }}>
-            <Text variant="body-sm" style={{ color: 'var(--color-success-700)' }}>Contraseña actualizada correctamente.</Text>
+          <div className="zoui-account__alert zoui-account__alert--success zoui-account__alert--inline">
+            <Text variant="body-sm">Contraseña actualizada correctamente.</Text>
           </div>
         )}
 
-        <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'flex-end' }}>
+        <div className="zoui-account__submit">
           <StoreButton
             size="md"
             onClick={handleSave}
@@ -139,44 +140,34 @@ export default function SeguridadPage() {
       </section>
 
       {/* ── MFA (deshabilitado) ── */}
-      <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px', opacity: 0.5, pointerEvents: 'none', userSelect: 'none' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ color: 'var(--color-fg-muted)' }}><ShieldIcon /></div>
-            <Text variant="heading-3">Autenticación de dos factores</Text>
+      <section className="zoui-account__card zoui-account__card--roomy zoui-account__card--disabled">
+        <div className="zoui-account__section-head zoui-account__section-head--split">
+          <div className="zoui-account__section-head-main">
+            <ShieldIcon />
+            <Text variant="heading-3" className="zoui-account__card-title">Autenticación de dos factores</Text>
           </div>
-          <span style={{
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 600,
-            padding: '3px 8px',
-            borderRadius: 'var(--radius-full)',
-            background: 'var(--color-bg-subtle)',
-            color: 'var(--color-fg-muted)',
-            border: '1px solid var(--color-border-default)',
-            letterSpacing: '0.04em',
-            textTransform: 'uppercase',
-          }}>
+          <span className="zoui-account__soon">
             Próximamente
           </span>
         </div>
 
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
-          <div style={{ flexShrink: 0, color: 'var(--color-fg-disabled)', marginTop: '4px' }}>
+        <div className="zoui-account__mfa">
+          <div className="zoui-account__mfa-icon">
             <PhoneIcon />
           </div>
-          <div style={{ flex: 1 }}>
-            <Text variant="body-sm" weight="medium" style={{ marginBottom: '6px' }}>
+          <div className="zoui-account__mfa-body">
+            <Text variant="body-sm" weight="medium">
               Aplicación de autenticación (TOTP)
             </Text>
-            <Text variant="body-sm" color="muted" style={{ lineHeight: 1.6 }}>
+            <Text variant="body-sm" color="muted">
               Usá una app como Google Authenticator o Authy para generar códigos temporales al iniciar sesión. Agrega una capa extra de seguridad a tu cuenta.
             </Text>
 
-            <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div className="zoui-account__mfa-state">
+              <div>
                 <Text variant="caption" color="muted">Estado</Text>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-fg-disabled)' }} />
+                <div className="zoui-account__inline">
+                  <div className="zoui-account__dot" />
                   <Text variant="body-sm">No activado</Text>
                 </div>
               </div>
@@ -188,6 +179,7 @@ export default function SeguridadPage() {
           </div>
         </div>
       </section>
+      </div>
     </main>
   );
 }
