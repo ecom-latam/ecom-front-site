@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { brandScale, BRAND_STEPS, ZouiThemeProvider, getFontOption, loadFont } from 'zoui';
+import { brandScale, BRAND_STEPS, getFontOption, loadFont } from 'zoui';
 import { PageConfigContext } from '@/context/PageConfigContext';
 import type { PageConfig } from '@/context/PageConfigContext';
 
@@ -21,10 +21,6 @@ function applyFont(fontId: string) {
   const opt = getFontOption(fontId);
   loadFont(opt);
   document.documentElement.style.setProperty('--font-ui', opt.stack);
-}
-
-function applyStoreTheme(theme: string) {
-  document.documentElement.setAttribute('data-store-theme', theme);
 }
 
 function getSlug(): string {
@@ -54,7 +50,6 @@ async function fetchPageInfo(): Promise<Record<string, unknown> | null> {
 function toPageConfig(raw: Record<string, unknown>): PageConfig {
   const store = (raw.store ?? undefined) as PageConfig['store'];
   return {
-    theme:       raw.theme       as string | undefined,
     hasCatalog:      raw.hasCatalog !== false,
     maintenanceMode: raw.maintenanceMode === true,
     catalog_label: typeof raw.catalog_label === 'string' && raw.catalog_label ? raw.catalog_label : 'Productos',
@@ -111,7 +106,7 @@ export function DynamicStoreTheme({
   }, []);
 
   // Si initialConfig vino de la SSR (caso normal), el theme y la
-  // config ya estan aplicados -- ver el <style> + data-store-theme que
+  // config ya estan aplicados -- ver el <style> que
   // arma app/layout.tsx. Solo se reintenta del lado del cliente si la SSR
   // no trajo nada (fallo el fetch en el servidor).
   useEffect(() => {
@@ -125,7 +120,6 @@ export function DynamicStoreTheme({
         applyBrandColor(fresh.brand_hue, sat, lit);
       }
       if (typeof fresh.font_id === 'string') applyFont(fresh.font_id);
-      if (typeof fresh.theme === 'string') applyStoreTheme(fresh.theme);
       setConfig(toPageConfig(fresh));
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,11 +127,9 @@ export function DynamicStoreTheme({
 
   return (
     <PageConfigContext.Provider value={config}>
-      <ZouiThemeProvider variant={config.theme}>
-        <div className="zoui-surface">
-          {children}
-        </div>
-      </ZouiThemeProvider>
+      <div className="zoui-surface">
+        {children}
+      </div>
     </PageConfigContext.Provider>
   );
 }

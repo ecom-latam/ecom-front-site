@@ -189,7 +189,6 @@ export interface PageInfo {
   brand2_saturation?: number | null;
   brand2_lightness?: number | null;
   font_id?: string;
-  theme?: string;
   activeTheme?: ActiveTheme | null;
   hasCatalog?: boolean;
   catalog_label?: string;
