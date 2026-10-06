@@ -13,16 +13,12 @@ export function DynamicPage({ page }: { page: PageContent }) {
   }
 
   return (
-    <>
-      <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }} data-mobile-ready>
-        <div className={styles.content}>
-          <DynamicPageRenderer
-            blocks={page.blocks}
-            mobileBlocks={page.mobileBlocks}
-            showGrid={page.workInProgress}
-          />
-        </div>
-      </main>
-    </>
+    <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }} data-mobile-ready>
+      <DynamicPageRenderer
+        blocks={page.blocks}
+        mobileBlocks={page.mobileBlocks}
+        showGrid={page.workInProgress}
+      />
+    </main>
   );
 }
