@@ -7,7 +7,6 @@ import { ProductDetailSection } from '@/components/catalog/ProductDetailSection'
 import { RelatedProducts } from '@/components/catalog/RelatedProducts';
 import { RatingsBlock } from '@/components/catalog/RatingsBlock';
 import { getCategories, getProduct, getProductReviews, getPageInfo } from '@/lib/api/storeClient';
-import styles from './page.module.scss';
 
 interface Props {
   searchParams: { id?: string };
@@ -89,10 +88,10 @@ export default async function ProductoPage({ searchParams }: Props) {
   ];
 
   return (
-    <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
-      <div className={styles.container}>
+    <main className="zoui-product">
+      <div className="zoui-product__container">
 
-        <div style={{ marginBottom: '24px' }}>
+        <div className="zoui-product__breadcrumbs">
           <Breadcrumbs items={breadcrumbItems} />
         </div>
 

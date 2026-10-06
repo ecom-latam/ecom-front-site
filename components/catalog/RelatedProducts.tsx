@@ -52,36 +52,12 @@ export async function RelatedProducts({
   if (products.length === 0) return null;
 
   return (
-    <section style={{ marginTop: '48px' }}>
-      <div
-        style={{
-          display:        'flex',
-          alignItems:     'center',
-          justifyContent: 'space-between',
-          marginBottom:   '20px',
-        }}
-      >
-        <h2
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize:   '20px',
-            fontWeight: 600,
-            color:      'var(--color-fg-primary)',
-            margin:     0,
-          }}
-        >
+    <section className="zoui-product__related">
+      <div className="zoui-product__section-head">
+        <h2 className="zoui-product__section-title">
           También te puede interesar
         </h2>
-        <Link
-          href={`/${catalogSlug}?categoryId=${categoryId}`}
-          style={{
-            fontFamily:     'var(--font-ui)',
-            fontSize:       '13px',
-            color:          'var(--color-brand-500)',
-            textDecoration: 'none',
-            fontWeight:     500,
-          }}
-        >
+        <Link href={`/${catalogSlug}?categoryId=${categoryId}`} className="zoui-product__section-link">
           Ver todo →
         </Link>
       </div>
