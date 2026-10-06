@@ -243,7 +243,7 @@ function ImagesTab({ productId, images, onChange }: ImagesTabProps) {
                   data-testid="prod-image-delete-btn"
                   style={{ display: 'flex', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-error-500)' }}
                 >
-                  <Icon name="trash" size="sm" />
+                  <Icon name="trash-2" size="sm" />
                 </button>
               </div>
             </div>
