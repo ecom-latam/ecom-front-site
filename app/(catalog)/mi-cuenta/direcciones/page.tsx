@@ -16,7 +16,7 @@ import type { Address, AddressPayload } from '@/utils/api/addresses';
 const MAX = ADDRESS_MAX;
 
 const Req = () => (
-  <span style={{ color: 'var(--color-error-500)', marginLeft: '2px' }} aria-hidden="true">*</span>
+  <span className="zoui-account__required" aria-hidden="true">*</span>
 );
 
 const LocationIcon = () => (
@@ -152,12 +152,13 @@ export default function DireccionesPage() {
   const isFormValid = Object.keys(formErrors).length === 0;
 
   return (
-    <main style={{ padding: '32px 24px', maxWidth: 680 }}>
+    <main className="zoui-account">
+      <div className="zoui-account__container zoui-account__container--wide">
 
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '28px' }}>
+      <div className="zoui-account__header">
         <div>
-          <Text variant="heading-2">Mis direcciones</Text>
-          <Text variant="body-sm" color="muted" style={{ marginTop: '4px' }}>
+          <Text variant="heading-2" className="zoui-account__title">Mis direcciones</Text>
+          <Text variant="body-sm" color="muted">
             Guardá hasta 5 direcciones de envío
           </Text>
         </div>
@@ -166,7 +167,7 @@ export default function DireccionesPage() {
           onClick={openCreate}
           disabled={atLimit}
           title={atLimit ? 'Llegaste al límite de 5 direcciones' : undefined}
-          style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}
+          className="zoui-account__add"
         >
           <Icon name="plus" size="sm" />
           Agregar
@@ -176,23 +177,23 @@ export default function DireccionesPage() {
       <AddressSlotsIndicator count={count} />
 
       {loading ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div className="zoui-account__list">
           {[1, 2].map((n) => (
-            <div key={n} style={{ height: 120, borderRadius: 'var(--radius-lg)', background: 'var(--color-bg-subtle)', animation: 'pulse 1.5s infinite' }} />
+            <div key={n} className="zoui-account__skeleton-item zoui-account__skeleton-item--address" />
           ))}
         </div>
       ) : count === 0 ? (
-        <div style={{ border: '2px dashed var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '48px 24px', textAlign: 'center' }}>
-          <div style={{ color: 'var(--color-fg-disabled)', marginBottom: '12px' }}>
+        <div className="zoui-account__empty zoui-account__empty--dashed">
+          <div className="zoui-account__empty-icon">
             <LocationIcon />
           </div>
           <Text variant="body" color="muted">Todavía no tenés direcciones guardadas.</Text>
-          <Text variant="body-sm" color="muted" style={{ marginTop: '6px' }}>
+          <Text variant="body-sm" color="muted">
             Usá el botón &quot;Agregar&quot; para guardar tu primera dirección de envío.
           </Text>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div className="zoui-account__list">
           {list.map((addr) => (
             <AddressCard
               key={addr._id}
@@ -215,7 +216,7 @@ export default function DireccionesPage() {
         </Modal.Header>
 
         <Modal.Body>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div className="zoui-account__fields">
             <StoreInput
               label="Etiqueta"
               labelAction={<Req />}
@@ -227,8 +228,8 @@ export default function DireccionesPage() {
               maxLength={30}
               size="md"
             />
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              <div style={{ gridColumn: '1 / -1' }}>
+            <div className="zoui-account__form-grid">
+              <div className="zoui-account__span">
                 <StoreInput
                   label="Nombre completo"
                   labelAction={<Req />}
@@ -239,7 +240,7 @@ export default function DireccionesPage() {
                   size="md"
                 />
               </div>
-              <div style={{ gridColumn: '1 / -1' }}>
+              <div className="zoui-account__span">
                 <StoreInput
                   label="Teléfono"
                   labelAction={<Req />}
@@ -252,7 +253,7 @@ export default function DireccionesPage() {
                   size="md"
                 />
               </div>
-              <div style={{ gridColumn: '1 / -1' }}>
+              <div className="zoui-account__span">
                 <StoreInput
                   label="Dirección"
                   labelAction={<Req />}
@@ -264,7 +265,7 @@ export default function DireccionesPage() {
                   size="md"
                 />
               </div>
-              <div style={{ gridColumn: '1 / -1' }}>
+              <div className="zoui-account__span">
                 <StoreInput
                   label="Piso / Depto"
                   hint="Opcional"
@@ -298,7 +299,7 @@ export default function DireccionesPage() {
                   size="md"
                 />
               </div>
-              <div style={{ gridColumn: '1 / -1' }}>
+              <div className="zoui-account__span">
                 <StoreSelect
                   label="Provincia"
                   labelAction={<Req />}
@@ -313,8 +314,8 @@ export default function DireccionesPage() {
             </div>
 
             {error && (
-              <div style={{ padding: '10px 14px', background: 'var(--color-error-50)', border: '1px solid var(--color-error-200)', borderRadius: 'var(--radius-md)' }}>
-                <Text variant="body-sm" style={{ color: 'var(--color-error-700)' }}>{error}</Text>
+              <div className="zoui-account__alert zoui-account__alert--error zoui-account__alert--inline">
+                <Text variant="body-sm">{error}</Text>
               </div>
             )}
           </div>
@@ -329,6 +330,7 @@ export default function DireccionesPage() {
           </StoreButton>
         </Modal.Footer>
       </Modal>
+      </div>
     </main>
   );
 }

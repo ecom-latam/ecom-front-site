@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import styles from './page.module.scss';
 import Image from 'next/image';
 
 import { getAccessTokenRole } from '@/utils/helpers';
@@ -66,15 +65,15 @@ function TransferInfo({ store }: { store: TransferData }) {
 
   if (fields.length > 0) {
     return (
-      <div style={{ marginTop: '16px', padding: '16px', background: 'var(--color-brand-50)', border: '1px solid var(--color-brand-200)', borderRadius: 'var(--radius-md)' }}>
-        <Text variant="body-sm" weight="semibold" style={{ marginBottom: '12px' }}>
+      <div className="zoui-account__transfer">
+        <Text variant="body-sm" weight="semibold" className="zoui-account__transfer-title">
           Datos para transferir:
         </Text>
-        <dl style={{ margin: 0, display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '6px 16px' }}>
+        <dl className="zoui-account__transfer-list">
           {fields.map((f) => (
             <>
-              <dt key={`dt-${f.label}`} style={{ fontWeight: 600, fontSize: 'var(--font-size-sm)', color: 'var(--color-fg-muted)' }}>{f.label}</dt>
-              <dd key={`dd-${f.label}`} style={{ margin: 0, fontSize: 'var(--font-size-sm)', fontFamily: 'monospace', wordBreak: 'break-all' }}>{f.value}</dd>
+              <dt key={`dt-${f.label}`}>{f.label}</dt>
+              <dd key={`dd-${f.label}`}>{f.value}</dd>
             </>
           ))}
         </dl>
@@ -84,9 +83,9 @@ function TransferInfo({ store }: { store: TransferData }) {
 
   if (store.transfer_info) {
     return (
-      <div style={{ marginTop: '16px', padding: '16px', background: 'var(--color-brand-50)', border: '1px solid var(--color-brand-200)', borderRadius: 'var(--radius-md)' }}>
-        <Text variant="body-sm" weight="semibold" style={{ marginBottom: '8px' }}>Datos para transferir:</Text>
-        <Text variant="body-sm" style={{ whiteSpace: 'pre-wrap' }}>{store.transfer_info}</Text>
+      <div className="zoui-account__transfer">
+        <Text variant="body-sm" weight="semibold" className="zoui-account__transfer-title">Datos para transferir:</Text>
+        <Text variant="body-sm" className="zoui-account__pre">{store.transfer_info}</Text>
       </div>
     );
   }
@@ -181,11 +180,11 @@ export default function OrderDetailPage() {
 
   if (loading) {
     return (
-      <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
-        <div className={styles.container}>
-          <div className={styles.skeleton}>
+      <main className="zoui-account">
+        <div className="zoui-account__container">
+          <div className="zoui-account__skeleton">
             {[1, 2, 3].map((i) => (
-              <div key={i} className={styles.skeletonItem} style={{ background: 'var(--color-bg-subtle)' }} />
+              <div key={i} className="zoui-account__skeleton-item zoui-account__skeleton-item--tall" />
             ))}
           </div>
         </div>
@@ -195,10 +194,10 @@ export default function OrderDetailPage() {
 
   if (!order) {
     return (
-      <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
-        <div className={styles.containerCenter}>
+      <main className="zoui-account">
+        <div className="zoui-account__container zoui-account__container--center">
           <Text variant="body" color="muted">Pedido no encontrado.</Text>
-          <StoreButton size="md" style={{ marginTop: '16px' }} onClick={() => router.push('/mis-pedidos')}>
+          <StoreButton size="md" className="zoui-account__after" onClick={() => router.push('/mis-pedidos')}>
             Mis pedidos
           </StoreButton>
         </div>
@@ -215,41 +214,35 @@ export default function OrderDetailPage() {
   );
 
   return (
-    <main className={styles.root} style={{ background: 'var(--color-bg-surface)' }}>
-      <div className={styles.container}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-          <button onClick={() => router.push('/mis-pedidos')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-fg-muted)', fontSize: 'var(--font-size-sm)' }}>
-            ← Mis pedidos
-          </button>
-        </div>
+    <main className="zoui-account">
+      <div className="zoui-account__container">
+        <button className="zoui-account__back" onClick={() => router.push('/mis-pedidos')}>
+          ← Mis pedidos
+        </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
-          <Text variant="heading-2">Pedido #{order.orderNumber}</Text>
+        <div className="zoui-account__heading">
+          <Text variant="heading-2" className="zoui-account__title">Pedido #{order.orderNumber}</Text>
           <Badge tone={STATUS_TONE[order.status]} variant="pill">{STATUS_LABEL[order.status]}</Badge>
         </div>
 
         {error && (
-          <div style={{ marginBottom: '16px', padding: '12px', background: 'var(--color-error-50)', border: '1px solid var(--color-error-200)', borderRadius: 'var(--radius-md)' }}>
-            <Text variant="body-sm" style={{ color: 'var(--color-error-700)' }}>{error}</Text>
+          <div className="zoui-account__alert zoui-account__alert--error">
+            <Text variant="body-sm">{error}</Text>
           </div>
         )}
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div className="zoui-account__stack">
 
           {/* Items */}
-          <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '20px' }}>
-            <Text variant="heading-3" style={{ marginBottom: '16px' }}>Productos</Text>
-            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <section className="zoui-account__card zoui-account__card--padded">
+            <Text variant="heading-3" className="zoui-account__card-title zoui-account__card-title--roomy">Productos</Text>
+            <ul className="zoui-account__items">
               {order.items.map((item, idx) => (
-                <li key={idx} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                  <div style={{ width: 56, height: 56, background: 'var(--color-bg-subtle)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', flexShrink: 0 }}>
-                    {item.image ? (
-                      <Image src={item.image} alt={item.name} width={56} height={56} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
-                    ) : (
-                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-fg-disabled)' }}>□</div>
-                    )}
+                <li key={idx} className="zoui-account__item">
+                  <div className="zoui-account__thumb">
+                    {item.image ? <Image src={item.image} alt={item.name} width={56} height={56} /> : '□'}
                   </div>
-                  <div style={{ flex: 1 }}>
+                  <div className="zoui-account__row-main">
                     <Text variant="body-sm" weight="medium">{item.name}</Text>
                     {Object.keys(item.selectedOptions).length > 0 && (
                       <Text variant="caption" color="muted">
@@ -262,15 +255,15 @@ export default function OrderDetailPage() {
                 </li>
               ))}
             </ul>
-            <div style={{ borderTop: '1px solid var(--color-border-default)', marginTop: '16px', paddingTop: '16px', display: 'flex', justifyContent: 'space-between' }}>
+            <div className="zoui-account__total">
               <Text variant="body" weight="semibold">Total</Text>
               <Text variant="body" weight="semibold">{formatPrice(order.total, currency)}</Text>
             </div>
           </section>
 
           {/* Shipping */}
-          <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '20px' }}>
-            <Text variant="heading-3" style={{ marginBottom: '12px' }}>Envío</Text>
+          <section className="zoui-account__card zoui-account__card--padded">
+            <Text variant="heading-3" className="zoui-account__card-title">Envío</Text>
             <Text variant="body-sm">{order.shippingAddress.fullName}</Text>
             <Text variant="body-sm">{order.shippingAddress.phone}</Text>
             <Text variant="body-sm">{order.shippingAddress.address}</Text>
@@ -278,19 +271,19 @@ export default function OrderDetailPage() {
           </section>
 
           {/* Payment */}
-          <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '20px' }}>
-            <Text variant="heading-3" style={{ marginBottom: '12px' }}>Pago</Text>
+          <section className="zoui-account__card zoui-account__card--padded">
+            <Text variant="heading-3" className="zoui-account__card-title">Pago</Text>
             <Text variant="body-sm">Método: Transferencia bancaria</Text>
 
             {paymentNote && (
-              <Text variant="body-sm" color="muted" style={{ marginTop: '8px' }}>{paymentNote}</Text>
+              <Text variant="body-sm" color="muted" className="zoui-account__note">{paymentNote}</Text>
             )}
 
             {order.paymentProofUrl && order.paymentStatus !== 'pending' && (
-              <div style={{ marginTop: '12px' }}>
-                <Text variant="body-sm" color="muted" style={{ marginBottom: '6px' }}>Comprobante adjunto:</Text>
+              <div className="zoui-account__proof">
+                <Text variant="body-sm" color="muted">Comprobante adjunto:</Text>
                 <a href={order.paymentProofUrl} target="_blank" rel="noopener noreferrer">
-                  <Image src={order.paymentProofUrl} alt="Comprobante de transferencia" width={120} height={80} style={{ objectFit: 'cover', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border-default)' }} />
+                  <Image src={order.paymentProofUrl} alt="Comprobante de transferencia" width={120} height={80} />
                 </a>
               </div>
             )}
@@ -302,15 +295,15 @@ export default function OrderDetailPage() {
 
           {/* Notes */}
           {order.notes && (
-            <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '20px' }}>
-              <Text variant="heading-3" style={{ marginBottom: '8px' }}>Notas</Text>
+            <section className="zoui-account__card zoui-account__card--padded">
+              <Text variant="heading-3" className="zoui-account__card-title zoui-account__card-title--tight">Notas</Text>
               <Text variant="body-sm" color="muted">{order.notes}</Text>
             </section>
           )}
 
           {/* Actions */}
           {(canNotify || canCancel) && (
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <div className="zoui-account__actions">
               {canNotify && (
                 <StoreButton size="md" onClick={openNotifyModal} disabled={actionLoading}>
                   Ya transferí
@@ -322,7 +315,7 @@ export default function OrderDetailPage() {
                   size="md"
                   onClick={() => setConfirmModal('cancel')}
                   disabled={actionLoading}
-                  style={{ color: 'var(--color-error-600)', borderColor: 'var(--color-error-300)' }}
+                  className="zoui-account__danger"
                 >
                   Cancelar pedido
                 </StoreButton>
@@ -337,7 +330,7 @@ export default function OrderDetailPage() {
       <Modal open={confirmModal === 'notify'} size="sm" onClose={() => !actionLoading && setConfirmModal(null)}>
         <Modal.Header>Confirmar pago</Modal.Header>
         <Modal.Body>
-          <Text variant="body-sm" style={{ marginBottom: '16px' }}>
+          <Text variant="body-sm" className="zoui-account__lead">
             ¿Confirmás que ya realizaste la transferencia? El vendedor la verificará y confirmará tu pedido.
           </Text>
 
@@ -345,18 +338,18 @@ export default function OrderDetailPage() {
             ref={fileInputRef}
             type="file"
             accept="image/*"
-            style={{ display: 'none' }}
+            hidden
             onChange={handleVoucherChange}
           />
 
           {voucherPreview ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <Image src={voucherPreview} alt="Comprobante" width={72} height={72} style={{ objectFit: 'cover', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border-default)', flexShrink: 0 }} />
+            <div className="zoui-account__voucher">
+              <Image src={voucherPreview} alt="Comprobante" width={72} height={72} />
               <div>
                 <Text variant="caption" color="muted">{voucher?.name}</Text>
                 <button
                   onClick={() => { setVoucher(null); setVoucherPreview(null); if (fileInputRef.current) fileInputRef.current.value = ''; }}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-error-600)', fontSize: 'var(--font-size-sm)', padding: 0 }}
+                  className="zoui-account__link-danger"
                 >
                   Quitar
                 </button>
@@ -365,7 +358,7 @@ export default function OrderDetailPage() {
           ) : (
             <button
               onClick={() => fileInputRef.current?.click()}
-              style={{ width: '100%', padding: '10px', border: '1px dashed var(--color-border-default)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-subtle)', cursor: 'pointer', color: 'var(--color-fg-muted)', fontSize: 'var(--font-size-sm)' }}
+              className="zoui-account__attach"
             >
               + Adjuntar comprobante (opcional)
             </button>
@@ -397,7 +390,7 @@ export default function OrderDetailPage() {
             size="md"
             onClick={handleCancel}
             disabled={actionLoading}
-            style={{ background: 'var(--color-error-600)', borderColor: 'var(--color-error-600)' }}
+            className="zoui-account__danger-filled"
           >
             {actionLoading ? 'Cancelando...' : 'Cancelar pedido'}
           </StoreButton>

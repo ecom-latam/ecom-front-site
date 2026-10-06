@@ -5490,196 +5490,16 @@
   color: var(--color-fg-muted);
 }
 
-.zoui-sidebar[data-variant=soft] {
-  border-right: 1px solid var(--color-border-default);
-}
-
-.zoui-sidebar[data-variant=outlined] {
-  --_bg: var(--color-bg-surface);
-  --_active-bg: var(--color-brand-50);
-  --_active-fg: var(--color-brand-700);
-  border: 1px solid var(--color-border-default);
-  border-left: none;
-  border-top-left-radius: 0;
-  border-top-right-radius: var(--radius-lg);
-  border-bottom-right-radius: var(--radius-lg);
-  border-bottom-left-radius: 0;
-}
-
-[data-theme=dark] .zoui-sidebar[data-variant=outlined] {
-  --_active-bg: color-mix(in srgb, var(--color-brand-400) 15%, transparent);
-  --_active-fg: var(--color-brand-300);
-}
-
-.zoui-sidebar[data-variant=filled] {
-  --_bg: var(--color-brand-600);
-  --_fg: var(--color-neutral-0);
-  --_item-fg: var(--color-brand-100);
-  --_icon-fg: var(--color-brand-200);
-  --_label-fg: var(--color-brand-200);
-  --_item-hover-bg: color-mix(in srgb, white 12%, transparent);
-  --_item-hover-fg: var(--color-neutral-0);
-  --_active-bg: color-mix(in srgb, white 22%, transparent);
-  --_active-fg: var(--color-neutral-0);
-}
-
-[data-theme=dark] .zoui-sidebar[data-variant=filled] {
-  --_bg: var(--color-brand-700);
-}
-
-.zoui-sidebar[data-variant=ghost] {
-  --_bg: transparent;
-  --_active-bg: var(--color-bg-muted);
-  --_active-fg: var(--color-fg-primary);
-}
-
-.zoui-sidebar[data-variant=editorial] {
-  --_bg: transparent;
-  --_item-hover-bg: transparent;
-  --_item-hover-fg: var(--color-fg-primary);
-  --_active-bg: transparent;
-  --_active-fg: var(--color-fg-primary);
-  --_item-radius: 0;
-  border-right: 1px solid var(--color-border-default);
-}
-.zoui-sidebar[data-variant=editorial] .zoui-sidebar__item {
-  border-left: 2px solid transparent;
-  padding-left: calc(var(--_item-px) - 2px);
-  transition: border-color var(--duration-fast) var(--easing-standard), color var(--duration-fast) var(--easing-standard), font-weight 0s;
-}
-.zoui-sidebar[data-variant=editorial] .zoui-sidebar__item[data-active] {
-  border-left-color: var(--color-fg-primary);
-}
-
-.zoui-sidebar[data-variant=terminal] {
-  --_bg: var(--color-neutral-950);
-  --_fg: var(--color-neutral-100);
-  --_item-fg: var(--color-neutral-400);
-  --_icon-fg: var(--color-neutral-600);
-  --_label-fg: var(--color-neutral-600);
-  --_item-hover-bg: var(--color-neutral-800);
-  --_item-hover-fg: var(--color-neutral-100);
-  --_active-bg: var(--color-neutral-800);
-  --_active-fg: var(--color-brand-400);
-  border-right: 1px solid var(--color-neutral-700);
-}
-
-.zoui-sidebar[data-variant=boutique] {
-  --_bg: var(--color-bg-surface);
-  --_item-hover-bg: transparent;
-  --_item-hover-fg: var(--color-fg-primary);
-  --_active-bg: transparent;
-  --_active-fg: var(--color-fg-primary);
-  --_label-fg: var(--color-fg-secondary);
-  border-right: 1px solid var(--color-fg-primary);
-  font-style: italic;
-}
-.zoui-sidebar[data-variant=boutique] .zoui-sidebar__section-label {
-  font-style: normal;
-}
-.zoui-sidebar[data-variant=boutique] .zoui-sidebar__item[data-active] {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-[data-theme=dark] .zoui-sidebar[data-variant=boutique] .zoui-sidebar__item[data-active] {
-  text-decoration-color: var(--color-fg-primary);
-}
-
-.zoui-sidebar[data-variant=frame] {
-  --_bg: var(--color-bg-surface);
-  --_active-bg: var(--color-brand-50);
-  --_active-fg: var(--color-brand-700);
-  border-left: 3px solid var(--color-brand-500);
-  border-right: 1px solid var(--color-border-default);
-}
-
-[data-theme=dark] .zoui-sidebar[data-variant=frame] {
-  --_active-bg: color-mix(in srgb, var(--color-brand-400) 15%, transparent);
-  --_active-fg: var(--color-brand-300);
-}
-
-.zoui-sidebar[data-variant=capsule] {
-  --_bg: var(--color-bg-surface);
-  --_item-hover-bg: var(--color-bg-subtle);
-  --_active-bg: var(--color-brand-500);
-  --_active-fg: var(--color-neutral-0);
-  --_item-radius: var(--radius-full);
-  border: 1px solid var(--color-border-default);
-  border-radius: var(--radius-xl);
-}
-.zoui-sidebar[data-variant=capsule] .zoui-sidebar__item[data-active] .zoui-sidebar__item-icon {
-  color: var(--color-neutral-0);
-}
-
-[data-theme=dark] .zoui-sidebar[data-variant=capsule] {
-  --_active-bg: var(--color-brand-600);
-}
-
-.zoui-sidebar[data-variant=retro] {
-  --_bg: #FFF8EE;
-  --_fg: #2C2416;
-  --_item-fg: #8B6F3E;
-  --_icon-fg: #C4A882;
-  --_label-fg: #C4A882;
-  --_item-hover-bg: rgba(139, 111, 62, .10);
-  --_item-hover-fg: #5C3A1E;
-  --_active-bg: #5C3A1E;
-  --_active-fg: #F5EDD6;
-  --_item-radius: var(--radius-sm);
-  border-right: 1px dashed #C4A882;
-}
-
-[data-theme=dark] .zoui-sidebar[data-variant=retro] {
-  --_bg: #1A120A;
-  --_fg: #F5DDA0;
-  --_item-fg: rgba(245, 221, 160, .55);
-  --_icon-fg: rgba(245, 221, 160, .35);
-  --_label-fg: rgba(245, 221, 160, .35);
-  --_item-hover-bg: rgba(92, 58, 30, .25);
-  --_item-hover-fg: #F5DDA0;
-  --_active-bg: #5C3A1E;
-  --_active-fg: #F5DDA0;
-  border-right-color: #5C3A1E;
-}
-
-.zoui-sidebar[data-variant=gradient] {
-  --_active-bg: color-mix(in srgb, white 40%, transparent);
-  --_active-fg: var(--color-brand-800);
-  background: linear-gradient(180deg, var(--color-brand-100), var(--color-brand-50));
-  border-right: 1px solid var(--color-brand-200);
-}
-
-[data-theme=dark] .zoui-sidebar[data-variant=gradient] {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--color-brand-700) 50%, var(--color-neutral-900)), var(--color-neutral-900));
-  --_active-bg: color-mix(in srgb, var(--color-brand-400) 25%, transparent);
-  --_active-fg: var(--color-brand-300);
-}
-
-.zoui-sidebar[data-variant=neon] {
-  --_bg: transparent;
-  --_item-fg: var(--color-fg-primary);
-  --_item-hover-bg: color-mix(in srgb, var(--color-brand-400) 10%, transparent);
-  --_item-hover-fg: var(--color-brand-300);
-  --_active-bg: color-mix(in srgb, var(--color-brand-400) 20%, transparent);
-  --_active-fg: var(--color-brand-300);
-  border-right: 1px solid var(--color-brand-400);
-  box-shadow: 4px 0 16px color-mix(in srgb, var(--color-brand-400) 30%, transparent);
-}
-.zoui-sidebar[data-variant=neon] .zoui-sidebar__item[data-active] {
-  box-shadow: inset 0 0 10px color-mix(in srgb, var(--color-brand-400) 15%, transparent);
-}
-
 .zoui-sidebar {
-  --_bg: var(--color-bg-subtle);
+  --_bg: var(--color-bg-surface);
   --_fg: var(--color-fg-primary);
   --_item-fg: var(--color-fg-secondary);
   --_icon-fg: var(--color-fg-muted);
   --_label-fg: var(--color-fg-muted);
   --_item-hover-bg: var(--color-bg-muted);
   --_item-hover-fg: var(--color-fg-primary);
-  --_active-bg: var(--color-bg-surface);
-  --_active-fg: var(--color-fg-primary);
+  --_active-bg: var(--color-brand-50);
+  --_active-fg: var(--color-brand-700);
   --_item-radius: var(--radius-md);
   --_item-px: 12px;
   --_item-py: 9px;
@@ -5691,7 +5511,18 @@
   background: var(--_bg);
   font-family: var(--font-ui);
   color: var(--_fg);
+  border: 1px solid var(--color-border-default);
+  border-left: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+  border-bottom-left-radius: 0;
   transition: width var(--duration-slow) var(--easing-standard), padding var(--duration-slow) var(--easing-standard);
+}
+
+[data-theme=dark] .zoui-sidebar {
+  --_active-bg: color-mix(in srgb, var(--color-brand-400) 15%, transparent);
+  --_active-fg: var(--color-brand-300);
 }
 
 .zoui-sidebar__header {
@@ -5777,24 +5608,27 @@
   outline: none;
   box-shadow: var(--shadow-focus-ring);
 }
-.zoui-sidebar__item[data-active] {
+.zoui-sidebar__item.zoui-sidebar__item--active {
   background: var(--_active-bg);
   color: var(--_active-fg);
   font-weight: var(--font-weight-semibold);
 }
-.zoui-sidebar__item[data-active] .zoui-sidebar__item-icon {
+.zoui-sidebar__item.zoui-sidebar__item--active .zoui-sidebar__item-icon {
   color: var(--_active-fg);
 }
-.zoui-sidebar__item[data-active]:hover {
+.zoui-sidebar__item.zoui-sidebar__item--active:hover {
   background: var(--_active-bg);
 }
-.zoui-sidebar__item[data-disabled] {
+
+.zoui-sidebar .zoui-sidebar__item.zoui-sidebar__item--disabled,
+.zoui-sidebar .zoui-sidebar__item.zoui-sidebar__item--disabled:hover {
   color: var(--color-fg-disabled);
   background: transparent;
   cursor: not-allowed;
   pointer-events: none;
 }
-.zoui-sidebar__item[data-disabled] .zoui-sidebar__item-icon {
+.zoui-sidebar .zoui-sidebar__item.zoui-sidebar__item--disabled .zoui-sidebar__item-icon,
+.zoui-sidebar .zoui-sidebar__item.zoui-sidebar__item--disabled:hover .zoui-sidebar__item-icon {
   color: var(--color-fg-disabled);
 }
 
@@ -7890,6 +7724,582 @@ button.zoui-gal__item {
   flex-wrap: wrap;
   justify-content: center;
   gap: 12px;
+}
+
+.zoui-auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 0 16px;
+  background: var(--color-bg-subtle);
+}
+
+.zoui-auth__card {
+  width: 100%;
+  max-width: 384px;
+  padding: 40px 32px;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.zoui-auth__back {
+  display: block;
+  margin-bottom: 24px;
+  text-decoration: none;
+}
+
+.zoui-auth__title {
+  margin-bottom: 4px;
+}
+
+.zoui-auth__subtitle {
+  margin-bottom: 24px;
+}
+
+.zoui-auth__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.zoui-auth__notice {
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--color-success-500) 30%, transparent);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-success-500) 10%, transparent);
+  color: var(--color-success-700);
+}
+
+.zoui-auth__error {
+  color: var(--color-danger-500);
+}
+
+.zoui-auth__footer {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.zoui-auth__link {
+  color: var(--color-fg-primary);
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.zoui-auth__card--center {
+  text-align: center;
+}
+
+.zoui-auth__icon {
+  margin-bottom: 16px;
+}
+
+.zoui-auth__hint {
+  margin-bottom: 24px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-subtle);
+}
+
+.zoui-auth__code {
+  text-align: center;
+  letter-spacing: 0.2em;
+  font-family: monospace;
+}
+
+.zoui-account {
+  min-height: 100vh;
+  background: var(--color-bg-surface);
+}
+
+.zoui-account__container {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.zoui-account__container--center {
+  padding: 64px 16px;
+  text-align: center;
+}
+
+.zoui-account__title {
+  margin-bottom: 24px;
+}
+
+.zoui-account__card {
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+}
+
+.zoui-account__card-title {
+  margin-bottom: 16px;
+}
+
+.zoui-account__container--narrow {
+  max-width: 560px;
+  margin: 0;
+  padding: 32px 24px;
+}
+
+.zoui-account__container--wide {
+  max-width: 680px;
+  margin: 0;
+  padding: 32px 24px;
+}
+
+.zoui-account__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+.zoui-account__header .zoui-account__title {
+  margin-bottom: 4px;
+}
+
+.zoui-account__heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.zoui-account__heading .zoui-account__title {
+  margin-bottom: 0;
+}
+
+.zoui-account__back {
+  margin-bottom: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-fg-muted);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.zoui-account__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.zoui-account__stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.zoui-account__row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 16px 20px;
+  background: var(--color-bg-default);
+  text-align: left;
+  cursor: pointer;
+}
+
+.zoui-account__row-main {
+  flex: 1;
+}
+
+.zoui-account__card--padded {
+  padding: 20px;
+  background: var(--color-bg-default);
+}
+
+.zoui-account__card--roomy {
+  padding: 24px;
+  background: var(--color-bg-default);
+}
+
+.zoui-account__card--accent {
+  border: 2px solid var(--color-brand-500);
+}
+
+.zoui-account__card--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+.zoui-account__card-title--tight {
+  margin-bottom: 8px;
+}
+
+.zoui-account__card-title--roomy {
+  margin-bottom: 16px;
+}
+
+.zoui-account__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.zoui-account__skeleton-item {
+  height: 80px;
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-subtle);
+}
+
+.zoui-account__skeleton-item--tall {
+  height: 96px;
+}
+
+.zoui-account__empty {
+  padding-top: 48px;
+  text-align: center;
+}
+.zoui-account__empty > * + * {
+  margin-top: 16px;
+}
+
+.zoui-account__empty--dashed {
+  padding: 48px 24px;
+  border: 2px dashed var(--color-border-default);
+  border-radius: var(--radius-lg);
+}
+.zoui-account__empty--dashed > * + * {
+  margin-top: 6px;
+}
+
+.zoui-account__empty-icon {
+  margin-bottom: 12px;
+  color: var(--color-fg-disabled);
+}
+
+.zoui-account__alert {
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px solid;
+  border-radius: var(--radius-md);
+}
+
+.zoui-account__alert--error {
+  border-color: color-mix(in srgb, var(--color-danger-500) 30%, transparent);
+  background: color-mix(in srgb, var(--color-danger-500) 10%, transparent);
+  color: var(--color-danger-700);
+}
+
+.zoui-account__alert--success {
+  border-color: color-mix(in srgb, var(--color-success-500) 30%, transparent);
+  background: color-mix(in srgb, var(--color-success-500) 10%, transparent);
+  color: var(--color-success-700);
+}
+
+.zoui-account__alert--inline {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+}
+
+.zoui-account__items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zoui-account__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.zoui-account__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-subtle);
+  color: var(--color-fg-disabled);
+}
+.zoui-account__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.zoui-account__total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.zoui-account__proof {
+  margin-top: 12px;
+}
+.zoui-account__proof img {
+  object-fit: cover;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-sm);
+}
+
+.zoui-account__transfer {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--color-brand-200);
+  border-radius: var(--radius-md);
+  background: var(--color-brand-50);
+}
+
+.zoui-account__transfer-title {
+  margin-bottom: 12px;
+}
+
+.zoui-account__transfer-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 16px;
+  margin: 0;
+}
+.zoui-account__transfer-list dt {
+  color: var(--color-fg-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+.zoui-account__transfer-list dd {
+  margin: 0;
+  font-family: monospace;
+  font-size: var(--font-size-sm);
+  word-break: break-all;
+}
+
+.zoui-account__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.zoui-account__danger {
+  color: var(--color-danger-600);
+  border-color: color-mix(in srgb, var(--color-danger-600) 40%, transparent);
+}
+
+.zoui-account__link-danger {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-danger-600);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.zoui-account__voucher {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.zoui-account__voucher img {
+  flex-shrink: 0;
+  object-fit: cover;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-sm);
+}
+
+.zoui-account__attach {
+  width: 100%;
+  padding: 10px;
+  border: 1px dashed var(--color-border-default);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-subtle);
+  color: var(--color-fg-muted);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.zoui-account__section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: var(--color-fg-muted);
+}
+.zoui-account__section-head .zoui-account__card-title {
+  margin-bottom: 0;
+  color: var(--color-fg-primary);
+}
+
+.zoui-account__section-head--split {
+  justify-content: space-between;
+}
+
+.zoui-account__section-head-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.zoui-account__soon {
+  padding: 3px 8px;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-subtle);
+  color: var(--color-fg-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.zoui-account__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.zoui-account__submit {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.zoui-account__mfa {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.zoui-account__mfa-icon {
+  flex-shrink: 0;
+  margin-top: 4px;
+  color: var(--color-fg-disabled);
+}
+
+.zoui-account__mfa-body {
+  flex: 1;
+}
+.zoui-account__mfa-body > * + * {
+  margin-top: 6px;
+}
+
+.zoui-account__mfa-state {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.zoui-account__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-fg-disabled);
+}
+
+.zoui-account__inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.zoui-account__slots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.zoui-account__slot-bars {
+  display: flex;
+  gap: 5px;
+}
+
+.zoui-account__slot {
+  width: 28px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-border-default);
+  transition: background 0.2s;
+}
+
+.zoui-account__slot--on {
+  background: var(--color-brand-500);
+}
+
+.zoui-account__address-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.zoui-account__address-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.zoui-account__form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.zoui-account__span {
+  grid-column: 1/-1;
+}
+
+.zoui-account__required {
+  margin-left: 2px;
+  color: var(--color-danger-500);
+}
+
+.zoui-account__after {
+  margin-top: 16px;
+}
+
+.zoui-account__note {
+  margin-top: 8px;
+}
+
+.zoui-account__lead {
+  margin-bottom: 16px;
+}
+
+.zoui-account__pre {
+  white-space: pre-wrap;
+}
+
+.zoui-account__danger-filled {
+  border-color: var(--color-danger-600);
+  background: var(--color-danger-600);
+}
+
+.zoui-account__card--spaced {
+  margin-bottom: 24px;
+}
+
+.zoui-account__skeleton-item--address {
+  height: 120px;
+}
+
+.zoui-account__add {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 6px;
+}
+
+.zoui-account__link-danger-btn {
+  color: var(--color-danger-600);
 }
 
 .zoui-float-preview {

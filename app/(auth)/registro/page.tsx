@@ -53,15 +53,15 @@ export default function RegistroPage() {
   }
 
   return (
-    <div style={{ width: '100%', maxWidth: '384px', background: 'var(--color-bg-surface)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--color-border-default)', padding: '40px 32px' }}>
-      <Link href="/productos" style={{ display: 'block', marginBottom: '24px', textDecoration: 'none' }}>
+    <div className="zoui-auth__card">
+      <Link href="/productos" className="zoui-auth__back">
         <Text variant="body-sm" color="muted">← Volver a la tienda</Text>
       </Link>
 
-      <Text variant="heading-2" style={{ marginBottom: '4px' }}>Crear cuenta</Text>
-      <Text variant="body-sm" color="muted" style={{ marginBottom: '24px' }}>Registrate para comprar en esta tienda.</Text>
+      <Text variant="heading-2" className="zoui-auth__title">Crear cuenta</Text>
+      <Text variant="body-sm" color="muted" className="zoui-auth__subtitle">Registrate para comprar en esta tienda.</Text>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div className="zoui-auth__form">
         <StoreInput id="email" type="email" autoComplete="email" autoFocus label="Email" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSubmit()} data-testid="store-register-email" />
         <StorePasswordInput
           id="password"
@@ -76,17 +76,17 @@ export default function RegistroPage() {
         />
 
         {error && (
-          <Text variant="body-sm" style={{ color: 'var(--color-error-500)' }} data-testid="store-register-error">{error}</Text>
+          <Text variant="body-sm" className="zoui-auth__error" data-testid="store-register-error">{error}</Text>
         )}
 
-        <StoreButton loading={loading} disabled={!isValid || loading} size="md" style={{ width: '100%' }} onClick={handleSubmit} data-testid="store-register-submit">
+        <StoreButton loading={loading} disabled={!isValid || loading} size="md" fullWidth onClick={handleSubmit} data-testid="store-register-submit">
           {loading ? 'Creando cuenta...' : 'Crear cuenta'}
         </StoreButton>
       </div>
 
-      <Text variant="body-sm" color="muted" style={{ textAlign: 'center', marginTop: '24px' }}>
+      <Text variant="body-sm" color="muted" className="zoui-auth__footer">
         ¿Ya tenés cuenta?{' '}
-        <Link href="/iniciar-sesion" style={{ color: 'var(--color-fg-primary)', fontWeight: 500, textDecoration: 'underline' }}>
+        <Link href="/iniciar-sesion" className="zoui-auth__link">
           Iniciá sesión
         </Link>
       </Text>
