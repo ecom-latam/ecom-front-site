@@ -33,7 +33,6 @@ export interface PageConfigPage {
 }
 
 export interface PageConfig {
-  theme?: string;
   hasCatalog?: boolean;
   catalog_label?: string;
   catalog_slug?: string;
