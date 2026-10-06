@@ -12,9 +12,9 @@ interface ShippingMethodSectionProps {
 
 export function ShippingMethodSection({ value, onChange, forcedPickup }: ShippingMethodSectionProps) {
   return (
-    <section style={{ background: 'var(--color-bg-default)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', padding: '24px' }}>
-      <Text variant="heading-3" style={{ marginBottom: '20px' }}>Método de entrega</Text>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <section className="zoui-checkout__card">
+      <Text variant="heading-3" className="zoui-checkout__card-title">Método de entrega</Text>
+      <div className="zoui-checkout__options">
         {(['delivery', 'pickup'] as const).map((method) => {
           const disabled = forcedPickup && method === 'delivery';
           return (
