@@ -45,7 +45,7 @@ export default async function RootLayout({
   const activeTheme = storeInfo?.activeTheme;
   const themeCss = activeTheme ? themeCssCache.get(`${activeTheme.id}:${activeTheme.updatedAt}`, { kit: activeTheme.kit }) : '';
   const background = activeTheme?.background
-    ? `:root:root { ${Object.entries(backgroundTokens(activeTheme.background)).map(([name, value]) => `--${name}: ${value};`).join(' ')} }`
+    ? `:root:root:not(:has([data-custom-page])) { ${Object.entries(backgroundTokens(activeTheme.background)).map(([name, value]) => `--${name}: ${value};`).join(' ')} }`
     : '';
   const brandStyles = `
     :root {
