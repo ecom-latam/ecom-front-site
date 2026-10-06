@@ -175,6 +175,7 @@ export interface ActiveTheme {
   id: string;
   name: string;
   updatedAt: string | null;
+  background: { hue: number; saturation: number; lightness: number } | null;
   kit: Record<string, unknown>;
 }
 
