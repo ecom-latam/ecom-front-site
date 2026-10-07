@@ -5,7 +5,7 @@ import styles from "./layout.module.scss";
 import "./zoui.css";
 import NextLink from "next/link";
 import NextImage from "next/image";
-import { ToastProvider, ZouiProvider, backgroundTokens, brandScale, createThemeCssCache, getGoogleFontUrl } from "zoui";
+import { BlockThemeProvider, THEMED_BLOCKS, ToastProvider, ZouiProvider, backgroundTokens, brandScale, createThemeCssCache, getGoogleFontUrl } from "zoui";
 import { CartProvider } from "@/context/CartContext";
 import { DynamicStoreTheme } from "@/components/DynamicStoreTheme";
 import { getPageInfo } from "@/lib/api/storeClient";
@@ -13,6 +13,10 @@ import { ErrorModalProvider } from "@/components/ui/ErrorModal";
 import { StoreProvider } from "@/store/StoreProvider";
 
 const themeCssCache = createThemeCssCache();
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
 
 export const metadata: Metadata = {
   title: "ecom store",
@@ -44,6 +48,10 @@ export default async function RootLayout({
   const scale2 = brandScale(hue2, sat2, lit2);
   const activeTheme = storeInfo?.activeTheme;
   const themeCss = activeTheme ? themeCssCache.get(`${activeTheme.id}:${activeTheme.updatedAt}`, { kit: activeTheme.kit }) : '';
+  const blockStyles = Object.fromEntries(THEMED_BLOCKS.flatMap((type) => {
+    const style = activeTheme?.kit[type];
+    return isRecord(style) ? [[type, style]] : [];
+  }));
   const background = activeTheme?.background
     ? `:root:root:not(:has([data-custom-page])) { ${Object.entries(backgroundTokens(activeTheme.background)).map(([name, value]) => `--${name}: ${value};`).join(' ')} }`
     : '';
@@ -97,9 +105,11 @@ export default async function RootLayout({
               <ToastProvider>
                 <ErrorModalProvider>
                   <CartProvider hasSession={hasSession}>
-                    <div className={styles.wrapper}>
-                      {children}
-                    </div>
+                    <BlockThemeProvider styles={blockStyles}>
+                      <div className={styles.wrapper}>
+                        {children}
+                      </div>
+                    </BlockThemeProvider>
                   </CartProvider>
                 </ErrorModalProvider>
               </ToastProvider>
