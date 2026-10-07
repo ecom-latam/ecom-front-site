@@ -5,7 +5,7 @@ import styles from "./layout.module.scss";
 import "./zoui.css";
 import NextLink from "next/link";
 import NextImage from "next/image";
-import { BlockThemeProvider, THEMED_BLOCKS, ToastProvider, ZouiProvider, backgroundTokens, brandScale, createThemeCssCache, getGoogleFontUrl } from "zoui";
+import { BlockThemeProvider, THEMED_BLOCKS, ToastProvider, ZouiProvider, backgroundTokens, brandScale, createThemeCssCache, getGoogleFontUrl, isThemeRadius, radiusTokens } from "zoui";
 import { CartProvider } from "@/context/CartContext";
 import { DynamicStoreTheme } from "@/components/DynamicStoreTheme";
 import { getPageInfo } from "@/lib/api/storeClient";
@@ -52,6 +52,9 @@ export default async function RootLayout({
     const style = activeTheme?.kit[type];
     return isRecord(style) ? [[type, style]] : [];
   }));
+  const radius = isThemeRadius(activeTheme?.radius)
+    ? `:root:root { ${Object.entries(radiusTokens(activeTheme.radius)).map(([name, value]) => `--${name}: ${value};`).join(' ')} }`
+    : '';
   const background = activeTheme?.background
     ? `:root:root:not(:has([data-custom-page])) { ${Object.entries(backgroundTokens(activeTheme.background)).map(([name, value]) => `--${name}: ${value};`).join(' ')} }`
     : '';
@@ -75,6 +78,7 @@ export default async function RootLayout({
       --color-brand2-600:     ${scale2[600]};
       --color-brand2-700:     ${scale2[700]};
     }
+    ${radius}
     ${background}
   `.trim();
 
