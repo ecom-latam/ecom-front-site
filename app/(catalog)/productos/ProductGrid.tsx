@@ -105,7 +105,7 @@ export function ProductGrid({
                 price={formatPrice(displayPrice, currency)}
                 priceOld={hasDiscount ? formatPrice(p.price, currency) : undefined}
                 discount={getDiscount(p)}
-                image={mainImage ? { url: mainImage.url, alt: p.name } : undefined}
+                image={mainImage ? { url: mainImage.url, alt: mainImage.alt || p.name } : undefined}
                 href={`/producto?id=${p._id}`}
                 outOfStock={outOfStock}
                 avgRating={ratings_enabled && p.avgRating != null ? p.avgRating : undefined}

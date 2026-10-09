@@ -17,7 +17,7 @@ export interface ProductVariant {
   price: number | null;
   stock: number;
   availableStock?: number;
-  images: { url: string; publicId: string; isMain: boolean }[];
+  images: { url: string; alt?: string; publicId: string; isMain: boolean }[];
   enabled: boolean;
 }
 
@@ -37,7 +37,7 @@ export interface Product {
   availableStock?: number;
   status: string;
   categoryId: string | null;
-  images: { url: string; publicId: string; isMain: boolean }[];
+  images: { url: string; alt?: string; publicId: string; isMain: boolean }[];
   hasVariants: boolean;
   linkedOptions: ProductLinkedOption[];
   variants: ProductVariant[];
