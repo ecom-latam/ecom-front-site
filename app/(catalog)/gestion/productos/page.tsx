@@ -15,6 +15,7 @@ import { StoreMoneyInput } from '@/components/ui/StoreMoneyInput';
 import { StoreNumberInput } from '@/components/ui/StoreNumberInput';
 import { StoreSelect } from '@/components/ui/StoreSelect';
 import { StoreTextarea } from '@/components/ui/StoreTextarea';
+import { BankImagePicker } from '@/components/gestion/BankImagePicker';
 import { usePageConfig } from '@/context/PageConfigContext';
 import { formatPrice } from '@/lib/format';
 
@@ -108,7 +109,7 @@ function ConfirmModal({ title, message, confirmLabel, danger = false, onConfirm,
 
 // ─── Images Tab ───────────────────────────────────────────────────────────────
 
-const UPLOAD_CHUNK_SIZE = 5; // limite del backend por request (multer upload.array)
+const MAX_IMAGES = 10; // tope fijo por producto (y por variante)
 
 interface ImagesTabProps {
   productId: string;
@@ -117,25 +118,16 @@ interface ImagesTabProps {
 }
 
 function ImagesTab({ productId, images, onChange }: ImagesTabProps) {
-  const [uploading, setUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [picking, setPicking] = useState(false);
   const dragIndexRef = useRef<number | null>(null);
+  const remaining = MAX_IMAGES - images.length;
 
-  async function handleFilesSelected(fileList: FileList | null) {
-    if (!fileList || fileList.length === 0) return;
-    const files = Array.from(fileList);
-    setUploading(true);
+  async function handleBankPick(publicIds: string[]) {
     try {
-      for (let i = 0; i < files.length; i += UPLOAD_CHUNK_SIZE) {
-        const chunk = files.slice(i, i + UPLOAD_CHUNK_SIZE);
-        const { data } = await productsApi.uploadImages(productId, chunk);
-        onChange(data);
-      }
+      const { data } = await productsApi.addImagesFromBank(productId, publicIds);
+      onChange(data);
     } catch {
       // errores mostrados via modal global (axios interceptor)
-    } finally {
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   }
 
@@ -175,25 +167,26 @@ function ImagesTab({ productId, images, onChange }: ImagesTabProps) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <div>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          hidden
-          onChange={e => handleFilesSelected(e.target.files)}
-        />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
         <StoreButton
           size="md"
           emphasis="outlined"
-          disabled={uploading}
-          onClick={() => fileInputRef.current?.click()}
-          data-testid="prod-images-upload-btn"
+          disabled={remaining <= 0}
+          onClick={() => setPicking(true)}
+          data-testid="prod-images-pick-btn"
         >
-          {uploading ? 'Subiendo...' : 'Subir imágenes'}
+          Elegir del banco de imágenes
         </StoreButton>
+        <Text variant="caption" color="muted" data-testid="prod-images-limit">
+          {remaining <= 0 ? `Llegaste al máximo de ${MAX_IMAGES} imágenes.` : `${images.length} de ${MAX_IMAGES} imágenes. Se suben desde la pantalla Imágenes del panel.`}
+        </Text>
       </div>
+      {picking && (
+        <BankImagePicker
+          title="Elegir imágenes del producto" remaining={remaining} taken={images.map((img) => img.publicId)}
+          onConfirm={handleBankPick} onClose={() => setPicking(false)}
+        />
+      )}
 
       {images.length === 0 ? (
         <Text variant="body-sm" color="muted">Todavía no hay imágenes para este producto.</Text>
@@ -270,23 +263,15 @@ interface VariantRowProps {
 function VariantRow({ productId, variant, onSave, onImagesChange }: VariantRowProps) {
   const [price, setPrice] = useState<number | null>(variant.price);
   const [stock, setStock] = useState(String(variant.stock));
-  const [uploading, setUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [picking, setPicking] = useState(false);
+  const remaining = MAX_IMAGES - variant.images.length;
 
-  async function handleFilesSelected(fileList: FileList | null) {
-    if (!fileList || fileList.length === 0) return;
-    const files = Array.from(fileList);
-    setUploading(true);
+  async function handleBankPick(publicIds: string[]) {
     try {
-      for (const file of files) {
-        const { data } = await productsApi.addVariantImage(productId, variant._id, file);
-        onImagesChange(variant._id, data);
-      }
+      const { data } = await productsApi.addVariantImagesFromBank(productId, variant._id, publicIds);
+      onImagesChange(variant._id, data);
     } catch {
       // errores mostrados via modal global (axios interceptor)
-    } finally {
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   }
 
@@ -347,20 +332,13 @@ function VariantRow({ productId, variant, onSave, onImagesChange }: VariantRowPr
               </button>
             </div>
           ))}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            hidden
-            onChange={e => handleFilesSelected(e.target.files)}
-          />
           <button
             type="button"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
-            aria-label="Subir imagen"
-            data-testid="var-image-upload-btn"
+            onClick={() => setPicking(true)}
+            disabled={remaining <= 0}
+            aria-label="Elegir imágenes del banco"
+            title="Elegir imágenes del banco"
+            data-testid="var-image-pick-btn"
             style={{
               width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center',
               border: '1px dashed var(--color-border-default)', borderRadius: 'var(--radius-sm)',
@@ -369,6 +347,12 @@ function VariantRow({ productId, variant, onSave, onImagesChange }: VariantRowPr
           >
             <Icon name="plus" size="xs" />
           </button>
+          {picking && (
+            <BankImagePicker
+              title={`Imágenes de ${combinationLabel(variant.combination)}`} remaining={remaining} taken={variant.images.map((img) => img.publicId)}
+              onConfirm={handleBankPick} onClose={() => setPicking(false)}
+            />
+          )}
         </div>
       </Table.Td>
     </Table.Row>

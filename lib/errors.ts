@@ -47,8 +47,10 @@ const errors: Record<string, ErrorDefinition> = {
   'MS03-ERR023': { message: 'Llegaste al límite de productos de tu plan', detail: 'Mejorá tu plan para crear más productos.', severity: 'info' },
 
   // ── Catálogo — Imágenes (MS03) ────────────────────────────────────────────
-  'MS03-ERR041': { message: 'Llegaste al límite de imágenes', detail: 'Cada variante comparte el mismo límite de imágenes que el producto. Eliminá alguna para subir otra.', severity: 'info' },
-  'MS03-ERR045': { message: 'No se recibió ningún archivo', severity: 'info' },
+  'MS03-ERR040': { message: 'No se pudieron agregar esas imágenes', detail: 'Elegí hasta 10 imágenes distintas del banco e intentá de nuevo.', severity: 'info' },
+  'MS03-ERR041': { message: 'Llegaste al máximo de 10 imágenes', detail: 'Es el máximo para cada producto y cada variante. Quitá alguna para sumar otra.', severity: 'info' },
+  'MS03-ERR045': { message: 'Alguna imagen ya no está en tu banco', detail: 'Volvé a abrir el selector y elegí otra.', severity: 'info' },
+  'MS03-ERR046': { message: 'No pudimos consultar tu banco de imágenes', detail: 'Probá de nuevo en un momento.', severity: 'info' },
 
   // ── Catálogo — Variantes (MS03) ───────────────────────────────────────────
   'MS03-ERR060': { message: 'No encontramos esa variante', severity: 'info' },

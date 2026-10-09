@@ -97,11 +97,9 @@ export const products = {
   delete: (id: string) =>
     apiClient.delete(`${BASE}/${id}`),
 
-  uploadImages: (id: string, files: File[]) => {
-    const form = new FormData();
-    files.forEach((file) => form.append('images', file));
-    return apiClient.post<ProductImage[]>(`${BASE}/${id}/images`, form);
-  },
+  // Las imagenes se eligen del banco del sitio: solo viaja el publicId, la url la resuelve el servidor.
+  addImagesFromBank: (id: string, publicIds: string[]) =>
+    apiClient.post<ProductImage[]>(`${BASE}/${id}/images`, { images: publicIds.map((publicId) => ({ publicId })) }),
 
   deleteImage: (id: string, publicId: string) =>
     apiClient.delete<ProductImage[]>(`${BASE}/${id}/images`, { data: { publicId } }),
@@ -118,11 +116,8 @@ export const products = {
   updateVariant: (id: string, variantId: string, payload: Partial<Pick<ProductVariant, 'price' | 'stock' | 'enabled'>>) =>
     apiClient.put<ProductVariant>(`${BASE}/${id}/variants/${variantId}`, payload),
 
-  addVariantImage: (id: string, variantId: string, file: File) => {
-    const form = new FormData();
-    form.append('image', file);
-    return apiClient.post<ProductImage[]>(`${BASE}/${id}/variants/${variantId}/images`, form);
-  },
+  addVariantImagesFromBank: (id: string, variantId: string, publicIds: string[]) =>
+    apiClient.post<ProductImage[]>(`${BASE}/${id}/variants/${variantId}/images`, { images: publicIds.map((publicId) => ({ publicId })) }),
 
   deleteVariantImage: (id: string, variantId: string, publicId: string) =>
     apiClient.delete<ProductImage[]>(`${BASE}/${id}/variants/${variantId}/images`, { data: { publicId } }),
