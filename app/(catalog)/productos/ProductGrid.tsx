@@ -160,7 +160,7 @@ function ProductListItem({ product }: { product: Product }) {
         {mainImage ? (
           <Image
             src={mainImage.url}
-            alt={product.name}
+            alt={mainImage.alt || product.name}
             width={80}
             height={80}
             style={{ objectFit: 'cover', width: '100%', height: '100%' }}

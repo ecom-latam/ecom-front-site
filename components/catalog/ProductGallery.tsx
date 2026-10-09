@@ -41,7 +41,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
           <Image
             key={selectedImage.publicId}
             src={selectedImage.url}
-            alt={productName}
+            alt={selectedImage.alt || productName}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
             priority
@@ -65,7 +65,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
             >
               <Image
                 src={img.url}
-                alt={`${productName} ${i + 1}`}
+                alt={img.alt || `${productName} ${i + 1}`}
                 fill
                 sizes="72px"
               />
@@ -87,7 +87,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
           </button>
 
           <div className={styles.lightboxImage}>
-            <ImageMagnifier src={selectedImage.url} alt={productName} />
+            <ImageMagnifier src={selectedImage.url} alt={selectedImage.alt || productName} />
           </div>
         </Modal>
       )}
