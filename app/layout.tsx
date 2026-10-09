@@ -36,7 +36,7 @@ export default async function RootLayout({
   const hue = Math.round(Math.max(0, Math.min(360, storeInfo?.brand_hue ?? 262)));
   const sat = Math.round(Math.max(0, Math.min(100, storeInfo?.brand_saturation ?? 72)));
   const lit = Math.round(Math.max(0, Math.min(100, storeInfo?.brand_lightness ?? 50)));
-  // Color secundario para themes de 2 colores (ej. gradient). Si la tienda
+  // Color secundario para themes de 2 colores (ej. gradient). Si el sitio
   // todavía no lo configuró, se deriva del color principal en vez de caer en un
   // default fijo que ignoraría el brand real del vendedor.
   const hue2 = Math.round(Math.max(0, Math.min(360, storeInfo?.brand2_hue ?? (hue + 60) % 360)));
@@ -92,7 +92,7 @@ export default async function RootLayout({
       <body className={styles.body}>
         <style dangerouslySetInnerHTML={{ __html: brandStyles }} />
         {themeCss && <style data-theme-css dangerouslySetInnerHTML={{ __html: themeCss }} />}
-        {/* EC-908 (reinicio): la tienda se repiensa de cero para mobile --
+        {/* EC-908 (reinicio): el sitio se repiensa de cero para mobile --
             mientras tanto, este aviso reemplaza el body entero por debajo
             del breakpoint. 100% CSS (ver layout.module.scss), nunca JS
             detectando el viewport. */}
@@ -100,7 +100,7 @@ export default async function RootLayout({
           <span className={styles.mobileNoticeIcon} aria-hidden="true">💻</span>
           <p className={styles.mobileNoticeTitle}>Disponible solo en versión web</p>
           <p className={styles.mobileNoticeBody}>
-            Por ahora, esta tienda funciona únicamente desde una computadora. Ingresá desde un navegador de escritorio para continuar.
+            Por ahora, este sitio funciona únicamente desde una computadora. Ingresá desde un navegador de escritorio para continuar.
           </p>
         </div>
         <StoreProvider>

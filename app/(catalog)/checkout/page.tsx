@@ -23,7 +23,7 @@ export default function CheckoutPage() {
     subtotal, items, itemCount, currency,
   } = useCheckoutForm();
 
-  // EC-559: tiendas sin el modulo de compras no tienen checkout.
+  // EC-559: sitios sin el modulo de compras no tienen checkout.
   useEffect(() => {
     if (hasPurchases === false) router.replace('/productos');
   }, [hasPurchases, router]);

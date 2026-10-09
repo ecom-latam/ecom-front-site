@@ -18,7 +18,7 @@ export function CartPageContent() {
   const [itemToRemove, setItemToRemove] = useState<string | null>(null);
   const [stockLimits, setStockLimits] = useState<Record<string, number>>({});
 
-  // EC-559: tiendas sin el modulo de compras no tienen carrito.
+  // EC-559: sitios sin el modulo de compras no tienen carrito.
   useEffect(() => {
     if (hasPurchases === false) router.replace('/productos');
   }, [hasPurchases, router]);

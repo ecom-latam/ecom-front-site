@@ -25,7 +25,7 @@ export default async function ProductosPage({ searchParams }: Props) {
     redirect(`/${catalogSlug}`);
   }
 
-  // EC-559: tiendas tipo "informativa" no tienen catalogo.
+  // EC-559: sitios tipo "informativa" no tienen catalogo.
   if (storeInfo?.hasCatalog === false) {
     redirect('/');
   }

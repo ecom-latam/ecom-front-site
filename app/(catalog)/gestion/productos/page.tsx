@@ -773,7 +773,7 @@ export default function GestionProductosPage() {
       try { await productsApi.update(product._id, { status: newStatus }); load(page, search, statusFilter); } catch { /* silent */ }
     };
     if (newStatus === 'paused') {
-      setConfirmModal({ title: 'Desactivar producto', message: `¿Querés desactivar "${product.name}"? Dejará de estar visible en la tienda.`, confirmLabel: 'Desactivar', onConfirm: doToggle });
+      setConfirmModal({ title: 'Desactivar producto', message: `¿Querés desactivar "${product.name}"? Dejará de estar visible en el sitio.`, confirmLabel: 'Desactivar', onConfirm: doToggle });
     } else {
       doToggle();
     }

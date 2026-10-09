@@ -12,7 +12,7 @@ const errors: Record<string, ErrorDefinition> = {
   'MS01-ERR001': { message: 'Tu sesión expiró', detail: 'Iniciá sesión para continuar.', severity: 'warning', action: { label: 'Iniciar sesión', href: '/iniciar-sesion' } },
   'MS01-ERR003': { message: 'Tu sesión no es válida', severity: 'warning', action: { label: 'Iniciar sesión', href: '/iniciar-sesion' } },
   'MS01-ERR004': { message: 'Email o contraseña incorrectos', severity: 'alert' },
-  'MS01-ERR005': { message: 'Cuenta bloqueada', detail: 'Contactá al soporte de la tienda.', severity: 'alert' },
+  'MS01-ERR005': { message: 'Cuenta bloqueada', detail: 'Contactá al soporte del sitio.', severity: 'alert' },
   'MS01-ERR012': { message: 'Ya existe una cuenta con ese email', severity: 'info', action: { label: 'Iniciar sesión', href: '/iniciar-sesion' } },
 
   // ── Órdenes (MS04) ────────────────────────────────────────────────────────
@@ -30,7 +30,7 @@ const errors: Record<string, ErrorDefinition> = {
   'MS04-ERR023': { message: 'El pago ya fue confirmado', severity: 'info' },
   'MS04-ERR024': { message: 'No podés modificar este pedido ahora', severity: 'warning' },
   'MS04-ERR028': { message: 'El pedido ya está cancelado', severity: 'info' },
-  'MS04-ERR090': { message: 'Ocurrió un error con tu pedido', detail: 'Si el problema persiste, contactá a la tienda.', severity: 'alert', action: { label: 'Reintentar', retry: true } },
+  'MS04-ERR090': { message: 'Ocurrió un error con tu pedido', detail: 'Si el problema persiste, contactá al sitio.', severity: 'alert', action: { label: 'Reintentar', retry: true } },
 
   // ── Catálogo — Stock (MS03) ───────────────────────────────────────────────
   'MS03-ERR001': { message: 'Sin stock disponible', detail: 'Ese producto ya no tiene unidades disponibles.', severity: 'info', action: { label: 'Ver catálogo', href: '/' } },
@@ -58,14 +58,14 @@ const errors: Record<string, ErrorDefinition> = {
   'MS03-ERR062': { message: 'Una de las opciones seleccionadas ya no existe', severity: 'info' },
   'MS03-ERR063': { message: 'Llegaste al límite de variantes de tu plan', detail: 'Mejorá tu plan o elegí menos opciones para generar menos combinaciones.', severity: 'info' },
 
-  // ── Config de tienda (MS05) ───────────────────────────────────────────────
-  'MS05-ERR010': { message: 'La tienda no está configurada', severity: 'warning', action: { label: 'Reintentar', retry: true } },
-  'MS05-ERR090': { message: 'Error al cargar la tienda', severity: 'alert', action: { label: 'Reintentar', retry: true } },
+  // ── Config del sitio (MS05) ───────────────────────────────────────────────
+  'MS05-ERR010': { message: 'El sitio no está configurado', severity: 'warning', action: { label: 'Reintentar', retry: true } },
+  'MS05-ERR090': { message: 'Error al cargar el sitio', severity: 'alert', action: { label: 'Reintentar', retry: true } },
 };
 
 const FALLBACK: ErrorDefinition = {
   message: 'Algo salió mal',
-  detail: 'Si el problema persiste, contactá a la tienda.',
+  detail: 'Si el problema persiste, contactá al sitio.',
   severity: 'alert',
   action: { label: 'Reintentar', retry: true },
 };

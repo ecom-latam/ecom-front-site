@@ -67,7 +67,7 @@ function LoginForm() {
   return (
     <div className="zoui-auth__card">
       <Link href="/productos" className="zoui-auth__back">
-        <Text variant="body-sm" color="muted">← Volver a la tienda</Text>
+        <Text variant="body-sm" color="muted">← Volver al sitio</Text>
       </Link>
 
       <Text variant="heading-2" className="zoui-auth__title">Iniciar sesión</Text>

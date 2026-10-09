@@ -12,7 +12,7 @@ export interface CreateMpPreferencePayload {
   };
   shippingMethod: ShippingMethod;
   notes?: string;
-  // Origen de la tienda para construir las back_urls del retorno de Checkout Pro.
+  // Origen del sitio para construir las back_urls del retorno de Checkout Pro.
   storeOrigin: string;
 }
 

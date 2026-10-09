@@ -28,7 +28,7 @@ function getSlug(): string {
 }
 
 // Un solo fetch a /api/page/public -- ecom-page ya embebe la
-// config comercial de ecom-store bajo `store` cuando la tienda tiene
+// config comercial de ecom-store bajo `store` cuando el sitio tiene
 // catalogo, asi que el front no pide mas los dos servicios por separado.
 // Esto ya NO corre siempre -- app/layout.tsx hace el mismo fetch en
 // el servidor (cache: 'no-store') y pinta el theme inicial sin flash. Esta
@@ -50,6 +50,7 @@ async function fetchPageInfo(): Promise<Record<string, unknown> | null> {
 function toPageConfig(raw: Record<string, unknown>): PageConfig {
   const store = (raw.store ?? undefined) as PageConfig['store'];
   return {
+    name:            typeof raw.name === 'string' && raw.name ? raw.name : undefined,
     hasCatalog:      raw.hasCatalog !== false,
     maintenanceMode: raw.maintenanceMode === true,
     catalog_label: typeof raw.catalog_label === 'string' && raw.catalog_label ? raw.catalog_label : 'Productos',
@@ -97,7 +98,7 @@ export function DynamicStoreTheme({
 
   useEffect(() => {
     // Si el visitante no tiene cookie ui-theme, bloqueamos el theme que el
-    // servidor ya aplicó (defaultColorScheme de la tienda). Así cambios futuros
+    // servidor ya aplicó (defaultColorScheme del sitio). Así cambios futuros
     // al default no pisan la experiencia de visitas anteriores.
     if (!document.cookie.split(';').some(c => c.trim().startsWith('ui-theme='))) {
       const current = document.documentElement.getAttribute('data-theme') ?? 'dark';

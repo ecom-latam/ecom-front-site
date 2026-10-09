@@ -76,7 +76,7 @@ export function useCheckoutForm() {
   function set(field: keyof CheckoutForm, value: string) {
     setForm((prev) => {
       const next = { ...prev, [field]: value };
-      // EC-895: efectivo en tienda se paga contra retiro -- forzar pickup apenas
+      // EC-895: efectivo en el local se paga contra retiro -- forzar pickup apenas
       // se elige, sin importar qué método de envío estuviera seleccionado antes.
       if (field === 'paymentMethod' && value === 'cash') {
         next.shippingMethod = 'pickup';

@@ -7,7 +7,7 @@ import { getPageInfo } from '@/lib/api/storeClient';
 
 export async function generateMetadata(): Promise<Metadata> {
   const info = await getPageInfo();
-  const name = info?.name ?? 'Tienda';
+  const name = info?.name ?? 'Sitio';
   return {
     title: {
       default: name,
@@ -33,7 +33,7 @@ export default async function CatalogLayout({
     return <PageUnderConstruction />;
   }
 
-  // Si la tienda no tiene ninguna sección activa ni páginas con contenido,
+  // Si el sitio no tiene ninguna sección activa ni páginas con contenido,
   // omitir navbar y chrome completo — el hijo renderiza la pantalla "en construcción".
   const hasNavItems =
     info?.hasCatalog === true ||

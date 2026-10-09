@@ -35,7 +35,7 @@
   }
 
   // Las paginas armadas con el editor (marcan su contenido con
-  // data-mobile-ready) si se ven en celular; el resto del sitio (la tienda:
+  // data-mobile-ready) si se ven en celular; el resto del sitio (las pantallas de compras:
   // catalogo, carrito, checkout, cuenta) mantiene el aviso.
   .body:has([data-mobile-ready]) .wrapper { display: flex; }
   .body:has([data-mobile-ready]) .mobileNotice { display: none; }
