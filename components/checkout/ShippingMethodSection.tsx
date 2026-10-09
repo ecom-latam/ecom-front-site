@@ -4,7 +4,7 @@ import type { ShippingMethod } from '@/utils/api/orders';
 interface ShippingMethodSectionProps {
   value:        ShippingMethod;
   onChange:     (method: ShippingMethod) => void;
-  // EC-895: efectivo en tienda se paga contra retiro -- con ese método
+  // EC-895: efectivo en el local se paga contra retiro -- con ese método
   // seleccionado, "Envío a domicilio" queda bloqueado, no oculto, para que
   // quede claro por qué no está disponible en vez de simplemente desaparecer.
   forcedPickup?: boolean;
@@ -22,7 +22,7 @@ export function ShippingMethodSection({ value, onChange, forcedPickup }: Shippin
               key={method}
               name="shippingMethod"
               value={method}
-              label={method === 'delivery' ? 'Envío a domicilio' : 'Retiro en tienda'}
+              label={method === 'delivery' ? 'Envío a domicilio' : 'Retiro en el local'}
               description={
                 disabled
                   ? 'No disponible pagando en efectivo — el pago se hace al retirar.'

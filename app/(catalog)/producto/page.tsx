@@ -46,7 +46,7 @@ export default async function ProductoPage({ searchParams }: Props) {
     getPageInfo(),
   ]);
 
-  // EC-559: tiendas tipo "informativa" no tienen catalogo.
+  // EC-559: sitios tipo "informativa" no tienen catalogo.
   if (storeInfo?.hasCatalog === false) {
     redirect('/');
   }
@@ -82,7 +82,7 @@ export default async function ProductoPage({ searchParams }: Props) {
 
   const catalogSlug = storeInfo?.catalog_slug ?? 'productos';
   const breadcrumbItems = [
-    { label: 'Tienda', href: `/${catalogSlug}` },
+    { label: storeInfo?.catalog_label ?? 'Productos', href: `/${catalogSlug}` },
     ...(category ? [{ label: category.name, href: `/${catalogSlug}?categoryId=${category._id}` }] : []),
     { label: product.name },
   ];

@@ -5,7 +5,7 @@ import { createContext, useContext } from 'react';
 export type Currency = 'ARS' | 'USD';
 
 // La config comercial (currency, mp_public_key, promo_bar, etc.) solo
-// existe cuando la tienda tiene catalogo -- ecom-page la embebe bajo `store`.
+// existe cuando el sitio tiene catalogo -- ecom-page la embebe bajo `store`.
 // El resto de los campos son siempre de la pagina en si.
 export interface PageStoreConfig {
   currency?: Currency;
@@ -33,6 +33,7 @@ export interface PageConfigPage {
 }
 
 export interface PageConfig {
+  name?: string;
   hasCatalog?: boolean;
   catalog_label?: string;
   catalog_slug?: string;

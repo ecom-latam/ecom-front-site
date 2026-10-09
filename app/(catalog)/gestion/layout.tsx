@@ -8,7 +8,7 @@ import { usePageConfig } from '@/context/PageConfigContext';
 
 const MANAGEMENT_ROLES = ['Admin', 'Manager', 'Seller'];
 
-// EC-560: secciones de /gestion que solo aplican a tiendas con el modulo activo.
+// EC-560: secciones de /gestion que solo aplican a sitios con el modulo activo.
 const CATALOG_PATHS = ['/gestion/productos', '/gestion/categorias', '/gestion/opciones'];
 const PURCHASES_PATHS = ['/gestion/pedidos', '/gestion/clientes', '/gestion/reportes'];
 

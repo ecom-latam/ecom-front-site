@@ -116,7 +116,7 @@ export default function OrderDetailPage() {
     const role = getAccessTokenRole();
     if (!role) { router.replace('/iniciar-sesion'); return; }
     if (role !== 'Customer') { router.replace('/productos'); return; }
-    // EC-559: tiendas sin el modulo de compras no tienen pedidos.
+    // EC-559: sitios sin el modulo de compras no tienen pedidos.
     if (hasPurchases === false) { router.replace('/productos'); return; }
 
     initialized.current = false;

@@ -28,7 +28,7 @@ export function PaymentMethodSection({ value, mpAvailable, cashAvailable, onChan
             name="paymentMethod"
             value="mp"
             label="Mercado Pago"
-            description="Vas a completar el pago en Mercado Pago (tarjeta, dinero en cuenta y más). Después volvés a la tienda."
+            description="Vas a completar el pago en Mercado Pago (tarjeta, dinero en cuenta y más). Después volvés al sitio."
             selected={value === 'mp'}
             onChange={() => onChange('mp')}
             data-testid="checkout-payment-mp"
@@ -39,8 +39,8 @@ export function PaymentMethodSection({ value, mpAvailable, cashAvailable, onChan
           <OptionCard
             name="paymentMethod"
             value="cash"
-            label="Efectivo en tienda"
-            description="Pagás al retirar tu pedido en el local. Solo disponible con retiro en tienda."
+            label="Efectivo en el local"
+            description="Pagás al retirar tu pedido en el local. Solo disponible con retiro en el local."
             selected={value === 'cash'}
             onChange={() => onChange('cash')}
             data-testid="checkout-payment-cash"

@@ -55,7 +55,7 @@ const PAYMENT_TONE: Record<string, BadgeTone> = {
 const PAYMENT_METHOD_LABEL: Record<string, string> = {
   transfer: 'Transferencia bancaria',
   mp: 'Mercado Pago',
-  cash: 'Efectivo en tienda',
+  cash: 'Efectivo en el local',
 };
 
 const STATUS_ACTION_LABEL: Record<string, string> = {

@@ -107,7 +107,7 @@ export default function ConfiguracionPage() {
       <div style={sectionStyle}>
         <Text variant="heading-3" style={{ marginBottom: '4px' }}>Color de marca</Text>
         <Text variant="body-sm" color="secondary" style={{ marginBottom: '28px' }}>
-          El color elegido se aplica en toda la tienda para todos los visitantes.
+          El color elegido se aplica en todo el sitio para todos los visitantes.
         </Text>
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px', flexWrap: 'wrap' }}>
           <ColorPicker

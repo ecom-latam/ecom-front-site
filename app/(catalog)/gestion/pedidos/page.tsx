@@ -175,7 +175,7 @@ export default function AdminPedidosPage() {
                     <IllustrationMessage
                       name="products-loading"
                       title="No hay pedidos todavía"
-                      description="Cuando alguien compre en tu tienda, va a aparecer acá."
+                      description="Cuando alguien compre en tu sitio, va a aparecer acá."
                     />
                   </td></tr>
                 )}

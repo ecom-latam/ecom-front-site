@@ -22,7 +22,7 @@ const ACCEPT_ERRORS: Record<string, string> = {
   'MS01-ERR050': 'El link de invitación expiró. Pedí uno nuevo al administrador.',
   'MS01-ERR051': 'El link de invitación es inválido.',
   'MS01-ERR052': 'Tu cuenta fue creada con un proveedor externo. Contactá al administrador.',
-  'MS01-ERR053': 'La tienda ya alcanzó su límite de colaboradores. Avisale al administrador.',
+  'MS01-ERR053': 'El sitio ya alcanzó su límite de colaboradores. Avisale al administrador.',
   INTERNAL_ERROR: 'Error del servidor. Intentá de nuevo.',
 };
 
@@ -87,7 +87,7 @@ function UnirseContent() {
       <div className="zoui-auth__card zoui-auth__card--center">
         <Text tag="p" variant="heading-1" className="zoui-auth__icon">⏱</Text>
         <Text variant="heading-3" className="zoui-auth__title">Link expirado</Text>
-        <Text variant="body-sm" color="secondary">El link de invitación venció. Pedile uno nuevo al administrador de la tienda.</Text>
+        <Text variant="body-sm" color="secondary">El link de invitación venció. Pedile uno nuevo al administrador del sitio.</Text>
       </div>
     );
   }

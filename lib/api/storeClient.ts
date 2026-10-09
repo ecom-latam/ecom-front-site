@@ -142,7 +142,7 @@ export interface StorePolicies {
   warranty_months?: number;
 }
 
-// Config comercial de ecom-store -- solo existe cuando la tienda
+// Config comercial de ecom-store -- solo existe cuando el sitio
 // tiene catalogo (ecom-page es quien la embebe acá adentro).
 export interface StoreCommerceConfig {
   currency?: 'ARS' | 'USD';
@@ -202,7 +202,7 @@ export interface PageInfo {
   // todavia, nada lee este campo en el storefront.
   hasMetrics?: boolean;
   // Config comercial de ecom-store, embebida por ecom-page --
-  // ausente del todo en tiendas sin catalogo.
+  // ausente del todo en sitios sin catalogo.
   store?: StoreCommerceConfig;
   // Listado de paginas visibles, en el orden en que se crearon -- cada una
   // con sus blocks (grilla plana, reemplaza rows[]). Puede venir vacio si la
@@ -252,7 +252,7 @@ export interface ProductReviewsResponse {
 }
 
 // Page es el concepto principal -- ecom-page embebe la config
-// comercial de ecom-store bajo `store` cuando la tienda tiene catalogo, asi
+// comercial de ecom-store bajo `store` cuando el sitio tiene catalogo, asi
 // que el front pide un solo endpoint en vez de combinar dos por su cuenta.
 //
 // root layout, (catalog) layout y (catalog)/page.tsx llaman esto por separado

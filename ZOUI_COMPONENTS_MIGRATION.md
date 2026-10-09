@@ -184,7 +184,7 @@ import { Navbar } from 'zoui'
 import Link from 'next/link'
 
 <Navbar variant="default">
-  <Navbar.Logo as={Link} href="/">Mi Tienda</Navbar.Logo>
+  <Navbar.Logo as={Link} href="/">Mi sitio</Navbar.Logo>
   <Navbar.Links>
     <Navbar.Link as={Link} href="/productos">Productos</Navbar.Link>
   </Navbar.Links>

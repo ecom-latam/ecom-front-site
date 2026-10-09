@@ -14,7 +14,7 @@ interface NavItem {
   disabled?: boolean;
   icon: React.ReactNode;
   // EC-560: si se setea, el item solo se muestra cuando el modulo
-  // correspondiente esta activo para el tipo de tienda (EC-558).
+  // correspondiente esta activo para el tipo de sitio (EC-558).
   requires?: 'catalog' | 'purchases';
 }
 

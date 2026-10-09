@@ -5,7 +5,7 @@ import type { PageInfo } from '@/lib/api/storeClient';
 import { PageUnderConstruction } from './PageUnderConstruction';
 import styles from './InformationalHome.module.scss';
 
-// EC-559/EC-589: home de tiendas tipo "informativa" (sin catalogo) --
+// EC-559/EC-589: home de sitios tipo "informativa" (sin catalogo) --
 // renderiza el branding + los bloques de contenido generico de ecom-page.
 // EC-695: migrado a DynamicPageRenderer (grilla plana, reemplaza PageRow).
 // 'use client' necesario porque DynamicPageRenderer es Client Component.
