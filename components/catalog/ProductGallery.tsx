@@ -8,6 +8,7 @@ import styles from './ProductGallery.module.scss';
 
 interface GalleryImage {
   url: string;
+  alt?: string;
   publicId: string;
   isMain: boolean;
 }
