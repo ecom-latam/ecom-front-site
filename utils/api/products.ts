@@ -2,8 +2,10 @@ import { apiClient } from './client';
 
 export type ProductStatus = 'draft' | 'active' | 'paused' | 'archived';
 
+// Una imagen de producto es una referencia al banco de imagenes: la url y el texto alternativo salen del banco.
 export interface ProductImage {
   url: string;
+  alt?: string;
   publicId: string;
   isMain: boolean;
 }

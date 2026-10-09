@@ -71,7 +71,7 @@ function MainImage({ images }: { images: Product['images'] }) {
   }
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={main.url} alt="" style={{ width: 40, height: 40, borderRadius: 'var(--radius-md)', objectFit: 'cover', border: '1px solid var(--color-border-default)' }} />
+    <img src={main.url} alt={main.alt ?? ''} style={{ width: 40, height: 40, borderRadius: 'var(--radius-md)', objectFit: 'cover', border: '1px solid var(--color-border-default)' }} />
   );
 }
 
@@ -209,7 +209,7 @@ function ImagesTab({ productId, images, onChange }: ImagesTabProps) {
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={img.url} alt="" style={{ width: '100%', height: 110, objectFit: 'cover', display: 'block' }} />
+              <img src={img.url} alt={img.alt ?? ''} style={{ width: '100%', height: 110, objectFit: 'cover', display: 'block' }} />
 
               {img.isMain && (
                 <Badge tone="success" variant="pill" style={{ position: 'absolute', top: 6, left: 6 }}>Principal</Badge>
@@ -316,7 +316,7 @@ function VariantRow({ productId, variant, onSave, onImagesChange }: VariantRowPr
           {variant.images.map(img => (
             <div key={img.publicId} style={{ position: 'relative', width: 28, height: 28 }} data-testid="var-image-thumb">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={img.url} alt="" style={{ width: 28, height: 28, objectFit: 'cover', borderRadius: 'var(--radius-sm)', display: 'block' }} />
+              <img src={img.url} alt={img.alt ?? ''} style={{ width: 28, height: 28, objectFit: 'cover', borderRadius: 'var(--radius-sm)', display: 'block' }} />
               <button
                 type="button"
                 onClick={() => handleDeleteImage(img.publicId)}
