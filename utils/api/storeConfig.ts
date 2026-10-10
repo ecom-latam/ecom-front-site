@@ -7,7 +7,4 @@ export interface StoreConfigResponse {
 export const storeConfig = {
   get: () =>
     apiClient.get<StoreConfigResponse>('/api/store/store/config'),
-
-  updateTransferInfo: (transfer_info: string) =>
-    apiClient.patch('/api/store/store/config/transfer-info', { transfer_info }),
 };
