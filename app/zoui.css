@@ -11,6 +11,9 @@
   --color-brand-600: hsl(var(--brand-h), 75%, 42%);
   --color-brand-700: hsl(var(--brand-h), 80%, 34%);
   --color-brand-contrast: #ffffff;
+  --color-brand-text: var(--color-brand-700);
+  --color-brand-soft: color-mix(in srgb, var(--color-brand-500) 10%, var(--color-bg-surface));
+  --color-brand-soft-strong: color-mix(in srgb, var(--color-brand-500) 20%, var(--color-bg-surface));
   --color-neutral-0: #ffffff;
   --color-neutral-50: #fafafa;
   --color-neutral-100: #f5f5f5;
@@ -93,6 +96,9 @@
 }
 
 [data-theme=dark] {
+  --color-brand-text: var(--color-brand-300);
+  --color-brand-soft: color-mix(in srgb, var(--color-brand-500) 16%, var(--color-bg-surface));
+  --color-brand-soft-strong: color-mix(in srgb, var(--color-brand-500) 28%, var(--color-bg-surface));
   --color-fg-primary: var(--color-neutral-50);
   --color-fg-secondary: var(--color-neutral-400);
   --color-fg-muted: var(--color-neutral-500);
@@ -389,8 +395,8 @@
 }
 .zoui-theme-studio__font-btn--active {
   border-color: var(--color-brand-500);
-  background: var(--color-brand-50);
-  color: var(--color-brand-700);
+  background: var(--color-brand-soft);
+  color: var(--color-brand-text);
 }
 
 .zoui-illustration-message {
@@ -565,6 +571,21 @@
   --_border: #fecaca;
   --_accent: var(--color-danger-600);
   --_on-dark: #f87171;
+}
+
+[data-theme=dark] .zoui-badge {
+  --_bg: var(--color-neutral-800);
+  --_fg: var(--color-neutral-200);
+  --_border: var(--color-neutral-700);
+}
+
+[data-theme=dark] .zoui-badge[data-tone=info],
+[data-theme=dark] .zoui-badge[data-tone=success],
+[data-theme=dark] .zoui-badge[data-tone=warning],
+[data-theme=dark] .zoui-badge[data-tone=danger] {
+  --_bg: color-mix(in srgb, var(--_accent) 18%, var(--color-neutral-900));
+  --_fg: var(--_on-dark);
+  --_border: color-mix(in srgb, var(--_accent) 40%, var(--color-neutral-900));
 }
 
 .zoui-badge[data-variant=pill] {
@@ -1512,9 +1533,9 @@
   --_fg-muted: var(--color-fg-secondary);
   --_cell-border: var(--color-border-default);
   --_row-hover: var(--color-bg-subtle);
-  --_row-selected: var(--color-brand-50);
+  --_row-selected: var(--color-brand-soft);
   --_stripe-bg: var(--color-bg-subtle);
-  --_stripe-tinted: var(--color-brand-50);
+  --_stripe-tinted: var(--color-brand-soft);
   --_px: 16px;
   --_py: 12px;
   --_py-compact: 7px;
@@ -2013,8 +2034,8 @@
   transition: background var(--duration-fast) var(--easing-standard), color var(--duration-fast) var(--easing-standard);
 }
 .zoui-select__item[data-highlighted] {
-  background: var(--color-brand-50);
-  color: var(--color-brand-700);
+  background: var(--color-brand-soft);
+  color: var(--color-fg-primary);
 }
 .zoui-select__item[data-state=checked] {
   font-weight: var(--font-weight-medium);
@@ -2267,7 +2288,7 @@
   --_max-width: 480px;
   --_media-size: 64px;
   --_media-icon: 28px;
-  --_bg: var(--color-brand-50);
+  --_bg: var(--color-brand-soft);
   --_border: var(--color-brand-100);
   --_radius: var(--radius-lg);
   --_shadow: none;
@@ -2449,7 +2470,7 @@
 }
 
 .zoui-breadcrumbs__current {
-  color: var(--color-brand-600);
+  color: var(--color-brand-text);
   font-weight: var(--font-weight-medium);
   border-bottom: 1px solid var(--color-brand-300);
   padding-bottom: 1px;
@@ -2477,12 +2498,12 @@
 }
 .zoui-chip-group__chip:hover:not(:disabled) {
   border-color: var(--color-brand-400);
-  color: var(--color-brand-600);
+  color: var(--color-brand-text);
 }
 .zoui-chip-group__chip--active {
   border-color: var(--color-brand-500);
-  color: var(--color-brand-600);
-  background: var(--color-brand-50);
+  color: var(--color-brand-text);
+  background: var(--color-brand-soft);
   font-weight: var(--font-weight-semibold);
 }
 .zoui-chip-group__chip--disabled {
@@ -2759,10 +2780,10 @@
   white-space: nowrap;
 }
 .zoui-tabs__trigger:hover:not(.zoui-tabs__trigger--disabled) {
-  color: var(--color-brand-600);
+  color: var(--color-brand-text);
 }
 .zoui-tabs__trigger--active {
-  color: var(--color-brand-600);
+  color: var(--color-brand-text);
   border-bottom-color: var(--color-brand-500);
   font-weight: var(--font-weight-semibold);
 }
@@ -2967,8 +2988,8 @@
   --_label-fg: var(--color-fg-muted);
   --_item-hover-bg: var(--color-bg-muted);
   --_item-hover-fg: var(--color-fg-primary);
-  --_active-bg: var(--color-brand-50);
-  --_active-fg: var(--color-brand-700);
+  --_active-bg: var(--color-brand-soft);
+  --_active-fg: var(--color-brand-text);
   --_item-radius: var(--radius-md);
   --_item-px: 12px;
   --_item-py: 9px;
@@ -3219,8 +3240,8 @@
   --_mark-fg: var(--color-fg-on-brand);
   --_mark-radius: var(--radius-md);
   --_nav-hover-bg: var(--color-bg-subtle);
-  --_nav-active-bg: var(--color-brand-50);
-  --_nav-active-fg: var(--color-brand-600);
+  --_nav-active-bg: var(--color-brand-soft);
+  --_nav-active-fg: var(--color-brand-text);
   --_action-fg: var(--color-fg-secondary);
   --_action-hover-bg: var(--color-bg-subtle);
   --_cta-bg: var(--color-neutral-900);
@@ -3554,7 +3575,7 @@
   --_fg: var(--color-fg-primary);
   --_fg-muted: var(--color-fg-muted);
   --_selected-border: var(--color-brand-500);
-  --_selected-bg: var(--color-brand-50);
+  --_selected-bg: var(--color-brand-soft);
   --_selected-shadow: none;
   --_indicator-border: var(--color-border-strong, var(--color-border-default));
   --_indicator-bg: var(--color-brand-500);
@@ -3665,7 +3686,7 @@
   background: none;
   border: none;
   padding: 0;
-  color: var(--color-brand-600);
+  color: var(--color-brand-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
@@ -3897,7 +3918,7 @@
   background: none;
   border: none;
   padding: 0;
-  color: var(--color-brand-600);
+  color: var(--color-brand-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
@@ -4715,7 +4736,7 @@ button.zoui-gal__item {
 
 :where(.zoui-chip:hover) {
   border-color: var(--color-brand-500);
-  background: var(--color-brand-50);
+  background: var(--color-brand-soft);
 }
 
 :where(.zoui-chip:focus-visible) {
@@ -5183,8 +5204,8 @@ button.zoui-gal__item {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--color-brand-100);
-  color: var(--color-brand-700);
+  background: var(--color-brand-soft-strong);
+  color: var(--color-brand-text);
   font-family: var(--font-ui);
   font-size: 14px;
   font-weight: 600;
@@ -5863,7 +5884,7 @@ button.zoui-gal__item {
   padding: 16px;
   border: 1px solid var(--color-brand-200);
   border-radius: var(--radius-md);
-  background: var(--color-brand-50);
+  background: var(--color-brand-soft);
 }
 
 .zoui-account__transfer-title {
