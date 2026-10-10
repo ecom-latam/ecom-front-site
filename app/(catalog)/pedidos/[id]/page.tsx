@@ -283,7 +283,7 @@ export default function OrderDetailPage() {
               <div className="zoui-account__proof">
                 <Text variant="body-sm" color="muted">Comprobante adjunto:</Text>
                 <a href={order.paymentProofUrl} target="_blank" rel="noopener noreferrer">
-                  <Image src={order.paymentProofUrl} alt="Comprobante de transferencia" width={120} height={80} />
+                  <Image src={order.paymentProofUrl} alt="Comprobante de transferencia" width={120} height={80} unoptimized />
                 </a>
               </div>
             )}

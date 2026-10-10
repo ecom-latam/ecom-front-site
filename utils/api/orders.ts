@@ -43,6 +43,7 @@ export interface Order {
   status: OrderStatus;
   notes: string;
   paymentProofUrl: string | null;
+  hasPaymentProof?: boolean;
   createdAt: string;
   updatedAt: string;
 }
