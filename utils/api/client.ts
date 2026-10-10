@@ -11,10 +11,12 @@ declare module 'axios' {
 
 const BFF_URL = process.env.NEXT_PUBLIC_BFF_URL ?? 'http://localhost:4000';
 
+const SITE_BASE_DOMAIN = (process.env.NEXT_PUBLIC_SITE_BASE_DOMAIN ?? 'ecom.com').replace(/\./g, '\\.');
+
 function getSlugFromHost(): string {
   if (typeof window === 'undefined') return '';
   const host = window.location.hostname;
-  const prod = host.match(/^([^.]+)\.ecom\.com$/);
+  const prod = host.match(new RegExp(`^([^.]+)\\.${SITE_BASE_DOMAIN}$`));
   if (prod) return prod[1];
   const dev = host.match(/^([^.]+)\.localhost$/);
   if (dev) return dev[1];

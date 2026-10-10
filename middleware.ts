@@ -1,22 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { extractSlugFromRequest } from '@/lib/tenant/extractSlug';
 
 const AUTH_ROUTES = ['/iniciar-sesion', '/registro'];
 const PROTECTED_ROUTES = ['/carrito', '/gestion'];
-
-function extractSlug(req: NextRequest): string | null {
-  const host = req.headers.get('host') ?? '';
-  const prod = host.match(/^([^.]+)\.ecom\.com(:\d+)?$/);
-  if (prod) return prod[1];
-  const dev = host.match(/^([^.]+)\.localhost(:\d+)?$/);
-  if (dev) return dev[1];
-  return null;
-}
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const hasSession = req.cookies.has('_auth');
 
-  const slug = extractSlug(req);
+  const slug = extractSlugFromRequest(req);
   if (!slug) {
     return NextResponse.rewrite(new URL('/not-found', req.url));
   }
