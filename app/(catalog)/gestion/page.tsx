@@ -1,6 +1,7 @@
 'use client';
 
 import { Table, Badge, Text } from 'zoui';
+import { MockOverlay } from '@/components/ui/MockOverlay';
 
 const STATS_MOCK = [
   { label: 'Pedidos hoy', value: '24', change: '+12%' },
@@ -29,7 +30,8 @@ export default function GestionPage() {
     <main style={{ padding: '32px', overflowY: 'auto' }}>
       <Text variant="heading-2" style={{ marginBottom: '24px' }}>Resumen</Text>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
+      <MockOverlay below>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
         {STATS_MOCK.map((stat) => (
           <div key={stat.label} style={{
             background: 'var(--color-bg-surface)',
@@ -45,7 +47,9 @@ export default function GestionPage() {
           </div>
         ))}
       </div>
+      </MockOverlay>
 
+      <MockOverlay>
       <div style={{ background: 'var(--color-bg-surface)', border: '1px solid var(--color-border-default)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
         <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--color-border-default)' }}>
           <Text variant="heading-3">Últimos pedidos</Text>
@@ -76,6 +80,7 @@ export default function GestionPage() {
           </Table.Root>
         </Table>
       </div>
+      </MockOverlay>
     </main>
   );
 }
