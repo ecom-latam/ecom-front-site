@@ -274,6 +274,19 @@ export const getPageInfo = cache(async (): Promise<PageInfo | null> => {
 // Pagina puntual del page builder por slug (la usa el catch-all
 // [pageSlug], no la ruta raiz -- esa usa getPageInfo). null si no existe o
 // esta oculta -- el caller llama notFound().
+// Borrador temporal de bloques (vista previa y capturas del asistente); null si no existe o ya vencio.
+export async function getDraftBlocks(draftId: string): Promise<PageBlock[] | null> {
+  const slug = await getSlug();
+  try {
+    const draft = await client.get<{ blocks: PageBlock[] }>(`/api/page/public/drafts/${encodeURIComponent(draftId)}?_store=${slug}`, {
+      headers: { 'X-Tenant-Slug': slug },
+    });
+    return draft.blocks;
+  } catch {
+    return null;
+  }
+}
+
 export const getPageBySlug = cache(async (pageSlug: string): Promise<PageContent | null> => {
   const slug = await getSlug();
   try {
