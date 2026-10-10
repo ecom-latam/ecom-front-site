@@ -1721,10 +1721,10 @@
   color: var(--_ph);
 }
 .zoui-field__control[data-has-start] input {
-  padding-left: calc(var(--_px) * 0.5);
+  padding-left: 0;
 }
 .zoui-field__control[data-has-end] input {
-  padding-right: calc(var(--_px) * 0.5);
+  padding-right: 0;
 }
 
 .zoui-field__icon {
@@ -1732,6 +1732,7 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
+  width: var(--_h);
   color: var(--color-fg-muted);
   pointer-events: none;
 }
@@ -1739,12 +1740,6 @@
   width: 16px;
   height: 16px;
   display: block;
-}
-.zoui-field__icon--start {
-  padding-left: var(--_px);
-}
-.zoui-field__icon--end {
-  padding-right: var(--_px);
 }
 
 .zoui-field[data-size=sm] .zoui-field__icon svg {
@@ -1761,7 +1756,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding-right: var(--_px);
+  width: var(--_h);
   height: 100%;
   flex: 0 0 auto;
   background: transparent;
@@ -1854,11 +1849,15 @@
   box-shadow: none;
   padding-bottom: 1px;
 }
-.zoui-field[data-variant=underline] .zoui-field__icon--start {
-  padding-left: 0;
+.zoui-field[data-variant=underline] .zoui-field__icon,
+.zoui-field[data-variant=underline] .zoui-field__toggle {
+  width: auto;
 }
-.zoui-field[data-variant=underline] .zoui-field__icon--end {
-  padding-right: 0;
+.zoui-field[data-variant=underline] .zoui-field__icon--start {
+  padding-right: var(--_px);
+}
+.zoui-field[data-variant=underline] .zoui-field__toggle {
+  padding-left: var(--_px);
 }
 
 .zoui-field[data-variant=underline][data-error] .zoui-field__control {
