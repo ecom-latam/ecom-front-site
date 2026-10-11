@@ -5,7 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { isAxiosError } from 'axios';
 import { auth, startSession } from '@/utils/api';
-import { Text } from 'zoui';
+import { DisabledOverlay, Text } from 'zoui';
+import { useCustomerRegistrationOpen } from '@/hooks/useCustomerRegistrationOpen';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
 import { StorePasswordInput } from '@/components/ui/StorePasswordInput';
@@ -22,6 +23,7 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const next = searchParams.get('next') ?? '/';
   const registered = searchParams.get('registered') === '1';
+  const registrationOpen = useCustomerRegistrationOpen();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -94,9 +96,11 @@ function LoginForm() {
 
       <Text variant="body-sm" color="muted" className="zoui-auth__footer">
         ¿No tenés cuenta?{' '}
-        <Link href="/registro" className="zoui-auth__link">
-          Registrate
-        </Link>
+        <DisabledOverlay compact disabled={registrationOpen === false} label="Registro deshabilitado" hint="Por ahora no se pueden crear cuentas nuevas">
+          <Link href="/registro" className="zoui-auth__link">
+            Registrate
+          </Link>
+        </DisabledOverlay>
       </Text>
     </div>
   );

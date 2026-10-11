@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { isAxiosError } from 'axios';
 import { auth, startSession } from '@/utils/api';
 import { DisabledOverlay, Text } from 'zoui';
+import { useCustomerRegistrationOpen } from '@/hooks/useCustomerRegistrationOpen';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
 import { StorePasswordInput } from '@/components/ui/StorePasswordInput';
@@ -25,15 +26,7 @@ export default function RegistroPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [registrationOpen, setRegistrationOpen] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    auth.registrationStatus()
-      .then((res) => { if (!cancelled) setRegistrationOpen(res.data.customer === true); })
-      .catch(() => { if (!cancelled) setRegistrationOpen(true); });
-    return () => { cancelled = true; };
-  }, []);
+  const registrationOpen = useCustomerRegistrationOpen();
 
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const isValid = emailValid && password.length >= 8;
