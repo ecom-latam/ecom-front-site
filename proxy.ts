@@ -4,7 +4,7 @@ import { extractSlugFromRequest } from '@/lib/tenant/extractSlug';
 const AUTH_ROUTES = ['/iniciar-sesion', '/registro'];
 const PROTECTED_ROUTES = ['/carrito', '/gestion'];
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const hasSession = req.cookies.has('_auth');
 

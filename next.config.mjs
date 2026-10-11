@@ -1,6 +1,14 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ['zoui'],
+  distDir: process.env.NEXT_DIST_DIR || '.next',
+  // zoui se enlaza desde fuera del proyecto: Turbopack necesita ver la carpeta que contiene a los dos.
+  turbopack: { root: path.resolve(here, '../..') },
   async headers() {
     if (process.env.NOINDEX !== 'true') return [];
     return [{ source: '/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] }];

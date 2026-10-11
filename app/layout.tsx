@@ -3,9 +3,8 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import styles from "./layout.module.scss";
 import "./zoui.css";
-import NextLink from "next/link";
-import NextImage from "next/image";
-import { BlockThemeProvider, THEMED_BLOCKS, ToastProvider, ZouiProvider, backgroundTokens, brandScale, createThemeCssCache, getGoogleFontUrl, isThemeRadius, radiusTokens } from "zoui";
+import { ZouiRoot } from "@/components/ZouiRoot";
+import { BlockThemeProvider, THEMED_BLOCKS, ToastProvider, backgroundTokens, brandScale, createThemeCssCache, getGoogleFontUrl, isThemeRadius, radiusTokens } from "zoui";
 import { CartProvider } from "@/context/CartContext";
 import { DynamicStoreTheme } from "@/components/DynamicStoreTheme";
 import { getPageInfo } from "@/lib/api/storeClient";
@@ -105,7 +104,7 @@ export default async function RootLayout({
         </div>
         <StoreProvider>
           <DynamicStoreTheme initialConfig={(storeInfo ?? {}) as Record<string, unknown>}>
-            <ZouiProvider linkComponent={NextLink} imageComponent={NextImage} font={fontId ?? 'geist'}>
+            <ZouiRoot font={fontId ?? 'geist'}>
               <ToastProvider>
                 <ErrorModalProvider>
                   <CartProvider hasSession={hasSession}>
@@ -117,7 +116,7 @@ export default async function RootLayout({
                   </CartProvider>
                 </ErrorModalProvider>
               </ToastProvider>
-            </ZouiProvider>
+            </ZouiRoot>
           </DynamicStoreTheme>
         </StoreProvider>
       </body>

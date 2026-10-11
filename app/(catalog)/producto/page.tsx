@@ -9,12 +9,12 @@ import { RatingsBlock } from '@/components/catalog/RatingsBlock';
 import { getCategories, getProduct, getProductReviews, getPageInfo } from '@/lib/api/storeClient';
 
 interface Props {
-  searchParams: { id?: string };
+  searchParams: Promise<{ id?: string }>;
 }
 
 
-export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
-  const id = searchParams.id;
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { id } = await props.searchParams;
   if (!id) return {};
   try {
     const product = await getProduct(id);
@@ -33,8 +33,8 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   }
 }
 
-export default async function ProductoPage({ searchParams }: Props) {
-  const id = searchParams.id;
+export default async function ProductoPage(props: Props) {
+  const { id } = await props.searchParams;
   if (!id) notFound();
 
   const cookieStore = await cookies();
