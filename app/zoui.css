@@ -3727,12 +3727,20 @@
 }
 .zoui-disabled {
   position: relative;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
   border-radius: var(--radius-lg);
+  overflow: hidden;
   isolation: isolate;
+  font-family: var(--font-ui);
+}
+.zoui-disabled--fill {
+  width: 100%;
 }
 .zoui-disabled__content {
-  filter: blur(3px) grayscale(0.4);
-  opacity: 0.7;
+  filter: blur(2.5px);
+  opacity: 0.55;
   pointer-events: none;
   user-select: none;
 }
@@ -3741,43 +3749,69 @@
   inset: 0;
   z-index: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  overflow: hidden;
+  padding: 12px;
   border-radius: inherit;
-  background: color-mix(in srgb, var(--color-bg-muted) 58%, transparent);
-  container-type: size;
-  text-align: center;
+  background: color-mix(in srgb, var(--color-bg-surface) 38%, transparent);
   cursor: not-allowed;
 }
-.zoui-disabled__label, .zoui-disabled__hint {
-  transform: rotate(-12deg);
+.zoui-disabled__notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+  padding: 12px 18px;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+  box-shadow: var(--shadow-md);
+  color: var(--color-fg-primary);
+  text-align: left;
+}
+.zoui-disabled__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
   color: var(--color-fg-secondary);
 }
+.zoui-disabled__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 .zoui-disabled__label {
-  font-size: min(1.75rem, 14cqh);
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  opacity: 0.85;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3;
 }
 .zoui-disabled__hint {
-  font-size: min(0.875rem, 7cqh);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  opacity: 0.75;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: var(--color-fg-secondary);
 }
 .zoui-disabled--compact {
   display: inline-flex;
+  width: auto;
   border-radius: var(--radius-md);
 }
+.zoui-disabled--compact .zoui-disabled__veil {
+  padding: 0;
+}
+.zoui-disabled--compact .zoui-disabled__notice {
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+.zoui-disabled--compact .zoui-disabled__icon {
+  width: 14px;
+  height: 14px;
+}
 .zoui-disabled--compact .zoui-disabled__label {
-  transform: none;
-  padding-inline: 8px;
-  font-size: 0.6875rem;
-  letter-spacing: 0.04em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .zoui-view-toggle {

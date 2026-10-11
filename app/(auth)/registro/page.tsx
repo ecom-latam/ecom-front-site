@@ -70,7 +70,7 @@ export default function RegistroPage() {
       <Text variant="heading-2" className="zoui-auth__title">Crear cuenta</Text>
       <Text variant="body-sm" color="muted" className="zoui-auth__subtitle">Registrate para comprar en este sitio.</Text>
 
-      <DisabledOverlay disabled={registrationOpen === false} label="Registro deshabilitado" hint="Por ahora no se pueden crear cuentas nuevas">
+      <DisabledOverlay fill disabled={registrationOpen === false} label="Registro deshabilitado" hint="Por ahora no se pueden crear cuentas nuevas">
       <div className="zoui-auth__form">
         <StoreInput id="email" type="email" autoComplete="email" autoFocus label="Email" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSubmit()} data-testid="store-register-email" />
         <StorePasswordInput
