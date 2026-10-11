@@ -22,6 +22,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 export const metadata: Metadata = {
   title: "ecom store",
   description: "ecom store",
+  icons: { icon: "/owlet-icon.png" },
 };
 
 export default async function RootLayout({
