@@ -184,6 +184,7 @@ export interface PageInfo {
   name: string;
   description?: string;
   logo_url?: string | null;
+  brand_display?: 'text' | 'image' | 'both';
   brand_hue?: number;
   brand_saturation?: number;
   brand_lightness?: number;
