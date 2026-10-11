@@ -8,8 +8,8 @@ import { ProductGrid } from '../productos/ProductGrid';
 import styles from './page.module.scss';
 
 interface Props {
-  params: { pageSlug: string };
-  searchParams: { page?: string; categoryId?: string; q?: string; view?: string };
+  params: Promise<{ pageSlug: string }>;
+  searchParams: Promise<{ page?: string; categoryId?: string; q?: string; view?: string }>;
 }
 
 // Pagina dinamica del page builder (cualquier slug que no sea
@@ -19,7 +19,8 @@ interface Props {
 // EC-714: si el slug coincide con catalog_slug configurado, se renderiza
 // la pagina de catalogo en vez de buscar una pagina del page builder.
 // Esto permite que el slug del catalogo sea configurable (default: 'productos').
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const storeInfo = await getPageInfo();
   const catalogSlug = storeInfo?.catalog_slug ?? 'productos';
   if (params.pageSlug === catalogSlug) {
@@ -29,7 +30,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: page?.title || undefined };
 }
 
-export default async function DynamicPageRoute({ params, searchParams }: Props) {
+export default async function DynamicPageRoute(props: Props) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   const storeInfo = await getPageInfo();
   const catalogSlug = storeInfo?.catalog_slug ?? 'productos';
 
