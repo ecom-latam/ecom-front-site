@@ -14,6 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${name}`,
     },
     description: info?.description ?? undefined,
+    icons: info?.logo_url ? { icon: info.logo_url, apple: info.logo_url } : { icon: '/owlet-icon.png' },
     openGraph: {
       title: name,
       description: info?.description ?? undefined,
