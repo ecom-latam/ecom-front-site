@@ -5,6 +5,8 @@ import styles from "./layout.module.scss";
 import "./zoui.css";
 import { ZouiRoot } from "@/components/ZouiRoot";
 import { BlockThemeProvider, THEMED_BLOCKS, ToastProvider, backgroundTokens, brandScale, createThemeCssCache, getGoogleFontUrl, isThemeRadius, radiusTokens } from "zoui";
+import { fetchPlatform } from "zoui/platform-server";
+import { PlatformProvider } from "zoui";
 import { CartProvider } from "@/context/CartContext";
 import { DynamicStoreTheme } from "@/components/DynamicStoreTheme";
 import { getPageInfo } from "@/lib/api/storeClient";
@@ -27,6 +29,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const platform = await fetchPlatform(process.env.NEXT_PUBLIC_BFF_URL ?? 'http://localhost:4000');
   const cookieStore = await cookies();
   const hasSession = !!cookieStore.get('_auth');
   const storeInfo = await getPageInfo();
@@ -102,6 +105,7 @@ export default async function RootLayout({
             Por ahora, este sitio funciona únicamente desde una computadora. Ingresá desde un navegador de escritorio para continuar.
           </p>
         </div>
+        <PlatformProvider value={platform}>
         <StoreProvider>
           <DynamicStoreTheme initialConfig={(storeInfo ?? {}) as Record<string, unknown>}>
             <ZouiRoot font={fontId ?? 'geist'}>
@@ -119,6 +123,7 @@ export default async function RootLayout({
             </ZouiRoot>
           </DynamicStoreTheme>
         </StoreProvider>
+        </PlatformProvider>
       </body>
     </html>
   );

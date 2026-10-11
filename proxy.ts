@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { fetchPlatform, maintenanceResponse } from 'zoui/platform-server';
 import { extractSlugFromRequest } from '@/lib/tenant/extractSlug';
 
 const AUTH_ROUTES = ['/iniciar-sesion', '/registro'];
 const PROTECTED_ROUTES = ['/carrito', '/gestion'];
 
-export function proxy(req: NextRequest) {
+const BFF_URL = process.env.NEXT_PUBLIC_BFF_URL ?? 'http://localhost:4000';
+
+export async function proxy(req: NextRequest) {
+  if (!(await fetchPlatform(BFF_URL)).sitesOnline) return maintenanceResponse('sites');
+
   const { pathname } = req.nextUrl;
   const hasSession = req.cookies.has('_auth');
 
