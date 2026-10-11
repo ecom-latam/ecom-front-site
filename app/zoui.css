@@ -3731,7 +3731,6 @@
   width: fit-content;
   max-width: 100%;
   border-radius: var(--radius-lg);
-  overflow: hidden;
   isolation: isolate;
   font-family: var(--font-ui);
 }
@@ -3739,6 +3738,8 @@
   width: 100%;
 }
 .zoui-disabled__content {
+  overflow: hidden;
+  border-radius: inherit;
   filter: blur(2.5px);
   opacity: 0.55;
   pointer-events: none;
@@ -3751,34 +3752,50 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
   border-radius: inherit;
   background: color-mix(in srgb, var(--color-bg-surface) 38%, transparent);
-  cursor: not-allowed;
 }
-.zoui-disabled__notice {
+.zoui-disabled__lock {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  max-width: 100%;
-  padding: 12px 18px;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--color-border-default);
+  border-radius: 999px;
+  background: var(--color-bg-surface);
+  color: var(--color-fg-secondary);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.zoui-disabled__lock:hover, .zoui-disabled__lock:focus-visible {
+  color: var(--color-fg-primary);
+  border-color: var(--color-border-strong);
+}
+.zoui-disabled__icon {
+  width: 18px;
+  height: 18px;
+}
+.zoui-disabled__notice {
+  position: absolute;
+  top: calc(50% + 28px);
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: max-content;
+  max-width: min(18rem, 90vw);
+  padding: 12px 16px;
   border: 1px solid var(--color-border-default);
   border-radius: var(--radius-lg);
   background: var(--color-bg-surface);
   box-shadow: var(--shadow-md);
   color: var(--color-fg-primary);
   text-align: left;
-}
-.zoui-disabled__icon {
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  color: var(--color-fg-secondary);
-}
-.zoui-disabled__text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  transform: translateX(-50%);
 }
 .zoui-disabled__label {
   font-size: 0.9375rem;
@@ -3795,23 +3812,23 @@
   width: auto;
   border-radius: var(--radius-md);
 }
-.zoui-disabled--compact .zoui-disabled__veil {
-  padding: 0;
+.zoui-disabled--compact .zoui-disabled__content {
+  filter: grayscale(0.6);
+  opacity: 0.45;
 }
-.zoui-disabled--compact .zoui-disabled__notice {
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: var(--radius-md);
-  box-shadow: none;
+.zoui-disabled--compact .zoui-disabled__veil {
+  background: transparent;
+}
+.zoui-disabled--compact .zoui-disabled__lock {
+  width: 26px;
+  height: 26px;
 }
 .zoui-disabled--compact .zoui-disabled__icon {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
 }
-.zoui-disabled--compact .zoui-disabled__label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  white-space: nowrap;
+.zoui-disabled--compact .zoui-disabled__notice {
+  top: calc(100% + 8px);
 }
 
 .zoui-view-toggle {
