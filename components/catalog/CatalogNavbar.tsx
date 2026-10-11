@@ -9,6 +9,7 @@ import { getAccessTokenRole } from '@/utils/helpers';
 import { auth } from '@/utils/api/auth';
 import { endSession } from '@/utils/api/client';
 import { Navbar } from 'zoui';
+import { useCustomerRegistrationOpen } from '@/hooks/useCustomerRegistrationOpen';
 
 const MANAGEMENT_ROLES = ['Admin', 'Manager', 'Seller'];
 
@@ -22,11 +23,7 @@ export function CatalogNavbar() {
   const [canManage,  setCanManage]  = useState(false);
   const [isCustomer, setIsCustomer] = useState(false);
   const [isDark,     setIsDark]     = useState(false);
-  const [registerOpen, setRegisterOpen] = useState(true);
-
-  useEffect(() => {
-    auth.registrationStatus().then((res) => setRegisterOpen(res.data.customer === true)).catch(() => setRegisterOpen(true));
-  }, []);
+  const registrationOpen = useCustomerRegistrationOpen();
 
   useEffect(() => {
     const role = getAccessTokenRole();
@@ -69,7 +66,7 @@ export function CatalogNavbar() {
       // No afecta /iniciar-sesion en si: Admin/Manager/Seller siguen entrando
       // por url directa para llegar a /gestion.
       showAuth={hasPurchases !== false}
-      registerDisabled={!registerOpen}
+      registerDisabled={registrationOpen === false}
       isDark={isDark}
       onThemeToggle={toggleTheme}
       onLogin={() => router.push('/iniciar-sesion')}
