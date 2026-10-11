@@ -8,7 +8,8 @@ const PROTECTED_ROUTES = ['/carrito', '/gestion'];
 const BFF_URL = process.env.NEXT_PUBLIC_BFF_URL ?? 'http://localhost:4000';
 
 export async function proxy(req: NextRequest) {
-  if (!(await fetchPlatform(BFF_URL)).sitesOnline) return maintenanceResponse('sites');
+  const platform = await fetchPlatform(BFF_URL);
+  if (!platform.sitesOnline || !platform.appOnline) return maintenanceResponse('sites');
 
   const { pathname } = req.nextUrl;
   const hasSession = req.cookies.has('_auth');
