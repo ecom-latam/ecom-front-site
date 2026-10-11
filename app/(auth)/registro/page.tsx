@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { isAxiosError } from 'axios';
 import { auth, startSession } from '@/utils/api';
-import { Text } from 'zoui';
+import { DisabledOverlay, Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
 import { StorePasswordInput } from '@/components/ui/StorePasswordInput';
@@ -25,6 +25,15 @@ export default function RegistroPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [registrationOpen, setRegistrationOpen] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    auth.registrationStatus()
+      .then((res) => { if (!cancelled) setRegistrationOpen(res.data.customer === true); })
+      .catch(() => { if (!cancelled) setRegistrationOpen(true); });
+    return () => { cancelled = true; };
+  }, []);
 
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const isValid = emailValid && password.length >= 8;
@@ -61,6 +70,7 @@ export default function RegistroPage() {
       <Text variant="heading-2" className="zoui-auth__title">Crear cuenta</Text>
       <Text variant="body-sm" color="muted" className="zoui-auth__subtitle">Registrate para comprar en este sitio.</Text>
 
+      <DisabledOverlay disabled={registrationOpen === false} label="Registro deshabilitado" hint="Por ahora no se pueden crear cuentas nuevas">
       <div className="zoui-auth__form">
         <StoreInput id="email" type="email" autoComplete="email" autoFocus label="Email" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSubmit()} data-testid="store-register-email" />
         <StorePasswordInput
@@ -83,6 +93,7 @@ export default function RegistroPage() {
           {loading ? 'Creando cuenta...' : 'Crear cuenta'}
         </StoreButton>
       </div>
+      </DisabledOverlay>
 
       <Text variant="body-sm" color="muted" className="zoui-auth__footer">
         ¿Ya tenés cuenta?{' '}

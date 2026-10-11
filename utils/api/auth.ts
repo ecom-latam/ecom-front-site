@@ -13,6 +13,9 @@ export const auth = {
   mfaVerify: (mfaToken: string, code: string, config?: AxiosRequestConfig) =>
     apiClient.post('/api/auth/mfa/verify', { mfaToken, code }, config),
 
+  registrationStatus: () =>
+    apiClient.get<{ merchant: boolean; customer: boolean }>('/api/auth/registration-status'),
+
   registerCustomer: (email: string, password: string, config?: AxiosRequestConfig) =>
     apiClient.post('/api/auth/customer/register', { email, password }, config),
 
