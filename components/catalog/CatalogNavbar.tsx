@@ -22,6 +22,11 @@ export function CatalogNavbar() {
   const [canManage,  setCanManage]  = useState(false);
   const [isCustomer, setIsCustomer] = useState(false);
   const [isDark,     setIsDark]     = useState(false);
+  const [registerOpen, setRegisterOpen] = useState(true);
+
+  useEffect(() => {
+    auth.registrationStatus().then((res) => setRegisterOpen(res.data.customer === true)).catch(() => setRegisterOpen(true));
+  }, []);
 
   useEffect(() => {
     const role = getAccessTokenRole();
@@ -64,6 +69,7 @@ export function CatalogNavbar() {
       // No afecta /iniciar-sesion en si: Admin/Manager/Seller siguen entrando
       // por url directa para llegar a /gestion.
       showAuth={hasPurchases !== false}
+      registerDisabled={!registerOpen}
       isDark={isDark}
       onThemeToggle={toggleTheme}
       onLogin={() => router.push('/iniciar-sesion')}
