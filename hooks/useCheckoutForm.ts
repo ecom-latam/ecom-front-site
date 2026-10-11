@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSwitch } from 'zoui';
 import { useCart } from '@/context/CartContext';
 import { usePageConfig } from '@/context/PageConfigContext';
 import { getAccessTokenRole } from '@/utils/helpers';
@@ -43,7 +44,8 @@ export function useCheckoutForm() {
   const { list: reduxAddresses, loading: addressesLoading } = useAppSelector((s) => s.addresses);
   const addressInitialized = useRef(false);
 
-  const mpAvailable   = !!store?.mp_public_key && currency === 'ARS';
+  const mpEnabled     = useSwitch('mercadopago');
+  const mpAvailable   = mpEnabled && !!store?.mp_public_key && currency === 'ARS';
   const cashAvailable = store?.cash_payment_enabled;
   const subtotal      = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
