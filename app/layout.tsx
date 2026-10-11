@@ -6,7 +6,7 @@ import "./zoui.css";
 import { ZouiRoot } from "@/components/ZouiRoot";
 import { BlockThemeProvider, THEMED_BLOCKS, ToastProvider, backgroundTokens, brandScale, createThemeCssCache, getGoogleFontUrl, isThemeRadius, radiusTokens } from "zoui";
 import { fetchPlatform } from "zoui/platform-server";
-import { PlatformProvider } from "zoui";
+import { PlatformProvider, PlatformRefresher } from "zoui";
 import { CartProvider } from "@/context/CartContext";
 import { DynamicStoreTheme } from "@/components/DynamicStoreTheme";
 import { getPageInfo } from "@/lib/api/storeClient";
@@ -110,6 +110,7 @@ export default async function RootLayout({
           <DynamicStoreTheme initialConfig={(storeInfo ?? {}) as Record<string, unknown>}>
             <ZouiRoot font={fontId ?? 'geist'}>
               <ToastProvider>
+                <PlatformRefresher bffUrl={process.env.NEXT_PUBLIC_BFF_URL ?? 'http://localhost:4000'} />
                 <ErrorModalProvider>
                   <CartProvider hasSession={hasSession}>
                     <BlockThemeProvider styles={blockStyles}>

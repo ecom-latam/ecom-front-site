@@ -2060,6 +2060,202 @@
   display: block;
 }
 
+.zoui-date-picker {
+  position: relative;
+}
+
+.zoui-date-picker__trigger {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 0 var(--_px) 0 0;
+}
+.zoui-date-picker__trigger[data-placeholder] .zoui-date-picker__value {
+  color: var(--_ph);
+}
+.zoui-date-picker__trigger[data-state=open] {
+  border-color: var(--_border-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--_ring) 20%, transparent);
+  outline: 0;
+}
+.zoui-date-picker__trigger:focus-visible {
+  border-color: var(--_border-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--_ring) 20%, transparent);
+  outline: 0;
+}
+
+.zoui-date-picker__value {
+  white-space: nowrap;
+}
+
+.zoui-field[data-error] .zoui-date-picker__trigger {
+  border-color: var(--color-danger-500);
+}
+
+.zoui-date-picker__panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 1100;
+  box-sizing: border-box;
+  width: 304px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-sm);
+  color: var(--color-fg-primary);
+  animation: dp-in var(--duration-fast) var(--easing-standard) both;
+}
+.zoui-date-picker__panel[data-align=end] {
+  left: auto;
+  right: 0;
+}
+
+@keyframes dp-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.zoui-date-picker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.zoui-date-picker__title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.zoui-date-picker__nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-fg-secondary);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-standard), border-color var(--duration-fast) var(--easing-standard), color var(--duration-fast) var(--easing-standard);
+}
+.zoui-date-picker__nav:hover {
+  background: var(--color-brand-soft);
+  border-color: var(--color-brand-400);
+  color: var(--color-brand-text);
+}
+.zoui-date-picker__nav:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 1px;
+}
+
+.zoui-date-picker__weekdays,
+.zoui-date-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.zoui-date-picker__weekdays {
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+.zoui-date-picker__weekday {
+  text-align: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-fg-muted);
+}
+
+.zoui-date-picker__day {
+  box-sizing: border-box;
+  height: 36px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-fg-primary);
+  font: inherit;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-standard), color var(--duration-fast) var(--easing-standard), box-shadow var(--duration-fast) var(--easing-standard);
+}
+.zoui-date-picker__day:hover:not(:disabled) {
+  background: var(--color-brand-soft);
+  color: var(--color-brand-text);
+}
+.zoui-date-picker__day:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: -1px;
+}
+.zoui-date-picker__day--outside {
+  color: var(--color-fg-disabled);
+}
+.zoui-date-picker__day--today {
+  background: var(--color-brand-soft);
+  border-color: var(--color-brand-400);
+  color: var(--color-brand-text);
+  font-weight: var(--font-weight-semibold);
+}
+.zoui-date-picker__day--selected {
+  background: var(--color-brand-500);
+  border-color: var(--color-brand-500);
+  color: var(--color-neutral-0);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--color-brand-500) 35%, transparent);
+}
+.zoui-date-picker__day--selected:hover:not(:disabled) {
+  background: var(--color-brand-600);
+  color: var(--color-neutral-0);
+}
+.zoui-date-picker__day--disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.zoui-date-picker__footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.zoui-date-picker__today {
+  padding: 5px 12px;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-brand-text);
+  font: inherit;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-standard), border-color var(--duration-fast) var(--easing-standard);
+}
+.zoui-date-picker__today:hover:not(:disabled) {
+  background: var(--color-brand-soft);
+  border-color: var(--color-brand-400);
+}
+.zoui-date-picker__today:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .zoui-switch {
   --_w: 36px;
   --_h: 20px;
@@ -3469,6 +3665,50 @@
     flex-wrap: wrap;
     gap: var(--space-2);
     padding-bottom: var(--space-3);
+  }
+}
+.zoui-updating {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  background: color-mix(in srgb, var(--color-bg-surface) 94%, transparent);
+  backdrop-filter: blur(6px);
+  color: var(--color-fg-primary);
+}
+.zoui-updating__spinner {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: 3px solid var(--color-border-default);
+  border-top-color: var(--color-brand-500);
+  animation: zoui-updating-spin 0.9s linear infinite;
+}
+.zoui-updating__title {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+.zoui-updating__text {
+  margin: 0;
+  max-width: 24rem;
+  color: var(--color-fg-secondary);
+}
+
+@keyframes zoui-updating-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .zoui-updating__spinner {
+    animation-duration: 3s;
   }
 }
 .zoui-view-toggle {
