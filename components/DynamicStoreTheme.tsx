@@ -51,6 +51,8 @@ function toPageConfig(raw: Record<string, unknown>): PageConfig {
   const store = (raw.store ?? undefined) as PageConfig['store'];
   return {
     name:            typeof raw.name === 'string' && raw.name ? raw.name : undefined,
+    logo_url:        typeof raw.logo_url === 'string' && raw.logo_url.startsWith('https://') ? raw.logo_url : null,
+    brand_display:   raw.brand_display === 'text' || raw.brand_display === 'image' ? raw.brand_display : 'both',
     hasCatalog:      raw.hasCatalog !== false,
     maintenanceMode: raw.maintenanceMode === true,
     catalog_label: typeof raw.catalog_label === 'string' && raw.catalog_label ? raw.catalog_label : 'Productos',

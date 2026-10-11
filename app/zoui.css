@@ -3495,6 +3495,20 @@
   line-height: 1;
 }
 
+.zoui-navbar__logo {
+  display: block;
+  flex-shrink: 0;
+  height: 28px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+}
+
+.zoui-navbar__brand[data-display=image] .zoui-navbar__logo {
+  height: 32px;
+  max-width: 200px;
+}
+
 .zoui-navbar__name {
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-lg);

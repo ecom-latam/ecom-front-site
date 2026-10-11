@@ -15,7 +15,7 @@ const MANAGEMENT_ROLES = ['Admin', 'Manager', 'Seller'];
 export function CatalogNavbar() {
   const router = useRouter();
   const { itemCount, openDrawer } = useCart();
-  const { name, hasCatalog, catalog_label, catalog_slug, hasPurchases, pages } = usePageConfig();
+  const { name, logo_url, brand_display, hasCatalog, catalog_label, catalog_slug, hasPurchases, pages } = usePageConfig();
   const catalogPath = `/${catalog_slug ?? 'productos'}`;
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -52,6 +52,8 @@ export function CatalogNavbar() {
   return (
     <Navbar
       storeName={name ?? 'Inicio'}
+      logoUrl={logo_url}
+      brandDisplay={brand_display}
       links={links}
       onLogoClick={() => router.push(hasCatalog !== false ? catalogPath : '/')}
       cartCount={Math.min(itemCount, 99)}

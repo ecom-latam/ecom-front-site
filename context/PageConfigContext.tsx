@@ -34,6 +34,8 @@ export interface PageConfigPage {
 
 export interface PageConfig {
   name?: string;
+  logo_url?: string | null;
+  brand_display?: 'text' | 'image' | 'both';
   hasCatalog?: boolean;
   catalog_label?: string;
   catalog_slug?: string;
