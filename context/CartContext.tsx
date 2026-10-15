@@ -6,6 +6,7 @@ import { apiClient } from '@/utils/api/client';
 import type { Cart, CartItem } from '@/lib/cart/types';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchCartRequest, fetchCartSuccess } from '@/store/cart/cartSlice';
+import { trackEvent } from '@/lib/analytics';
 
 interface CartContextValue {
   items: CartItem[];
@@ -61,6 +62,7 @@ export function CartProvider({ children, hasSession }: CartProviderProps) {
       try {
         const { data } = await apiClient.post<Cart>('/api/cart/items', { quantity: 1, ...payload });
         dispatch(fetchCartSuccess(data.items ?? []));
+        trackEvent({ type: 'cart_add', productId: payload.productId });
         return { ok: true };
       } catch (err: unknown) {
         const axiosErr = err as { response?: { data?: { error?: string; available?: number } } };
