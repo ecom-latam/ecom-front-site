@@ -12,6 +12,7 @@ import { DynamicStoreTheme } from "@/components/DynamicStoreTheme";
 import { getPageInfo } from "@/lib/api/storeClient";
 import { ErrorModalProvider } from "@/components/ui/ErrorModal";
 import { StoreProvider } from "@/store/StoreProvider";
+import { PageTracker } from "@/components/PageTracker";
 
 const themeCssCache = createThemeCssCache();
 
@@ -108,6 +109,7 @@ export default async function RootLayout({
         </div>
         <PlatformProvider value={platform}>
         <StoreProvider>
+          <PageTracker />
           <DynamicStoreTheme initialConfig={(storeInfo ?? {}) as Record<string, unknown>}>
             <ZouiRoot font={fontId ?? 'geist'}>
               <ToastProvider>

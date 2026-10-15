@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProductGallery } from './ProductGallery';
 import { PDPInfoPanel } from './PDPInfoPanel';
 import type { Product, ProductVariant } from '@/lib/api/storeClient';
+import { trackEvent } from '@/lib/analytics';
 
 interface ProductDetailSectionProps {
   product: Product;
@@ -30,6 +31,10 @@ interface ProductDetailSectionProps {
 export function ProductDetailSection(props: ProductDetailSectionProps) {
   const { product } = props;
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
+
+  useEffect(() => {
+    trackEvent({ type: 'product_view', productId: product._id });
+  }, [product._id]);
 
   const galleryImages = selectedVariant && selectedVariant.images.length > 0
     ? selectedVariant.images
