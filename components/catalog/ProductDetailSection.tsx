@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ProductGallery } from './ProductGallery';
 import { PDPInfoPanel } from './PDPInfoPanel';
 import type { Product, ProductVariant } from '@/lib/api/storeClient';
-import { trackEvent } from '@/lib/analytics';
+import { trackProductView } from '@/lib/analytics';
 
 interface ProductDetailSectionProps {
   product: Product;
@@ -33,8 +33,8 @@ export function ProductDetailSection(props: ProductDetailSectionProps) {
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
 
   useEffect(() => {
-    trackEvent({ type: 'product_view', productId: product._id });
-  }, [product._id]);
+    trackProductView({ _id: product._id, categoryId: product.categoryId, price: product.price, salePrice: product.salePrice });
+  }, [product._id, product.categoryId, product.price, product.salePrice]);
 
   const galleryImages = selectedVariant && selectedVariant.images.length > 0
     ? selectedVariant.images
