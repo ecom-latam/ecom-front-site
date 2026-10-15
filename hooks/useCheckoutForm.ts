@@ -11,6 +11,7 @@ import type { PaymentMethod, ShippingMethod } from '@/utils/api/orders';
 import type { Address } from '@/utils/api/addresses';
 import { payment as paymentApi } from '@/utils/api/payment';
 import { splitAddress } from '@/lib/checkout';
+import { trackCheckoutStarted, trackOrderPlaced, trackPaymentSelected } from '@/lib/analytics';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchAddressesRequest } from '@/store/addresses/addressesSlice';
 
@@ -62,6 +63,7 @@ export function useCheckoutForm() {
     if (role !== 'Customer') { router.replace('/productos'); return; }
     setReady(true);
     dispatch(fetchAddressesRequest());
+    trackCheckoutStarted(itemCount, subtotal);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps -- router is stable in practice but not guaranteed; auth check runs once on mount
 
   useEffect(() => {
@@ -85,6 +87,7 @@ export function useCheckoutForm() {
       }
       return next;
     });
+    if (field === 'paymentMethod') trackPaymentSelected(value);
     setError(null);
   }
 
@@ -118,6 +121,7 @@ export function useCheckoutForm() {
       shippingMethod: form.shippingMethod,
       notes:          form.notes,
     });
+    trackOrderPlaced(order._id, order.total, 'transfer');
     await clearCart();
     router.push(`/pedidos/${order._id}`);
   }
@@ -139,6 +143,7 @@ export function useCheckoutForm() {
       shippingMethod: 'pickup',
       notes:          form.notes,
     });
+    trackOrderPlaced(order._id, order.total, 'cash');
     await clearCart();
     router.push(`/pedidos/${order._id}`);
   }
