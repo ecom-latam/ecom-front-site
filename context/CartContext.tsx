@@ -6,7 +6,7 @@ import { apiClient } from '@/utils/api/client';
 import type { Cart, CartItem } from '@/lib/cart/types';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchCartRequest, fetchCartSuccess } from '@/store/cart/cartSlice';
-import { trackCartAdd } from '@/lib/analytics';
+import { trackCartAdd, trackCartRemove } from '@/lib/analytics';
 
 interface CartContextValue {
   items: CartItem[];
@@ -95,14 +95,16 @@ export function CartProvider({ children, hasSession }: CartProviderProps) {
   const removeItem = useCallback(async (itemId: string) => {
     setMutationLoading(true);
     try {
+      const removed = items.find((item) => item._id === itemId);
       const { data } = await apiClient.delete<Cart>(`/api/cart/items/${itemId}`);
       dispatch(fetchCartSuccess(data.items ?? []));
+      if (removed) trackCartRemove(removed.productId, removed.quantity);
     } catch {
       // item already gone
     } finally {
       setMutationLoading(false);
     }
-  }, [dispatch]);
+  }, [dispatch, items]);
 
   const clearCart = useCallback(async () => {
     setMutationLoading(true);

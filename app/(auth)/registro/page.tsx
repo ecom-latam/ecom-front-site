@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { isAxiosError } from 'axios';
 import { auth, startSession } from '@/utils/api';
+import { trackBuyerRegistered } from '@/lib/analytics';
 import { DisabledOverlay, Text } from 'zoui';
 import { useCustomerRegistrationOpen } from '@/hooks/useCustomerRegistrationOpen';
 import { StoreButton } from '@/components/ui/StoreButton';
@@ -38,6 +39,7 @@ export default function RegistroPage() {
 
     try {
       await auth.registerCustomer(email, password, { _skipModal: true });
+      trackBuyerRegistered();
       const { data } = await auth.login(email, password, { _skipModal: true });
       const res = data as { accessToken?: string };
       if (res.accessToken) startSession(res.accessToken);

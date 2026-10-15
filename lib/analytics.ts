@@ -19,8 +19,10 @@ export function isSkippedPath(path: string): boolean {
   return SKIPPED_PREFIXES.some((prefix) => path === prefix || path.startsWith(`${prefix}/`));
 }
 
-function excluded(): boolean {
-  if (isSkippedPath(window.location.pathname)) return true;
+const AUTH_EVENTS = new Set(['buyer.registered', 'buyer.logged_in']);
+
+function excluded(name: string): boolean {
+  if (isSkippedPath(window.location.pathname) && !AUTH_EVENTS.has(name)) return true;
   const role = getAccessTokenRole();
   return role !== null && STAFF_ROLES.includes(role);
 }
@@ -89,4 +91,47 @@ export function trackProductView(product: { _id: string; categoryId: string | nu
 
 export function trackCartAdd(productId: string, quantity: number): void {
   getTracker()?.track('cart.item_added', { productId, quantity });
+}
+
+export function trackCartRemove(productId: string, quantity: number): void {
+  getTracker()?.track('cart.item_removed', { productId, quantity });
+}
+
+export function trackCheckoutStarted(items: number, total: number): void {
+  getTracker()?.trackOnce('checkout-started', 'checkout.started', { items, total });
+}
+
+export function trackPaymentSelected(method: string): void {
+  getTracker()?.track('checkout.payment_selected', { method });
+}
+
+export function trackOrderPlaced(orderId: string, total: number, method: string): void {
+  getTracker()?.trackOnce(`order-${orderId}`, 'order.placed', { orderId, total, method });
+}
+
+export function trackBuyerRegistered(): void {
+  getTracker()?.track('buyer.registered', { method: 'email' });
+}
+
+export function trackBuyerLoggedIn(): void {
+  getTracker()?.track('buyer.logged_in');
+}
+
+const SOCIAL_HOSTS: Record<string, string> = { 'instagram.com': 'instagram', 'facebook.com': 'facebook', 'tiktok.com': 'tiktok', 'x.com': 'x', 'twitter.com': 'x', 'youtube.com': 'youtube', 'linkedin.com': 'linkedin' };
+
+export function contactChannel(href: string): string | null {
+  if (href.startsWith('tel:')) return 'phone';
+  if (href.startsWith('mailto:')) return 'email';
+  try {
+    const host = new URL(href).hostname.replace(/^www\./, '').toLowerCase();
+    if (host === 'wa.me' || host.endsWith('whatsapp.com')) return 'whatsapp';
+    return SOCIAL_HOSTS[host] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export function trackContactClick(href: string): void {
+  const channel = contactChannel(href);
+  if (channel) getTracker()?.track('contact.clicked', { channel, path: window.location.pathname });
 }

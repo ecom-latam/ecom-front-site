@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { isAxiosError } from 'axios';
 import { auth, startSession } from '@/utils/api';
+import { trackBuyerLoggedIn } from '@/lib/analytics';
+import { getAccessTokenRole } from '@/utils/helpers';
 import { DisabledOverlay, Text } from 'zoui';
 import { useCustomerRegistrationOpen } from '@/hooks/useCustomerRegistrationOpen';
 import { StoreButton } from '@/components/ui/StoreButton';
@@ -53,6 +55,7 @@ function LoginForm() {
       }
 
       startSession(res.accessToken!);
+      if (getAccessTokenRole() === 'Customer') trackBuyerLoggedIn();
       router.push(next);
     } catch (err) {
       if (isAxiosError(err)) {
