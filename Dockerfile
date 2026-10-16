@@ -1,11 +1,13 @@
 FROM node:22-alpine
 
 WORKDIR /app
+RUN chown node:node /app
+USER node
 
-COPY package*.json ./
+COPY --chown=node:node package*.json ./
 RUN npm ci
 
-COPY . .
+COPY --chown=node:node . .
 
 ARG NEXT_PUBLIC_BFF_URL=http://ecom-bff:4000
 ENV NEXT_PUBLIC_BFF_URL=$NEXT_PUBLIC_BFF_URL
