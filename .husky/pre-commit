@@ -1,0 +1,1 @@
+if [ -x ../ecom-infra/scripts/secret-check.sh ]; then ../ecom-infra/scripts/secret-check.sh; fi
