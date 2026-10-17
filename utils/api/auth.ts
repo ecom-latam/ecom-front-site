@@ -19,6 +19,12 @@ export const auth = {
   registerCustomer: (email: string, password: string, config?: AxiosRequestConfig) =>
     apiClient.post('/api/auth/customer/register', { email, password }, config),
 
+  forgotPassword: (email: string, config?: AxiosRequestConfig) =>
+    apiClient.post('/api/auth/password/forgot', { email }, config),
+
+  resetPassword: (token: string, newPassword: string, config?: AxiosRequestConfig) =>
+    apiClient.post('/api/auth/password/reset', { token, newPassword }, config),
+
   logout: () =>
     apiClient.post('/api/auth/logout', {}),
 

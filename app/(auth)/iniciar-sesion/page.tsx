@@ -92,6 +92,10 @@ function LoginForm() {
           <Text variant="body-sm" className="zoui-auth__error" data-testid="store-login-error">{error}</Text>
         )}
 
+        <Link href="/recuperar-contrasena" className="zoui-auth__link" data-testid="store-login-forgot">
+          <Text variant="body-sm" color="muted">¿Olvidaste tu contraseña?</Text>
+        </Link>
+
         <StoreButton loading={loading} disabled={!isValid || loading} size="md" fullWidth onClick={handleSubmit} data-testid="store-login-submit">
           {loading ? 'Ingresando...' : 'Ingresar'}
         </StoreButton>
