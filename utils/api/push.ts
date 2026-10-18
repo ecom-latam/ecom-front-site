@@ -33,6 +33,10 @@ export const push = {
 
   markRead: (body: { ids: string[] } | { all: true }) => apiClient.post<{ updated: number }>('/api/push/notifications/read', body, quiet),
 
+  remove: (id: string) => apiClient.delete(`/api/push/notifications/${encodeURIComponent(id)}`, quiet),
+
+  clear: () => apiClient.post<{ deleted: number }>('/api/push/notifications/clear', {}, quiet),
+
   subscribe: (body: PushSubscriptionBody) => apiClient.post('/api/push/subscriptions', body, quiet),
 
   unsubscribe: (endpoint: string) => apiClient.delete('/api/push/subscriptions', { ...quiet, data: { endpoint } }),
