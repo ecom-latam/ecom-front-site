@@ -15,18 +15,19 @@ interface ImageMagnifierProps {
 export function ImageMagnifier({ src, alt }: ImageMagnifierProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [naturalSize, setNaturalSize] = useState<{ w: number; h: number } | null>(null);
-  const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null);
+  // El tamaño del contenedor se mide al mover el mouse (en el evento) y se guarda junto al cursor: durante el render no se lee la referencia.
+  const [cursor, setCursor] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect) return;
-    setCursor({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    setCursor({ x: e.clientX - rect.left, y: e.clientY - rect.top, width: rect.width, height: rect.height });
   }
 
   let lensStyle: React.CSSProperties | undefined;
-  const rect = containerRef.current?.getBoundingClientRect();
 
-  if (cursor && rect && naturalSize) {
+  if (cursor && naturalSize) {
+    const rect = { width: cursor.width, height: cursor.height };
     // La imagen visible usa object-fit: contain (se ve completa, "maximizada",
     // sin recortar) -- por eso puede quedar con barras vacías a los costados o
     // arriba/abajo si el contenedor no tiene la misma proporción que la foto.

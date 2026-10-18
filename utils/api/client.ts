@@ -1,5 +1,4 @@
 import axios from 'axios';
-import type { AxiosRequestConfig } from 'axios';
 import { triggerErrorModal } from '@/lib/errorModal';
 import { getErrorDefinition } from '@/lib/errors';
 

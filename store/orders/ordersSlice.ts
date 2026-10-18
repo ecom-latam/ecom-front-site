@@ -38,9 +38,14 @@ const ordersSlice = createSlice({
       state.listLoading = true;
       state.error = null;
     },
-    fetchAdminOrdersRequest(state, _action: PayloadAction<AdminOrderListParams>) {
-      state.listLoading = true;
-      state.error = null;
+    fetchAdminOrdersRequest: {
+      reducer(state) {
+        state.listLoading = true;
+        state.error = null;
+      },
+      prepare(payload: AdminOrderListParams) {
+        return { payload };
+      },
     },
     fetchOrderListSuccess(state, action: PayloadAction<{ list: Order[]; total: number }>) {
       state.list = action.payload.list;
@@ -51,13 +56,23 @@ const ordersSlice = createSlice({
       state.error = action.payload;
       state.listLoading = false;
     },
-    fetchCurrentOrderRequest(state, _action: PayloadAction<string>) {
-      state.currentLoading = true;
-      state.currentError = null;
+    fetchCurrentOrderRequest: {
+      reducer(state) {
+        state.currentLoading = true;
+        state.currentError = null;
+      },
+      prepare(payload: string) {
+        return { payload };
+      },
     },
-    fetchAdminOrderRequest(state, _action: PayloadAction<string>) {
-      state.currentLoading = true;
-      state.currentError = null;
+    fetchAdminOrderRequest: {
+      reducer(state) {
+        state.currentLoading = true;
+        state.currentError = null;
+      },
+      prepare(payload: string) {
+        return { payload };
+      },
     },
     fetchCurrentOrderSuccess(state, action: PayloadAction<Order>) {
       state.current = action.payload;

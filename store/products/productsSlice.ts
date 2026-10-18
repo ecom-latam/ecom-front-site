@@ -20,9 +20,14 @@ const productsSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    fetchProductsRequest(state, _action: PayloadAction<ProductListParams | undefined>) {
-      state.loading = true;
-      state.error = null;
+    fetchProductsRequest: {
+      reducer(state) {
+        state.loading = true;
+        state.error = null;
+      },
+      prepare(payload: ProductListParams | undefined) {
+        return { payload };
+      },
     },
     fetchProductsSuccess(state, action: PayloadAction<{ list: Product[]; total: number }>) {
       state.list = action.payload.list;
