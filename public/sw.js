@@ -11,14 +11,18 @@ self.addEventListener('push', (event) => {
   }
   const title = typeof data.title === 'string' && data.title ? data.title : 'Web Owlet';
   event.waitUntil((async () => {
-    await self.registration.showNotification(title, {
-      body: typeof data.body === 'string' ? data.body : '',
-      icon: '/owlet-icon.png',
-      tag: typeof data.id === 'string' ? data.id : undefined,
-      data: { url: typeof data.url === 'string' && data.url.startsWith('/') ? data.url : '/gestion/pedidos' },
-    });
-    const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
-    windows.forEach((client) => client.postMessage({ type: 'push-received' }));
+    try {
+      await self.registration.showNotification(title, {
+        body: typeof data.body === 'string' ? data.body : '',
+        icon: '/owlet-icon.png',
+        tag: typeof data.id === 'string' ? data.id : undefined,
+        data: { url: typeof data.url === 'string' && data.url.startsWith('/') ? data.url : '/gestion/pedidos' },
+      });
+    } finally {
+      // Aunque el sistema no muestre la notificación, la campanita de la página abierta se actualiza.
+      const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      windows.forEach((client) => client.postMessage({ type: 'push-received' }));
+    }
   })());
 });
 
