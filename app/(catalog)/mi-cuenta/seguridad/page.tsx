@@ -24,7 +24,7 @@ export default function SeguridadPage() {
                 <div className={styles.title}>
                   <Text variant="heading-3">Contraseña</Text>
                 </div>
-                <Text variant="body-sm" color="secondary">Cambiala cada tanto o si creés que alguien la conoce.</Text>
+                <Text variant="body-sm" color="secondary">Es la misma para tu cuenta de Web Owlet en el panel y en todas las tiendas. Cambiala cada tanto o si creés que alguien la conoce.</Text>
               </div>
               <StoreButton emphasis="outlined" size="sm" onClick={() => router.push('/mi-cuenta/seguridad/contrasena')} data-testid="password-change">Cambiar contraseña</StoreButton>
             </div>
