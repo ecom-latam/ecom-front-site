@@ -11,7 +11,13 @@ export const auth = {
     apiClient.post('/api/auth/login', { email, password }, config),
 
   mfaVerify: (mfaToken: string, code: string, config?: AxiosRequestConfig) =>
-    apiClient.post('/api/auth/mfa/verify', { mfaToken, code }, config),
+    apiClient.post('/api/auth/mfa/verify', { code }, { ...config, headers: { Authorization: `Bearer ${mfaToken}` } }),
+
+  mfaRecover: (mfaToken: string, config?: AxiosRequestConfig) =>
+    apiClient.post('/api/auth/mfa/recover', {}, { ...config, headers: { Authorization: `Bearer ${mfaToken}` } }),
+
+  mfaRecoverConfirm: (token: string, config?: AxiosRequestConfig) =>
+    apiClient.post('/api/auth/mfa/recover/confirm', { token }, config),
 
   registrationStatus: () =>
     apiClient.get<{ merchant: boolean; customer: boolean }>('/api/auth/registration-status'),
