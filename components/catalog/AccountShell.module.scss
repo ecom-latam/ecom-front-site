@@ -1,0 +1,27 @@
+// Menú lateral fijo y contenido a la derecha: al hacer scroll solo se mueve el contenido, y el menú ocupa siempre el resto de la pantalla.
+$navbar-height: 56px;
+
+.shell {
+  display: flex;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.side {
+  position: sticky;
+  top: $navbar-height;
+  flex-shrink: 0;
+  display: flex;
+  height: calc(100vh - #{$navbar-height});
+  height: calc(100dvh - #{$navbar-height});
+
+  > :global(.zoui-sidebar) {
+    height: 100%;
+    overflow-y: auto;
+  }
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
