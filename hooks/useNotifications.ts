@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { push, type AppNotification } from '@/utils/api/push';
 
-const POLL_MS = 60 * 1000;
+const POLL_MS = 20 * 1000;
 
 export function useNotifications(open: boolean, enabled: boolean) {
   const router = useRouter();

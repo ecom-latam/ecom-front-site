@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Badge, Switch, Text } from 'zoui';
+import { Badge, Button, Switch, Text } from 'zoui';
 import { usePushDevice } from '@/hooks/usePushDevice';
 import { push, type PushCategory } from '@/utils/api/push';
 import styles from './notifications.module.scss';
@@ -23,6 +23,8 @@ export default function NoticeSettings() {
   const { state, busy, error, enable, disable } = usePushDevice();
   const [categories, setCategories] = useState<Record<PushCategory, boolean> | null>(null);
   const [saveError, setSaveError] = useState('');
+  const [testMessage, setTestMessage] = useState('');
+  const [testing, setTesting] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -36,6 +38,41 @@ export default function NoticeSettings() {
   useEffect(() => {
     void load();
   }, [load]);
+
+  const permission = typeof Notification === 'undefined' ? 'no disponible' : Notification.permission === 'granted' ? 'permitido' : Notification.permission === 'denied' ? 'bloqueado' : 'sin decidir';
+
+  // Muestra una notificación directamente desde este navegador, sin pasar por el servidor: sirve para saber si el sistema las muestra.
+  async function showLocal() {
+    setTestMessage('');
+    setTesting(true);
+    try {
+      const registration = await navigator.serviceWorker.getRegistration('/sw.js');
+      if (!registration) {
+        setTestMessage('Todavía no hay un service worker registrado en este navegador. Activá las notificaciones push primero.');
+        return;
+      }
+      await registration.showNotification('Prueba en este navegador', { body: 'Si ves este aviso en tu pantalla, el sistema muestra las notificaciones.', icon: '/owlet-icon.png' });
+      setTestMessage('Pedimos mostrar la notificación. Si no la ves en tu pantalla, el bloqueo está en tu sistema: en Mac, revisá Ajustes del Sistema → Notificaciones → tu navegador, y que no esté activo el modo Concentración.');
+    } catch {
+      setTestMessage('El navegador no pudo mostrar la notificación. Revisá el permiso del sitio en el candado de la barra de direcciones.');
+    } finally {
+      setTesting(false);
+    }
+  }
+
+  // Manda un aviso real por todo el camino (servidor, servicio de push del navegador y vuelta).
+  async function sendServer() {
+    setTestMessage('');
+    setTesting(true);
+    try {
+      const { data } = await push.test();
+      setTestMessage(data.queued > 0 ? 'Mandamos un aviso de prueba. Debería llegarte en unos segundos como notificación y quedar en la campanita.' : 'Mandamos un aviso de prueba a la campanita, pero este navegador no está suscripto a las notificaciones push.');
+    } catch {
+      setTestMessage('No pudimos mandar el aviso de prueba. Intentá de nuevo.');
+    } finally {
+      setTesting(false);
+    }
+  }
 
   async function toggle(key: PushCategory, value: boolean) {
     if (!categories) return;
@@ -68,6 +105,16 @@ export default function NoticeSettings() {
           DEVICE_NOTE[state] && <Text variant="body-sm" color="secondary" data-testid="push-device-note">{DEVICE_NOTE[state]}</Text>
         )}
         {error && <Text variant="body-sm" color="danger" data-testid="push-error">{error}</Text>}
+
+        <div className={styles.diag} data-testid="push-diagnostic">
+          <Text variant="label">Probar las notificaciones</Text>
+          <Text variant="caption" color="muted">Permiso del navegador para este sitio: {permission}. Este navegador: {state === 'on' ? 'suscripto' : 'no suscripto'}.</Text>
+          <div className={styles.testRow}>
+            <Button emphasis="outlined" size="sm" disabled={testing || state !== 'on'} onClick={showLocal} data-testid="push-test-local">Mostrar una en este navegador</Button>
+            <Button emphasis="outlined" size="sm" disabled={testing} onClick={sendServer} data-testid="push-test-server">Enviarme un aviso de prueba</Button>
+          </div>
+          {testMessage && <Text variant="body-sm" color="secondary" data-testid="push-test-message">{testMessage}</Text>}
+        </div>
 
         {categories && (
           <div data-testid="push-categories">

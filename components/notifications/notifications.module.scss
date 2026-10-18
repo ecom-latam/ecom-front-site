@@ -31,13 +31,17 @@
   }
 }
 
+.itemRow[data-read='false'] {
+  background: var(--color-bg-subtle);
+}
+
 .dot {
   flex-shrink: 0;
   width: 8px;
   height: 8px;
   margin-top: 7px;
   border-radius: 50%;
-  background: var(--color-primary-500);
+  background: var(--color-brand-500);
 
   &[data-read='true'] {
     background: transparent;
@@ -190,4 +194,20 @@
     background: var(--color-bg-subtle);
     color: var(--color-error-500);
   }
+}
+
+.diag {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-subtle);
+}
+
+.testRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
