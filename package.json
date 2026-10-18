@@ -23,8 +23,8 @@
     "zoui": "file:../../zoui"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.5.2",
-    "@commitlint/core": "^20.5.2",
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/core": "^21.2.3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
