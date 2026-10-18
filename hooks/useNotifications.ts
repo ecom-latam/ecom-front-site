@@ -6,23 +6,12 @@ import { push, type AppNotification } from '@/utils/api/push';
 
 const POLL_MS = 20 * 1000;
 
-// Si el push no llega a este navegador (a algunos les pasa), mientras la página esté abierta el aviso nuevo se muestra igual
-// como notificación del sistema. Usa la misma etiqueta que el push (el id del aviso): si llegan los dos, se ve uno solo.
-async function showLocally(items: AppNotification[]) {
-  if (typeof Notification === 'undefined' || Notification.permission !== 'granted' || !('serviceWorker' in navigator)) return;
-  const registration = await navigator.serviceWorker.getRegistration('/sw.js');
-  if (!registration) return;
-  await Promise.all(items.map((item) => registration.showNotification(item.title, { body: item.body, icon: '/owlet-icon.png', tag: item.id, data: { url: item.url } })));
-}
-
 export function useNotifications(open: boolean, enabled: boolean) {
   const router = useRouter();
   const [unread, setUnread] = useState(0);
   const [items, setItems] = useState<AppNotification[] | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [error, setError] = useState('');
-  const knownUnread = useRef<number | null>(null);
-  const shown = useRef<Set<string>>(new Set());
   const openRef = useRef(open);
   useEffect(() => {
     openRef.current = open;
@@ -32,16 +21,6 @@ export function useNotifications(open: boolean, enabled: boolean) {
     try {
       const { data } = await push.unread();
       setUnread(data.unread);
-      const previous = knownUnread.current;
-      knownUnread.current = data.unread;
-      // La primera lectura solo toma nota de lo que ya había; después, un contador que sube trae avisos nuevos.
-      if (previous === null) {
-        if (data.unread > 0) (await push.list()).data.data.forEach((item) => shown.current.add(item.id));
-      } else if (data.unread > previous) {
-        const fresh = (await push.list()).data.data.filter((item) => !item.read && !shown.current.has(item.id));
-        fresh.forEach((item) => shown.current.add(item.id));
-        await showLocally(fresh);
-      }
     } catch {
       // la campanita no es crítica: si falla, el contador queda como estaba
     }
