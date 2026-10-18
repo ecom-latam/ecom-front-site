@@ -20,9 +20,10 @@ export default function PushOptIn() {
 
   return (
     <div className={styles.optin} data-testid="push-optin">
-      <Text variant="body-sm">Recibí los avisos como notificación del navegador, aunque no tengas esta página abierta.</Text>
+      <Text variant="label">Notificaciones push</Text>
+      <Text variant="body-sm" color="secondary">Enterate de cada pedido al instante: te llega un aviso a la pantalla de tu computadora, aunque estés en otra pestaña o en otra aplicación. Estos avisos también quedan guardados acá.</Text>
       {error && <Text variant="body-sm" color="danger" data-testid="push-optin-error">{error}</Text>}
-      <Button emphasis="filled" size="sm" loading={busy} disabled={busy} onClick={enable} data-testid="push-enable">Activar notificaciones</Button>
+      <Button emphasis="filled" size="sm" loading={busy} disabled={busy} onClick={enable} data-testid="push-enable">Activar notificaciones push</Button>
     </div>
   );
 }
