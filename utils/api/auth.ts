@@ -6,9 +6,36 @@ export interface InviteInfo {
   role: string;
 }
 
+export interface AccountSession {
+  id: string;
+  current: boolean;
+  browser: string | null;
+  os: string | null;
+  device: string | null;
+  ip: string | null;
+  country: string | null;
+  city: string | null;
+  startedAt: string | null;
+  lastUsedAt: string | null;
+}
+
 export const auth = {
   login: (email: string, password: string, config?: AxiosRequestConfig) =>
     apiClient.post('/api/auth/login', { email, password }, config),
+
+  me: () => apiClient.get('/api/auth/me'),
+
+  sessions: () => apiClient.get<{ data: AccountSession[] }>('/api/auth/sessions'),
+
+  closeSession: (id: string) => apiClient.delete(`/api/auth/sessions/${encodeURIComponent(id)}`),
+
+  closeOtherSessions: () => apiClient.post<{ revoked: number }>('/api/auth/sessions/revoke-others', {}),
+
+  mfaEnroll: () => apiClient.post<{ otpauth_url: string; secret: string }>('/api/auth/mfa/enroll', {}, { _skipModal: true }),
+
+  mfaEnrollConfirm: (code: string) => apiClient.post('/api/auth/mfa/enroll/confirm', { code }, { _skipModal: true }),
+
+  mfaDisableRequest: (config?: AxiosRequestConfig) => apiClient.post('/api/auth/mfa/disable-request', {}, config),
 
   mfaVerify: (mfaToken: string, code: string, config?: AxiosRequestConfig) =>
     apiClient.post('/api/auth/mfa/verify', { code }, { ...config, headers: { Authorization: `Bearer ${mfaToken}` } }),

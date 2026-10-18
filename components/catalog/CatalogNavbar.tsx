@@ -83,7 +83,7 @@ export function CatalogNavbar() {
         window.location.href = catalogPath;
       }}
       onRegister={() => router.push('/registro')}
-      onMyAccount={isCustomer ? () => router.push('/mi-cuenta') : undefined}
+      onMyAccount={() => router.push('/mi-cuenta')}
       notifications={noticesEnabled ? { unread: notices.unread, onClick: () => setNoticesOpen(true) } : undefined}
     />
     {noticesEnabled && (

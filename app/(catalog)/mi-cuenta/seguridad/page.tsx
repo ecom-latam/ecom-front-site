@@ -1,10 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { isAxiosError } from 'axios';
 import { Text } from 'zoui';
 import { StoreButton } from '@/components/ui/StoreButton';
 import { StorePasswordInput } from '@/components/ui/StorePasswordInput';
 import { security } from '@/utils/api/security';
+import SessionsCard from '@/components/account/SessionsCard';
+import TwoStepCard from '@/components/account/TwoStepCard';
+import { useAccountStatus } from '@/hooks/useAccountStatus';
 
 const ShieldIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -12,16 +16,10 @@ const ShieldIcon = () => (
   </svg>
 );
 
-const PhoneIcon = () => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-    <line x1="12" y1="18" x2="12.01" y2="18" />
-  </svg>
-);
-
 const EMPTY = { current: '', next: '', confirm: '' };
 
 export default function SeguridadPage() {
+  const { status, refresh } = useAccountStatus();
   const [form, setForm] = useState(EMPTY);
   const [touched, setTouched] = useState<Partial<Record<keyof typeof EMPTY, boolean>>>({});
   const [saving, setSaving] = useState(false);
@@ -64,9 +62,10 @@ export default function SeguridadPage() {
       setForm(EMPTY);
       setTouched({});
     } catch (err: unknown) {
-      const code = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
-      if (code === 'INVALID_CURRENT_PASSWORD') setApiError('La contraseña actual es incorrecta.');
-      else if (code === 'PASSWORD_TOO_SHORT') setApiError('La nueva contraseña debe tener al menos 8 caracteres.');
+      const code = isAxiosError(err) ? err.response?.data?.error?.code : undefined;
+      if (code === 'MS01-ERR016') setApiError('La contraseña actual es incorrecta.');
+      else if (code === 'MS01-ERR014') setApiError('La nueva contraseña debe tener al menos 8 caracteres.');
+      else if (code === 'MS01-ERR015') setApiError('La nueva contraseña es demasiado larga.');
       else setApiError('Ocurrió un error. Intentá de nuevo.');
     } finally {
       setSaving(false);
@@ -139,46 +138,11 @@ export default function SeguridadPage() {
         </div>
       </section>
 
-      {/* ── MFA (deshabilitado) ── */}
-      <section className="zoui-account__card zoui-account__card--roomy zoui-account__card--disabled">
-        <div className="zoui-account__section-head zoui-account__section-head--split">
-          <div className="zoui-account__section-head-main">
-            <ShieldIcon />
-            <Text variant="heading-3" className="zoui-account__card-title">Autenticación de dos factores</Text>
-          </div>
-          <span className="zoui-account__soon">
-            Próximamente
-          </span>
-        </div>
-
-        <div className="zoui-account__mfa">
-          <div className="zoui-account__mfa-icon">
-            <PhoneIcon />
-          </div>
-          <div className="zoui-account__mfa-body">
-            <Text variant="body-sm" weight="medium">
-              Aplicación de autenticación (TOTP)
-            </Text>
-            <Text variant="body-sm" color="muted">
-              Usá una app como Google Authenticator o Authy para generar códigos temporales al iniciar sesión. Agrega una capa extra de seguridad a tu cuenta.
-            </Text>
-
-            <div className="zoui-account__mfa-state">
-              <div>
-                <Text variant="caption" color="muted">Estado</Text>
-                <div className="zoui-account__inline">
-                  <div className="zoui-account__dot" />
-                  <Text variant="body-sm">No activado</Text>
-                </div>
-              </div>
-
-              <StoreButton emphasis="outlined" size="sm" disabled>
-                Activar
-              </StoreButton>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ── Verificación en dos pasos y sesiones abiertas ── */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        {status && <TwoStepCard enabled={status.mfaEnabled} onChanged={refresh} />}
+        <SessionsCard />
+      </div>
       </div>
     </main>
   );

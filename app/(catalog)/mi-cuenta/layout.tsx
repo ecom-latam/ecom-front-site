@@ -7,22 +7,19 @@ import { MiCuentaSidebar } from '@/components/catalog/MiCuentaSidebar';
 
 export default function MiCuentaLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const [ready, setReady] = useState(false);
+  const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
-    const role = getAccessTokenRole();
-    if (role !== 'Customer') {
-      router.replace('/productos');
-    } else {
-      setReady(true);
-    }
+    const current = getAccessTokenRole();
+    if (current === null) router.replace('/iniciar-sesion');
+    else setRole(current);
   }, [router]);
 
-  if (!ready) return null;
+  if (role === null) return null;
 
   return (
     <div style={{ display: 'flex' }}>
-      <MiCuentaSidebar />
+      <MiCuentaSidebar role={role} />
       <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
     </div>
   );
