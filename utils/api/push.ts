@@ -2,10 +2,13 @@ import { apiClient } from './client';
 
 export type PushCategory = 'orders' | 'payments' | 'stock';
 
+// 'system' son los avisos de prueba: no son una categoría que se pueda apagar.
+export type NoticeCategory = PushCategory | 'system';
+
 export interface AppNotification {
   id: string;
   type: string;
-  category: PushCategory;
+  category: NoticeCategory;
   title: string;
   body: string;
   url: string;
