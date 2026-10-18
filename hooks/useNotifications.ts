@@ -96,5 +96,31 @@ export function useNotifications(open: boolean, enabled: boolean) {
     }
   }, [loadUnread]);
 
-  return { unread, items, hasMore, error, loadMore, markRead, markAllRead };
+  const remove = useCallback(async (id: string) => {
+    const removed = items?.find((item) => item.id === id);
+    setItems((current) => current?.filter((item) => item.id !== id) ?? null);
+    if (removed && !removed.read) setUnread((count) => Math.max(0, count - 1));
+    try {
+      await push.remove(id);
+    } catch {
+      setError('No pudimos borrar el aviso. Intentá de nuevo.');
+      void loadList();
+      void loadUnread();
+    }
+  }, [items, loadList, loadUnread]);
+
+  const removeAll = useCallback(async () => {
+    setItems([]);
+    setHasMore(false);
+    setUnread(0);
+    try {
+      await push.clear();
+    } catch {
+      setError('No pudimos borrar los avisos. Intentá de nuevo.');
+      void loadList();
+      void loadUnread();
+    }
+  }, [loadList, loadUnread]);
+
+  return { unread, items, hasMore, error, loadMore, markRead, markAllRead, remove, removeAll };
 }

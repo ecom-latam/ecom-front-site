@@ -97,6 +97,8 @@ export function CatalogNavbar() {
         loadMore={notices.loadMore}
         markRead={notices.markRead}
         markAllRead={notices.markAllRead}
+        remove={notices.remove}
+        removeAll={notices.removeAll}
       />
     )}
     </>
