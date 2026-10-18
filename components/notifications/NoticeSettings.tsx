@@ -13,9 +13,9 @@ const CATEGORIES: { key: PushCategory; label: string; hint: string }[] = [
 ];
 
 const DEVICE_NOTE: Partial<Record<string, string>> = {
-  unsupported: 'Este navegador no permite notificaciones. Los avisos igual aparecen en la campanita.',
-  unavailable: 'Las notificaciones del navegador no están disponibles por ahora. Los avisos igual aparecen en la campanita.',
-  denied: 'Bloqueaste las notificaciones de este sitio. Para recibirlas, habilitalas desde el candado de la barra de direcciones.',
+  unsupported: 'Este navegador no permite notificaciones push. Los avisos igual quedan en la campanita.',
+  unavailable: 'Las notificaciones push no están disponibles por ahora. Los avisos igual quedan en la campanita.',
+  denied: 'Bloqueaste las notificaciones de este sitio en el navegador. Para recibirlas, habilitalas desde el candado de la barra de direcciones.',
 };
 
 // Preferencias de avisos de la persona: notificaciones del navegador y qué categorías llegan.
@@ -57,13 +57,13 @@ export default function NoticeSettings() {
         <div>
           <div className={styles.title}>
             <Text variant="heading-3">Avisos</Text>
-            <Badge tone={state === 'on' ? 'success' : 'neutral'} size="sm" data-testid="push-status">{state === 'on' ? 'Notificaciones activas' : 'Notificaciones apagadas'}</Badge>
+            <Badge tone={state === 'on' ? 'success' : 'neutral'} size="sm" data-testid="push-status">{state === 'on' ? 'Notificaciones push activas' : 'Notificaciones push apagadas'}</Badge>
           </div>
-          <Text variant="body-sm" color="secondary">Los avisos de pedidos, pagos y stock aparecen siempre en la campanita. Además podés recibirlos como notificación del navegador.</Text>
+          <Text variant="body-sm" color="secondary">Los avisos de pedidos, pagos y stock quedan siempre guardados en la campanita. Con las notificaciones push, además te llegan al instante como un aviso en la pantalla de tu computadora, aunque estés en otra pestaña o en otra aplicación.</Text>
         </div>
 
         {state === 'on' || state === 'off' ? (
-          <Switch checked={state === 'on'} disabled={busy} onCheckedChange={(value) => { void (value ? enable() : disable()); }} label="Notificaciones en este navegador" data-testid="push-device-switch" />
+          <Switch checked={state === 'on'} disabled={busy} onCheckedChange={(value) => { void (value ? enable() : disable()); }} label="Notificaciones push en este navegador" data-testid="push-device-switch" />
         ) : (
           DEVICE_NOTE[state] && <Text variant="body-sm" color="secondary" data-testid="push-device-note">{DEVICE_NOTE[state]}</Text>
         )}
@@ -77,7 +77,7 @@ export default function NoticeSettings() {
                   <Text variant="label">{label}</Text>
                   <Text variant="caption" color="muted">{hint}</Text>
                 </div>
-                <Switch checked={categories[key]} onCheckedChange={(value) => { void toggle(key, value); }} label="Como notificación" data-testid={`push-category-${key}`} />
+                <Switch checked={categories[key]} onCheckedChange={(value) => { void toggle(key, value); }} label="Recibir como push" data-testid={`push-category-${key}`} />
               </div>
             ))}
           </div>
