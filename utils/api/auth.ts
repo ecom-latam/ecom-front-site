@@ -23,13 +23,13 @@ export const auth = {
   login: (email: string, password: string, config?: AxiosRequestConfig) =>
     apiClient.post('/api/auth/login', { email, password }, config),
 
-  me: () => apiClient.get('/api/auth/me'),
+  me: () => apiClient.get('/api/auth/me', { _skipModal: true }),
 
-  sessions: () => apiClient.get<{ data: AccountSession[] }>('/api/auth/sessions'),
+  sessions: () => apiClient.get<{ data: AccountSession[] }>('/api/auth/sessions', { _skipModal: true }),
 
-  closeSession: (id: string) => apiClient.delete(`/api/auth/sessions/${encodeURIComponent(id)}`),
+  closeSession: (id: string) => apiClient.delete(`/api/auth/sessions/${encodeURIComponent(id)}`, { _skipModal: true }),
 
-  closeOtherSessions: () => apiClient.post<{ revoked: number }>('/api/auth/sessions/revoke-others', {}),
+  closeOtherSessions: () => apiClient.post<{ revoked: number }>('/api/auth/sessions/revoke-others', {}, { _skipModal: true }),
 
   mfaEnroll: () => apiClient.post<{ otpauth_url: string; secret: string }>('/api/auth/mfa/enroll', {}, { _skipModal: true }),
 
