@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAccessTokenRole } from '@/utils/helpers';
 import { MiCuentaSidebar } from '@/components/catalog/MiCuentaSidebar';
+import { AccountShell } from '@/components/catalog/AccountShell';
 
 export default function MiCuentaLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -17,10 +18,5 @@ export default function MiCuentaLayout({ children }: { children: React.ReactNode
 
   if (role === null) return null;
 
-  return (
-    <div style={{ display: 'flex' }}>
-      <MiCuentaSidebar role={role} />
-      <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
-    </div>
-  );
+  return <AccountShell sidebar={<MiCuentaSidebar role={role} />}>{children}</AccountShell>;
 }

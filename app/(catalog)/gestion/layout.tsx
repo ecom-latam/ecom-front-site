@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { getAccessTokenRole } from '@/utils/helpers';
 import { GestionSidebar } from '@/components/gestion/GestionSidebar';
+import { AccountShell } from '@/components/catalog/AccountShell';
 import { usePageConfig } from '@/context/PageConfigContext';
 
 const MANAGEMENT_ROLES = ['Admin', 'Manager', 'Seller'];
@@ -37,10 +38,5 @@ export default function GestionLayout({ children }: { children: React.ReactNode 
 
   if (!role) return null;
 
-  return (
-    <div style={{ display: 'flex', flex: 1 }}>
-      <GestionSidebar role={role} />
-      <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
-    </div>
-  );
+  return <AccountShell sidebar={<GestionSidebar role={role} />}>{children}</AccountShell>;
 }
