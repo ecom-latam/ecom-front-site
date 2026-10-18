@@ -85,7 +85,7 @@ export default function TwoStepCard({ enabled, onChanged }: Props) {
             <Text variant="heading-3">Verificación en dos pasos</Text>
             <Badge tone={enabled ? 'success' : 'warning'} size="sm" data-testid="two-step-status">{enabled ? 'Activada' : 'Desactivada'}</Badge>
           </div>
-          <Text variant="body-sm" color="secondary">Además de tu contraseña, al ingresar te pedimos un código de tu app de autenticación (Google Authenticator, Authy, etc.). Protege tu cuenta aunque alguien conozca tu contraseña.</Text>
+          <Text variant="body-sm" color="secondary">Además de tu contraseña, al ingresar te pedimos un código de tu app de autenticación (Google Authenticator, Authy, etc.). Vale para toda tu cuenta de Web Owlet (el panel y todas las tiendas) y la protege aunque alguien conozca tu contraseña.</Text>
         </div>
         {!enabled && phase === 'idle' && (
           <Button emphasis="filled" size="sm" loading={busy} disabled={busy} onClick={start} data-testid="two-step-start">Activar</Button>

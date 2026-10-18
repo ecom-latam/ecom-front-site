@@ -27,7 +27,7 @@ function LoginForm() {
   const registered = searchParams.get('registered') === '1';
   const registrationOpen = useCustomerRegistrationOpen();
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(searchParams.get('email') ?? '');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -76,7 +76,7 @@ function LoginForm() {
       </Link>
 
       <Text variant="heading-2" className="zoui-auth__title">Iniciar sesión</Text>
-      <Text variant="body-sm" color="muted" className="zoui-auth__subtitle">Accedé a tu cuenta.</Text>
+      <Text variant="body-sm" color="muted" className="zoui-auth__subtitle">Entrá con tu cuenta de Web Owlet: es la misma en el panel y en todas las tiendas.</Text>
 
       {registered && (
         <div className="zoui-auth__notice">

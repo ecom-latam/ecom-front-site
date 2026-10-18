@@ -12,12 +12,13 @@ import { StoreButton } from '@/components/ui/StoreButton';
 import { StoreInput } from '@/components/ui/StoreInput';
 import { StorePasswordInput } from '@/components/ui/StorePasswordInput';
 
+const EMAIL_TAKEN = 'MS01-ERR012';
+
 const ERRORS: Record<string, string> = {
-  INVALID_EMAIL: 'El email no es válido.',
-  INVALID_PASSWORD: 'La contraseña debe tener al menos 8 caracteres.',
-  EMAIL_TAKEN: 'Ya existe una cuenta con ese email.',
-  MISSING_STORE_ID: 'No se pudo identificar el sitio.',
-  MISSING_TENANT: 'No se pudo identificar el sitio.',
+  'MS01-ERR010': 'El email no es válido.',
+  'MS01-ERR011': 'La contraseña debe tener al menos 8 caracteres.',
+  'MS01-ERR040': 'No se pudo identificar el sitio.',
+  'MS01-ERR055': 'Por ahora no se pueden crear cuentas nuevas.',
   INTERNAL_ERROR: 'Error del servidor. Intentá de nuevo.',
 };
 
@@ -26,6 +27,7 @@ export default function RegistroPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [emailTaken, setEmailTaken] = useState(false);
   const [loading, setLoading] = useState(false);
   const registrationOpen = useCustomerRegistrationOpen();
 
@@ -35,6 +37,7 @@ export default function RegistroPage() {
   async function handleSubmit() {
     if (!isValid) return;
     setError('');
+    setEmailTaken(false);
     setLoading(true);
 
     try {
@@ -46,8 +49,9 @@ export default function RegistroPage() {
       router.push('/');
     } catch (err) {
       if (isAxiosError(err)) {
-        const code = err.response?.data?.error as string | undefined;
-        setError(ERRORS[code ?? ''] ?? ERRORS.INTERNAL_ERROR);
+        const code: unknown = err.response?.data?.error?.code;
+        if (code === EMAIL_TAKEN) setEmailTaken(true);
+        else setError(ERRORS[typeof code === 'string' ? code : ''] ?? ERRORS.INTERNAL_ERROR);
       } else {
         setError(ERRORS.INTERNAL_ERROR);
       }
@@ -63,7 +67,7 @@ export default function RegistroPage() {
       </Link>
 
       <Text variant="heading-2" className="zoui-auth__title">Crear cuenta</Text>
-      <Text variant="body-sm" color="muted" className="zoui-auth__subtitle">Registrate para comprar en este sitio.</Text>
+      <Text variant="body-sm" color="muted" className="zoui-auth__subtitle">Con una sola cuenta de Web Owlet comprás en cualquier tienda. Si ya tenés una, iniciá sesión con ella.</Text>
 
       <DisabledOverlay fill disabled={registrationOpen === false} label="Registro deshabilitado" hint="Por ahora no se pueden crear cuentas nuevas">
       <div className="zoui-auth__form">
@@ -82,6 +86,15 @@ export default function RegistroPage() {
 
         {error && (
           <Text variant="body-sm" className="zoui-auth__error" data-testid="store-register-error">{error}</Text>
+        )}
+
+        {emailTaken && (
+          <div className="zoui-auth__notice" data-testid="store-register-taken">
+            <Text variant="body-sm">Ese email ya tiene una cuenta de Web Owlet, y sirve en todas las tiendas. Iniciá sesión con tu contraseña de siempre.</Text>
+            <Link href={`/iniciar-sesion?email=${encodeURIComponent(email.trim())}`} className="zoui-auth__link" data-testid="store-register-taken-login">
+              <Text variant="body-sm">Iniciar sesión con este email</Text>
+            </Link>
+          </div>
         )}
 
         <StoreButton loading={loading} disabled={!isValid || loading} size="md" fullWidth onClick={handleSubmit} data-testid="store-register-submit">
