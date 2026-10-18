@@ -5,11 +5,14 @@ import { useRouter } from 'next/navigation';
 import { Button, Drawer, Icon, Modal, Text } from 'zoui';
 import type { IconName } from 'zoui';
 import { timeAgo } from '@/lib/timeAgo';
-import type { AppNotification, PushCategory } from '@/utils/api/push';
+import type { AppNotification } from '@/utils/api/push';
 import PushOptIn from './PushOptIn';
 import styles from './notifications.module.scss';
 
-const CATEGORY_ICON: Record<PushCategory, IconName> = { orders: 'shopping-cart', payments: 'circle-check', stock: 'package' };
+const CATEGORY_ICON: Record<string, IconName> = { orders: 'shopping-cart', payments: 'circle-check', stock: 'package', system: 'bell' };
+
+// Una categoría que esta versión no conoce nunca debe romper la bandeja.
+const iconOf = (category: string): IconName => CATEGORY_ICON[category] ?? 'bell';
 
 interface Props {
   open: boolean;
@@ -52,7 +55,7 @@ export default function NoticesDrawer({ open, onClose, unread, items, hasMore, e
             <div key={item.id} className={styles.itemRow} data-testid="notification-item" data-read={item.read}>
               <button type="button" className={styles.item} onClick={() => go(item)} data-testid="notification-open">
                 <span className={styles.dot} data-read={item.read} />
-                <Icon name={CATEGORY_ICON[item.category]} size="sm" />
+                <Icon name={iconOf(item.category)} size="sm" />
                 <span className={styles.text}>
                   <Text variant={item.read ? 'body-sm' : 'label'}>{item.title}</Text>
                   {item.body && <Text variant="body-sm" color="secondary">{item.body}</Text>}
