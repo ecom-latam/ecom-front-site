@@ -32,21 +32,24 @@ const BellIcon = () => (
   </svg>
 );
 
+// Compras y direcciones son de quien compra; los avisos, de quien gestiona el sitio; la seguridad es de todos.
+const STAFF_ROLES = ['Admin', 'Manager', 'Seller'];
+
 const NAV_ITEMS = [
-  { label: 'Mis pedidos',    href: '/mi-cuenta/pedidos',    icon: <OrdersIcon /> },
-  { label: 'Mis direcciones', href: '/mi-cuenta/direcciones', icon: <AddressIcon /> },
-  { label: 'Avisos',         href: '/mi-cuenta/avisos',     icon: <BellIcon /> },
-  { label: 'Seguridad',      href: '/mi-cuenta/seguridad',  icon: <SecurityIcon /> },
+  { label: 'Mis pedidos',    href: '/mi-cuenta/pedidos',    icon: <OrdersIcon />,  for: ['Customer'] },
+  { label: 'Mis direcciones', href: '/mi-cuenta/direcciones', icon: <AddressIcon />, for: ['Customer'] },
+  { label: 'Avisos',         href: '/mi-cuenta/avisos',     icon: <BellIcon />,    for: STAFF_ROLES },
+  { label: 'Seguridad',      href: '/mi-cuenta/seguridad',  icon: <SecurityIcon />, for: ['Customer', ...STAFF_ROLES] },
 ];
 
-export function MiCuentaSidebar() {
+export function MiCuentaSidebar({ role }: { role: string }) {
   const pathname = usePathname();
 
   return (
     <Sidebar>
       <Sidebar.Header label="Mi cuenta" />
       <Sidebar.Nav>
-        {NAV_ITEMS.map((item) => {
+        {NAV_ITEMS.filter((item) => item.for.includes(role)).map((item) => {
           const isActive = item.href === '/mi-cuenta'
             ? pathname === '/mi-cuenta'
             : pathname === item.href || pathname.startsWith(`${item.href}/`);

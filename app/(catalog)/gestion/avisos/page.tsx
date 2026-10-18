@@ -1,7 +1,11 @@
 'use client';
 
-import NoticeSettings from '@/components/notifications/NoticeSettings';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default function AvisosPage() {
-  return <NoticeSettings />;
+// Los avisos pasaron a Mi cuenta; esta dirección queda por si hay un aviso viejo que apunta acá.
+export default function AvisosMovidosPage() {
+  const router = useRouter();
+  useEffect(() => { router.replace('/mi-cuenta/avisos'); }, [router]);
+  return null;
 }
