@@ -10,6 +10,8 @@ import { auth } from '@/utils/api/auth';
 import { endSession } from '@/utils/api/client';
 import { Navbar } from 'zoui';
 import { useCustomerRegistrationOpen } from '@/hooks/useCustomerRegistrationOpen';
+import { useNotifications } from '@/hooks/useNotifications';
+import NoticesDrawer from '@/components/notifications/NoticesDrawer';
 
 const MANAGEMENT_ROLES = ['Admin', 'Manager', 'Seller'];
 
@@ -24,6 +26,10 @@ export function CatalogNavbar() {
   const [isCustomer, setIsCustomer] = useState(false);
   const [isDark,     setIsDark]     = useState(false);
   const registrationOpen = useCustomerRegistrationOpen();
+  const [noticesOpen, setNoticesOpen] = useState(false);
+  // Misma regla que el login: los avisos solo existen en un sitio con tienda (no en página informativa ni en página + catálogo).
+  const noticesEnabled = isLoggedIn && hasPurchases !== false;
+  const notices = useNotifications(noticesOpen, noticesEnabled);
 
   useEffect(() => {
     const role = getAccessTokenRole();
@@ -52,6 +58,7 @@ export function CatalogNavbar() {
   ];
 
   return (
+    <>
     <Navbar
       storeName={name ?? 'Inicio'}
       logoUrl={logo_url}
@@ -77,6 +84,21 @@ export function CatalogNavbar() {
       }}
       onRegister={() => router.push('/registro')}
       onMyAccount={isCustomer ? () => router.push('/mi-cuenta') : undefined}
+      notifications={noticesEnabled ? { unread: notices.unread, onClick: () => setNoticesOpen(true) } : undefined}
     />
+    {noticesEnabled && (
+      <NoticesDrawer
+        open={noticesOpen}
+        onClose={() => setNoticesOpen(false)}
+        unread={notices.unread}
+        items={notices.items}
+        hasMore={notices.hasMore}
+        error={notices.error}
+        loadMore={notices.loadMore}
+        markRead={notices.markRead}
+        markAllRead={notices.markAllRead}
+      />
+    )}
+    </>
   );
 }
