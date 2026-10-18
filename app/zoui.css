@@ -3579,6 +3579,16 @@
   color: var(--_cta-fg);
 }
 
+.zoui-navbar__bell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+}
+
 .zoui-navbar__cart {
   position: relative;
   display: inline-flex;
