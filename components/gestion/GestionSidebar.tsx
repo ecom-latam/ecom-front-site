@@ -49,6 +49,12 @@ const ICON = {
       <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
     </svg>
   ),
+  avisos: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+    </svg>
+  ),
   opciones: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
@@ -63,6 +69,7 @@ const NAV_GROUPS: NavGroup[] = [
   ] },
   { label: 'Ventas', items: [
     { label: 'Pedidos',  href: '/gestion/pedidos',  elevated: false, icon: ICON.pedidos, requires: 'purchases' },
+    { label: 'Avisos',   href: '/gestion/avisos',   elevated: false, icon: ICON.avisos,  requires: 'purchases' },
   ] },
   { label: 'Catálogo', items: [
     { label: 'Productos',  href: '/gestion/productos',  elevated: true, icon: ICON.productos, requires: 'catalog' },
