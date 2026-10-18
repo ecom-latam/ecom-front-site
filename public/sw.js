@@ -2,6 +2,21 @@
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (event) => event.waitUntil(self.clients.claim()));
 
+// Guarda cuándo llegó el último push a este navegador, para que la página pueda mostrar si el mensaje llega aunque el sistema no lo muestre.
+function rememberPush(info) {
+  return new Promise((resolve) => {
+    const open = indexedDB.open('notices', 1);
+    open.onupgradeneeded = () => open.result.createObjectStore('state');
+    open.onerror = () => resolve();
+    open.onsuccess = () => {
+      const tx = open.result.transaction('state', 'readwrite');
+      tx.objectStore('state').put(info, 'lastPush');
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => resolve();
+    };
+  });
+}
+
 self.addEventListener('push', (event) => {
   let data = {};
   try {
@@ -11,6 +26,7 @@ self.addEventListener('push', (event) => {
   }
   const title = typeof data.title === 'string' && data.title ? data.title : 'Web Owlet';
   event.waitUntil((async () => {
+    await rememberPush({ at: Date.now(), title });
     try {
       await self.registration.showNotification(title, {
         body: typeof data.body === 'string' ? data.body : '',

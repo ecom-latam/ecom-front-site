@@ -12,6 +12,10 @@ const CATEGORIES: { key: PushCategory; label: string; hint: string }[] = [
   { key: 'stock', label: 'Stock', hint: 'Producto con pocas unidades o sin stock.' },
 ];
 
+interface LastPush { at: number; title: string }
+
+const isLastPush = (value: unknown): value is LastPush => typeof value === 'object' && value !== null && 'at' in value && typeof value.at === 'number' && 'title' in value && typeof value.title === 'string';
+
 const DEVICE_NOTE: Partial<Record<string, string>> = {
   unsupported: 'Este navegador no permite notificaciones push. Los avisos igual quedan en la campanita.',
   unavailable: 'Las notificaciones push no están disponibles por ahora. Los avisos igual quedan en la campanita.',
@@ -25,6 +29,7 @@ export default function NoticeSettings() {
   const [saveError, setSaveError] = useState('');
   const [testMessage, setTestMessage] = useState('');
   const [testing, setTesting] = useState(false);
+  const [lastPush, setLastPush] = useState<LastPush | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -38,6 +43,27 @@ export default function NoticeSettings() {
   useEffect(() => {
     void load();
   }, [load]);
+
+  // Lee lo que guardó el service worker la última vez que le llegó un push.
+  const readLastPush = useCallback(() => {
+    const open = indexedDB.open('notices', 1);
+    open.onupgradeneeded = () => open.result.createObjectStore('state');
+    open.onerror = () => setLastPush(null);
+    open.onsuccess = () => {
+      const get = open.result.transaction('state', 'readonly').objectStore('state').get('lastPush');
+      get.onsuccess = () => {
+        const value: unknown = get.result;
+        setLastPush(isLastPush(value) ? value : null);
+      };
+      get.onerror = () => setLastPush(null);
+    };
+  }, []);
+
+  useEffect(() => {
+    readLastPush();
+    const timer = setInterval(readLastPush, 3000);
+    return () => clearInterval(timer);
+  }, [readLastPush]);
 
   const permission = typeof Notification === 'undefined' ? 'no disponible' : Notification.permission === 'granted' ? 'permitido' : Notification.permission === 'denied' ? 'bloqueado' : 'sin decidir';
 
@@ -109,6 +135,7 @@ export default function NoticeSettings() {
         <div className={styles.diag} data-testid="push-diagnostic">
           <Text variant="label">Probar las notificaciones</Text>
           <Text variant="caption" color="muted">Permiso del navegador para este sitio: {permission}. Este navegador: {state === 'on' ? 'suscripto' : 'no suscripto'}.</Text>
+          <Text variant="caption" color="muted" data-testid="push-last">{lastPush ? `Último push recibido por este navegador: ${new Date(lastPush.at).toLocaleTimeString('es-AR')} («${lastPush.title}»).` : 'Este navegador todavía no recibió ningún push.'}</Text>
           <div className={styles.testRow}>
             <Button emphasis="outlined" size="sm" disabled={testing || state !== 'on'} onClick={showLocal} data-testid="push-test-local">Mostrar una en este navegador</Button>
             <Button emphasis="outlined" size="sm" disabled={testing} onClick={sendServer} data-testid="push-test-server">Enviarme un aviso de prueba</Button>
