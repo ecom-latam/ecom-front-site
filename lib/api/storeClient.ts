@@ -217,6 +217,8 @@ export interface PageInfo {
 export interface PageContent {
   slug:           string;
   title:          string;
+  // EC-1583: resumen para buscadores, generado por el asistente; vacio si no se cargo ninguna.
+  metaDescription?: string;
   workInProgress: boolean;
   blocks:         PageBlock[];
   // EC-1060: null/undefined = sin personalizar (fallback automatico de

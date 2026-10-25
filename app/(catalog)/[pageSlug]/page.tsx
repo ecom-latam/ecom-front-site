@@ -27,7 +27,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     return { title: storeInfo?.catalog_label || 'Productos' };
   }
   const page = await getPageBySlug(params.pageSlug);
-  return { title: page?.title || undefined };
+  return { title: page?.title || undefined, description: page?.metaDescription || undefined };
 }
 
 export default async function DynamicPageRoute(props: Props) {
