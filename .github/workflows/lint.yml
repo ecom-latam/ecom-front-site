@@ -1,0 +1,33 @@
+name: Lint
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Acceso a dependencias privadas
+        env:
+          TOKEN: ${{ secrets.CI_LECTURA_TOKEN }}
+        run: |
+          git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "https://github.com/"
+          git config --global --add url."https://x-access-token:${TOKEN}@github.com/".insteadOf "ssh://git@github.com/"
+          git config --global --add url."https://x-access-token:${TOKEN}@github.com/".insteadOf "git@github.com:"
+      - name: Bajar zoui junto al repo
+        env:
+          TOKEN: ${{ secrets.CI_LECTURA_TOKEN }}
+        run: git clone --depth 1 "https://x-access-token:${TOKEN}@github.com/ecom-latam/zoui.git" ../../zoui
+      - run: npm ci
+      - run: npm run lint
